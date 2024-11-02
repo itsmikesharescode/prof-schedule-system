@@ -8,6 +8,7 @@
   import { signupSchema, type SignupSchema } from './schema';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import { Loader } from 'lucide-svelte';
+  import SelectPicker from '$lib/components/general/SelectPicker.svelte';
 
   interface Props {
     registerForm: SuperValidated<Infer<SignupSchema>>;
@@ -47,6 +48,26 @@
 
     <div class="p-4">
       <form method="POST" use:enhance>
+        <Form.Field {form} name="title">
+          <Form.Control>
+            {#snippet children({ props })}
+              <Form.Label>Title</Form.Label>
+              <SelectPicker
+                name="Select title"
+                {props}
+                class=""
+                selections={[
+                  { label: 'Professor', value: 'Professor' },
+                  { label: 'Program Head', value: 'Program Head' }
+                ]}
+                selected={$formData.title}
+              />
+              <input type="hidden" {...props} bind:value={$formData.title} />
+            {/snippet}
+          </Form.Control>
+          <Form.FieldErrors />
+        </Form.Field>
+
         <Form.Field {form} name="email">
           <Form.Control>
             {#snippet children({ props })}
