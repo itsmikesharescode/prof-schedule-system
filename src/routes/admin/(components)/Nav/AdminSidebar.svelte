@@ -7,12 +7,15 @@
     ListRestart,
     CalendarCheck,
     ChartColumn,
-    LogOut
+    LogOut,
+    ChevronDown,
+    CalendarCog
   } from 'lucide-svelte';
   import * as Sidebar from '$lib/components/ui/sidebar/index.js';
   import { page } from '$app/stores';
   import * as Popover from '$lib/components/ui/popover/index.js';
   import Profile from './components/Profile.svelte';
+  import * as Collapsible from '$lib/components/ui/collapsible';
 
   const site_map = [
     {
@@ -31,11 +34,6 @@
       icon: Logs
     },
     {
-      title: 'Records',
-      url: '/admin/records',
-      icon: Archive
-    },
-    {
       title: 'Faculty Loading',
       url: '/admin/faculty-loading',
       icon: ListRestart
@@ -49,6 +47,34 @@
       title: 'Reports',
       url: '/admin/reports',
       icon: ChartColumn
+    }
+  ];
+
+  const records_map = [
+    {
+      title: 'School Year',
+      url: '/admin/school-year',
+      icon: CalendarCog
+    },
+    {
+      title: 'Year Level',
+      url: '/admin/year-level',
+      icon: CalendarCog
+    },
+    {
+      title: 'Sections',
+      url: '/admin/sections',
+      icon: CalendarCog
+    },
+    {
+      title: 'Subjects',
+      url: '/admin/Subjects',
+      icon: CalendarCog
+    },
+    {
+      title: 'Rooms',
+      url: '/admin/rooms',
+      icon: CalendarCog
     }
   ];
 </script>
@@ -75,6 +101,38 @@
         </Sidebar.Menu>
       </Sidebar.GroupContent>
     </Sidebar.Group>
+    <Collapsible.Root open class="group/collapsible">
+      <Sidebar.Group>
+        <Sidebar.GroupLabel>
+          {#snippet child({ props })}
+            <Collapsible.Trigger {...props}>
+              Records
+              <ChevronDown
+                class="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180"
+              />
+            </Collapsible.Trigger>
+          {/snippet}
+        </Sidebar.GroupLabel>
+        <Collapsible.Content>
+          <Sidebar.GroupContent>
+            <Sidebar.Menu>
+              {#each records_map as record (record.title)}
+                <Sidebar.MenuItem class={record.url === $page.url.pathname ? 'bg-gray-100' : ''}>
+                  <Sidebar.MenuButton>
+                    {#snippet child({ props })}
+                      <a href={record.url} {...props}>
+                        <record.icon />
+                        <span>{record.title}</span>
+                      </a>
+                    {/snippet}
+                  </Sidebar.MenuButton>
+                </Sidebar.MenuItem>
+              {/each}
+            </Sidebar.Menu>
+          </Sidebar.GroupContent>
+        </Collapsible.Content>
+      </Sidebar.Group>
+    </Collapsible.Root>
   </Sidebar.Content>
 
   <Sidebar.Footer>
