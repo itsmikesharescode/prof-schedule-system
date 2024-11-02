@@ -32,7 +32,7 @@ export const actions: Actions = {
     return fail(401, { form, msg: 'Something went wrong' });
   },
 
-  registerEvent: async ({ request, fetch }) => {
+  registerEvent: async ({ request, fetch, locals: { supabase } }) => {
     const form = await superValidate(request, zod(signupSchema));
 
     if (!form.valid) {
@@ -43,6 +43,42 @@ export const actions: Actions = {
     const blob = await res.blob();
     const file = new File([blob], 'photo.png', { type: 'image/png' });
 
-    console.log(form.data, file);
+    const { data: uploadRes, error: uploadError } = await supabase.storage
+      .from('user_photos')
+      .upload(crypto.randomUUID(), file);
+
+    if (uploadError) {
+      console.log(uploadError);
+      return withFiles({ form, msg: uploadError.message });
+    }
+
+    const {
+      data: { user },
+      error
+    } = await supabase.auth.signUp({
+      email: form.data.email,
+      password: form.data.password,
+      options: {
+        data: {
+          role: 'professor',
+          photo: uploadRes.path,
+          email: form.data.email,
+          title: form.data.title,
+          firstName: form.data.firstName,
+          middleName: form.data.middleName,
+          lastName: form.data.lastName,
+          previousSchool: form.data.previousSchool,
+          yearsOfTeaching: form.data.yearsOfTeaching,
+          department: form.data.department,
+          availability: form.data.availability,
+          interests: form.data.interests,
+          schedule: {
+            day: form.data.day,
+            startTime: form.data.startTime,
+            endTime: form.data.endTime
+          }
+        }
+      }
+    });
   }
 };

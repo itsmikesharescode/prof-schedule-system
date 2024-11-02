@@ -18,6 +18,7 @@
   import { Label } from '$lib/components/ui/label/index.js';
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
+  import { toast } from 'svelte-sonner';
   interface Props {
     registerForm: SuperValidated<Infer<SignupSchema>>;
   }
@@ -29,7 +30,18 @@
   let finishedTab = $state<string[]>(['Account Details']);
 
   const form = superForm(registerForm, {
-    validators: zodClient(signupSchema)
+    validators: zodClient(signupSchema),
+    onUpdate({ result }) {
+      const { data, status } = result;
+      switch (status) {
+        case 200:
+          toast.success('', { description: data.msg });
+          break;
+        case 401:
+          toast.error('', { description: data.msg });
+          break;
+      }
+    }
   });
 
   const { form: formData, enhance, submitting } = form;
