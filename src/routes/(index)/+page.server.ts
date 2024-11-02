@@ -11,7 +11,7 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions: Actions = {
-  loginEvent: async ({ request, supabase }) => {
+  loginEvent: async ({ request, locals: { supabase } }) => {
     const form = await superValidate(request, zod(loginSchema));
 
     if (!form.valid) {
