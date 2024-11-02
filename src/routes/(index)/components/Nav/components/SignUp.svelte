@@ -23,7 +23,7 @@
 
   let open = $state(true);
   let activeTab = $state('Account Details');
-  let finishedTab = $state<string[]>(['Account Details', 'Academic Details']);
+  let finishedTab = $state<string[]>(['Account Details', 'Academic Details', 'Interest']);
 
   const form = superForm(registerForm, {
     validators: zodClient(signupSchema)
@@ -272,6 +272,26 @@
                     bind:selected={$formData.endTime}
                   />
                   <input type="hidden" {...props} bind:value={$formData.endTime} />
+                {/snippet}
+              </Form.Control>
+              <Form.FieldErrors />
+            </Form.Field>
+
+            <Form.Field {form} name="availability">
+              <Form.Control>
+                {#snippet children({ props })}
+                  <Form.Label>Availability</Form.Label>
+                  <SelectPicker
+                    name="Select availability"
+                    {props}
+                    class=""
+                    selections={[
+                      { value: 'Part Time', label: 'Part Time' },
+                      { value: 'Full Time', label: 'Full Time' }
+                    ]}
+                    bind:selected={$formData.availability}
+                  />
+                  <input type="hidden" {...props} bind:value={$formData.availability} />
                 {/snippet}
               </Form.Control>
               <Form.FieldErrors />
