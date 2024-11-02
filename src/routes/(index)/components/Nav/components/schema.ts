@@ -7,9 +7,7 @@ export const loginSchema = z.object({
 
 export const signupSchema = z
   .object({
-    photo: z
-      .instanceof(File, { message: 'Must upload a 1x1 photo.' })
-      .refine((f) => f.size < 1_000_000, 'Max 1 MB upload size.'),
+    photo: z.string().min(1, { message: 'Must upload a 1 by 1 photo.' }),
     title: z
       .string()
       .refine((v) => ['Professor', 'Program Head'].includes(v), { message: 'Must select title.' }),

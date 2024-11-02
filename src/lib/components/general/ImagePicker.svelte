@@ -2,26 +2,26 @@
   import { ImageUp } from 'lucide-svelte';
 
   interface Props {
-    image: File | null;
+    imageLink: string | null;
   }
 
-  let { image = $bindable() }: Props = $props();
+  let { imageLink = $bindable() }: Props = $props();
 
-  let imageUrl = $state<string | null>(null);
+  let image = $state<File | null>(null);
 
   $effect(() => {
     // Create new object URL when image changes
     if (image) {
-      imageUrl = URL.createObjectURL(image);
+      imageLink = URL.createObjectURL(image);
     }
   });
 </script>
 
-{#if imageUrl}
+{#if imageLink}
   <div class="">
     <button
       onclick={(e) => {
-        imageUrl = null;
+        imageLink = null;
         image = null;
       }}
       type="button"
@@ -32,7 +32,7 @@
       >
         <span class="text-sm font-bold text-white">Remove</span>
       </div>
-      <img src={imageUrl} alt="uploadedimage" class="h-[128px] w-[161.13px] rounded-lg" />
+      <img src={imageLink} alt="uploadedimage" class="h-[128px] w-[161.13px] rounded-lg" />
     </button>
   </div>
 {:else}
@@ -41,9 +41,10 @@
     <input
       class="hidden"
       type="file"
-      name="images"
       accept="image/png, image/jpeg"
-      oninput={(e) => (image = e.currentTarget.files?.item(0) as File)}
+      oninput={(e) => {
+        image = e.currentTarget.files?.item(0) as File;
+      }}
     />
     <span class="text-xs font-bold text-muted-foreground">Upload Photo</span>
   </label>

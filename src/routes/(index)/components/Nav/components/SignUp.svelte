@@ -2,7 +2,7 @@
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index';
   import Button from '$lib/components/ui/button/button.svelte';
   import X from 'lucide-svelte/icons/x';
-  import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
+  import { fileProxy, superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
   import * as Form from '$lib/components/ui/form/index.js';
   import { Input } from '$lib/components/ui/input/index.js';
   import { signupSchema, type SignupSchema } from './schema';
@@ -55,7 +55,7 @@
       <ScrollArea class="h-[60dvh]">
         <form
           method="POST"
-          action="/registerEvent"
+          action="?/registerEvent"
           enctype="multipart/form-data"
           use:enhance
           class="overflow-auto p-4"
@@ -65,7 +65,7 @@
               <Form.Control>
                 {#snippet children({ props })}
                   <Form.Label>Photo</Form.Label>
-                  <ImagePicker bind:image={$formData.photo} />
+                  <ImagePicker bind:imageLink={$formData.photo} />
                   <input type="hidden" {...props} bind:value={$formData.photo} />
                 {/snippet}
               </Form.Control>
@@ -84,7 +84,7 @@
                       { label: 'Professor', value: 'Professor' },
                       { label: 'Program Head', value: 'Program Head' }
                     ]}
-                    selected={$formData.title}
+                    bind:selected={$formData.title}
                   />
                   <input type="hidden" {...props} bind:value={$formData.title} />
                 {/snippet}

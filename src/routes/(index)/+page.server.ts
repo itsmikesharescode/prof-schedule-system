@@ -18,11 +18,15 @@ export const actions: Actions = {
       return fail(400, { form });
     }
   },
-  registerEvent: async ({ request }) => {
+  registerEvent: async ({ request, fetch }) => {
     const form = await superValidate(request, zod(signupSchema));
-    console.log(form.data);
+
     if (!form.valid) {
       return fail(400, withFiles({ form }));
     }
+
+    const res = await fetch(form.data.photo);
+    const blob = await res.blob();
+    const file = new File([blob], 'photo.png', { type: 'image/png' });
   }
 };
