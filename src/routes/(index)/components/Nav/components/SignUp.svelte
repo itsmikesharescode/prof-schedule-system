@@ -12,7 +12,8 @@
   import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
   import * as Tabs from '$lib/components/ui/tabs/index.js';
   import ImagePicker from '$lib/components/general/ImagePicker.svelte';
-  import { days, departments, titles } from '$lib/metadata';
+  import { availableTimes, days, departments, titles } from '$lib/metadata';
+  import Combobox from '$lib/components/general/Combobox.svelte';
 
   interface Props {
     registerForm: SuperValidated<Infer<SignupSchema>>;
@@ -239,6 +240,38 @@
                     bind:selected={$formData.day}
                   />
                   <input type="hidden" {...props} bind:value={$formData.day} />
+                {/snippet}
+              </Form.Control>
+              <Form.FieldErrors />
+            </Form.Field>
+
+            <Form.Field {form} name="startTime">
+              <Form.Control>
+                {#snippet children({ props })}
+                  <Form.Label>Start Time</Form.Label>
+                  <Combobox
+                    name="Select start time"
+                    placeholder="Select start time"
+                    selections={availableTimes}
+                    bind:selected={$formData.startTime}
+                  />
+                  <input type="hidden" {...props} bind:value={$formData.startTime} />
+                {/snippet}
+              </Form.Control>
+              <Form.FieldErrors />
+            </Form.Field>
+
+            <Form.Field {form} name="endTime">
+              <Form.Control>
+                {#snippet children({ props })}
+                  <Form.Label>End Time</Form.Label>
+                  <Combobox
+                    name="Select end time"
+                    placeholder="Select end time"
+                    selections={availableTimes}
+                    bind:selected={$formData.endTime}
+                  />
+                  <input type="hidden" {...props} bind:value={$formData.endTime} />
                 {/snippet}
               </Form.Control>
               <Form.FieldErrors />

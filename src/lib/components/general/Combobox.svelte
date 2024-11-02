@@ -47,12 +47,12 @@
     {#snippet child({ props })}
       <Button
         variant="outline"
-        class="w-[200px] justify-between"
+        class="w-full justify-between"
         {...props}
         role="combobox"
         aria-expanded={open}
       >
-        {selected || { name }}
+        {selected || name}
         <ChevronsUpDown class="ml-2 size-4 shrink-0 opacity-50" />
       </Button>
     {/snippet}
