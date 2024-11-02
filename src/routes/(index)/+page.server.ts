@@ -28,5 +28,7 @@ export const actions: Actions = {
     const res = await fetch(form.data.photo);
     const blob = await res.blob();
     const file = new File([blob], 'photo.png', { type: 'image/png' });
+
+    console.log(form.data, file);
   }
 };

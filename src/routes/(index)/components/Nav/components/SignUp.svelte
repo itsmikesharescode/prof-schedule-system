@@ -24,7 +24,7 @@
 
   let open = $state(true);
   let activeTab = $state('Account Details');
-  let finishedTab = $state<string[]>(['Account Details', 'Academic Details', 'Interest']);
+  let finishedTab = $state<string[]>(['Account Details']);
 
   const form = superForm(registerForm, {
     validators: zodClient(signupSchema)
@@ -32,15 +32,42 @@
 
   const { form: formData, enhance, submitting } = form;
 
-  function addItem(id: string) {
+  const addInterest = (id: string) => {
     $formData.interests = [...$formData.interests, id];
-  }
+  };
 
-  function removeItem(id: string) {
+  const removeInterest = (id: string) => {
     $formData.interests = $formData.interests.filter((i) => i !== id);
-  }
+  };
 
-  $effect(() => {});
+  $effect(() => {
+    if (
+      $formData.photo.length &&
+      $formData.title.length &&
+      $formData.firstName.length &&
+      $formData.lastName.length &&
+      $formData.email.length &&
+      $formData.password.length &&
+      $formData.previousSchool.length &&
+      $formData.yearsOfTeaching &&
+      $formData.department.length &&
+      $formData.day.length &&
+      $formData.startTime.length &&
+      $formData.endTime.length &&
+      $formData.availability.length
+    ) {
+      finishedTab = ['Account Details', 'Academic Details', 'Interest'];
+    } else if (
+      $formData.photo.length &&
+      $formData.title.length &&
+      $formData.firstName.length &&
+      $formData.lastName.length &&
+      $formData.email.length &&
+      $formData.password.length
+    ) {
+      finishedTab = ['Account Details', 'Academic Details'];
+    }
+  });
 </script>
 
 <Button variant="secondary" size="sm" onclick={() => (open = true)}>Sign Up</Button>
@@ -208,7 +235,7 @@
             <Form.Field {form} name="yearsOfTeaching">
               <Form.Control>
                 {#snippet children({ props })}
-                  <Form.Label>Previous School</Form.Label>
+                  <Form.Label>Years of Teaching</Form.Label>
                   <Input
                     type="number"
                     {...props}
@@ -307,50 +334,57 @@
             </Form.Field>
           </Tabs.Content>
 
-          <Tabs.Content value="Interest" class="flex flex-col gap-4">
-            <Label class="text-lg font-bold">Interests</Label>
-            <Form.Fieldset {form} name="interests">
-              <div class="space-y-2">
-                {#each interests as interest}
-                  {@const checked = $formData.interests.includes(interest.value)}
-                  <div class="flex flex-row items-start space-x-3">
-                    <Form.Control>
-                      {#snippet children({ props })}
-                        <Checkbox
-                          {...props}
-                          {checked}
-                          value={interest.value}
-                          onCheckedChange={(v) => {
-                            if (v) {
-                              addItem(interest.value);
-                            } else {
-                              removeItem(interest.value);
-                            }
-                          }}
-                        />
-                        <Form.Label class="font-normal">
-                          {interest.label}
-                        </Form.Label>
-                      {/snippet}
-                    </Form.Control>
-                  </div>
-                {/each}
-                <Form.FieldErrors />
-              </div>
-            </Form.Fieldset>
+          <Tabs.Content value="Interest" class="">
+            <div class="flex flex-col gap-4">
+              <Label class="text-lg font-bold">Interests</Label>
+              <Form.Fieldset {form} name="interests">
+                <div class="space-y-2">
+                  {#each interests as interest}
+                    {@const checked = $formData.interests.includes(interest.value)}
+                    <div class="flex flex-row items-start space-x-3">
+                      <Form.Control>
+                        {#snippet children({ props })}
+                          <Checkbox
+                            {...props}
+                            {checked}
+                            value={interest.value}
+                            onCheckedChange={(v) => {
+                              if (v) {
+                                addInterest(interest.value);
+                              } else {
+                                removeInterest(interest.value);
+                              }
+                            }}
+                          />
+                          <Form.Label class="font-normal">
+                            {interest.label}
+                          </Form.Label>
+                        {/snippet}
+                      </Form.Control>
+                    </div>
+                  {/each}
+                  <Form.FieldErrors />
+                </div>
+              </Form.Fieldset>
+            </div>
           </Tabs.Content>
+          <Tabs.Content value="Interest" class="flex flex-col gap-4"></Tabs.Content>
 
           <AlertDialog.Footer>
-            <Form.Button disabled={$submitting} class="relative">
-              {#if $submitting}
-                <div
-                  class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center rounded-lg bg-primary"
-                >
-                  <Loader class="size-4 animate-spin text-white" />
-                </div>
+            <div class="">
+              {#if $formData.interests.length}
+                <Form.Button disabled={$submitting} class="relative">
+                  {#if $submitting}
+                    <div
+                      class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center rounded-lg bg-primary"
+                    >
+                      <Loader class="size-4 animate-spin text-white" />
+                    </div>
+                  {/if}
+                  Create Account
+                </Form.Button>
               {/if}
-              Create Account
-            </Form.Button>
+            </div>
           </AlertDialog.Footer>
         </form>
       </ScrollArea>
