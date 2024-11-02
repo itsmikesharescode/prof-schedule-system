@@ -29,4 +29,4 @@
 
 <Toaster position="top-left" richColors />
 {@render children()}
-<Footer />
+<!-- <Footer /> -->

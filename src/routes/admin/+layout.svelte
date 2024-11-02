@@ -6,13 +6,13 @@
   let open = $state(true);
 </script>
 
-{@render children()}
 <Sidebar.Provider bind:open>
   <AdminSidebar />
-  <main>
-    <div class={!open ? 'fixed left-0' : 'hidden'}>
+  <main class="w-full p-2">
+    <div class={!open ? 'fixed left-0 z-50' : 'hidden'}>
       <Sidebar.Trigger title="Open sidebar" />
     </div>
-    {@render children?.()}
+
+    {@render children()}
   </main>
 </Sidebar.Provider>
