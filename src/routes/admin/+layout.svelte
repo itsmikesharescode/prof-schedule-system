@@ -2,13 +2,17 @@
   import * as Sidebar from '$lib/components/ui/sidebar/index.js';
   import AdminSidebar from './(components)/Nav/AdminSidebar.svelte';
   const { children } = $props();
+
+  let open = $state(false);
 </script>
 
 {@render children()}
-<Sidebar.Provider>
+<Sidebar.Provider bind:open>
   <AdminSidebar />
   <main>
-    <Sidebar.Trigger />
+    <div class={!open ? 'fixed left-0' : 'hidden'}>
+      <Sidebar.Trigger title="Open sidebar" />
+    </div>
     {@render children?.()}
   </main>
 </Sidebar.Provider>

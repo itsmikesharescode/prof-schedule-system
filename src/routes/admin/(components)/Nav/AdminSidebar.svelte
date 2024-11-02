@@ -6,9 +6,11 @@
     Archive,
     ListRestart,
     CalendarCheck,
-    ChartColumn
+    ChartColumn,
+    LogOut
   } from 'lucide-svelte';
   import * as Sidebar from '$lib/components/ui/sidebar/index.js';
+  import { page } from '$app/stores';
 
   const site_map = [
     {
@@ -32,8 +34,8 @@
       icon: Archive
     },
     {
-      title: 'Faculty Loadings',
-      url: '/admin/faculty-loadings',
+      title: 'Faculty Loading',
+      url: '/admin/faculty-loading',
       icon: ListRestart
     },
     {
@@ -51,12 +53,13 @@
 
 <Sidebar.Root>
   <Sidebar.Content class="">
+    <Sidebar.Trigger title="Close sidebar" class="absolute right-2 z-50" />
     <Sidebar.Group>
       <Sidebar.GroupLabel>Administrator</Sidebar.GroupLabel>
       <Sidebar.GroupContent>
         <Sidebar.Menu>
           {#each site_map as site (site.title)}
-            <Sidebar.MenuItem>
+            <Sidebar.MenuItem class={site.url === $page.url.pathname ? 'bg-gray-100' : ''}>
               <Sidebar.MenuButton>
                 {#snippet child({ props })}
                   <a href={site.url} {...props}>
@@ -71,4 +74,11 @@
       </Sidebar.GroupContent>
     </Sidebar.Group>
   </Sidebar.Content>
+
+  <Sidebar.Footer>
+    <Sidebar.MenuButton variant="outline">
+      <LogOut />
+      <span class="text-sm font-semibold">Log out</span>
+    </Sidebar.MenuButton>
+  </Sidebar.Footer>
 </Sidebar.Root>
