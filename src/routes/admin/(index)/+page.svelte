@@ -1,23 +1,37 @@
 <script lang="ts">
   import * as Table from '$lib/components/ui/table/index.js';
+  import TableMenu from './components/TableMenu.svelte';
+  import AddProgram from './components/AddProgram/AddProgram.svelte';
 </script>
 
-<Table.Root>
-  <Table.Caption>A list of your recent invoices.</Table.Caption>
-  <Table.Header>
-    <Table.Row>
-      <Table.Head class="w-[100px]">Invoice</Table.Head>
-      <Table.Head>Status</Table.Head>
-      <Table.Head>Method</Table.Head>
-      <Table.Head class="text-right">Amount</Table.Head>
-    </Table.Row>
-  </Table.Header>
-  <Table.Body>
-    <Table.Row>
-      <Table.Cell class="font-medium">INV001</Table.Cell>
-      <Table.Cell>Paid</Table.Cell>
-      <Table.Cell>wew</Table.Cell>
-      <Table.Cell class="text-right">$250.00</Table.Cell>
-    </Table.Row>
-  </Table.Body>
-</Table.Root>
+<div class="flex flex-col gap-4">
+  <div class="flex justify-end">
+    <AddProgram />
+  </div>
+
+  <Table.Root>
+    <Table.Caption>A list of your recent invoices.</Table.Caption>
+    <Table.Header>
+      <Table.Row>
+        <Table.Head class="w-[50px]"></Table.Head>
+        <Table.Head class="w-[100px]">Department</Table.Head>
+        <Table.Head>Description</Table.Head>
+        <Table.Head>Program Head</Table.Head>
+        <Table.Head class="text-right">Created At</Table.Head>
+      </Table.Row>
+    </Table.Header>
+    <Table.Body>
+      {#each Array(20) as _}
+        <Table.Row>
+          <Table.Cell class="">
+            <TableMenu />
+          </Table.Cell>
+          <Table.Cell class="font-medium">BSIS</Table.Cell>
+          <Table.Cell>Bachelor of Science in Information System</Table.Cell>
+          <Table.Cell>Magdiwang, Magdalo Macapagal</Table.Cell>
+          <Table.Cell class="text-right">{new Date().toLocaleDateString()}</Table.Cell>
+        </Table.Row>
+      {/each}
+    </Table.Body>
+  </Table.Root>
+</div>
