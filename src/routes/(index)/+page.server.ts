@@ -56,7 +56,7 @@ export const actions: Actions = {
       options: {
         data: {
           role: 'professor',
-          photo: uploadRes.path,
+          photo: uploadRes.fullPath,
           email: form.data.email,
           title: form.data.title,
           firstName: form.data.firstName,
