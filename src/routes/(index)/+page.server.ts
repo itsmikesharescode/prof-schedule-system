@@ -11,24 +11,73 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions: Actions = {
-  loginEvent: async ({ request }) => {
+  loginEvent: async ({ request, locals: { supabase } }) => {
     const form = await superValidate(request, zod(loginSchema));
 
     if (!form.valid) {
       return fail(400, { form });
     }
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: form.data.email,
+      password: form.data.password
+    });
+
+    if (error) {
+      return fail(401, { form, msg: error.message });
+    } else if (data.user) {
+      return { form, msg: `Welcome back! ${data.user.user_metadata.firstName}` };
+    }
+
+    return fail(401, { form, msg: 'Something went wrong' });
   },
-  registerEvent: async ({ request, fetch }) => {
+
+  registerEvent: async ({ request, fetch, locals: { supabase } }) => {
     const form = await superValidate(request, zod(signupSchema));
 
     if (!form.valid) {
       return fail(400, withFiles({ form }));
     }
 
-    const res = await fetch(form.data.photo);
-    const blob = await res.blob();
-    const file = new File([blob], 'photo.png', { type: 'image/png' });
+    const { data: uploadRes, error: uploadError } = await supabase.storage
+      .from('user_photos')
+      .upload(crypto.randomUUID(), form.data.photo);
 
-    console.log(form.data, file);
+    if (uploadError) {
+      return withFiles({ form, msg: uploadError.message });
+    }
+
+    const {
+      data: { user },
+      error
+    } = await supabase.auth.signUp({
+      email: form.data.email,
+      password: form.data.password,
+      options: {
+        data: {
+          role: 'professor',
+          photo: uploadRes.fullPath,
+          email: form.data.email,
+          title: form.data.title,
+          firstName: form.data.firstName,
+          middleName: form.data.middleName,
+          lastName: form.data.lastName,
+          previousSchool: form.data.previousSchool,
+          yearsOfTeaching: form.data.yearsOfTeaching,
+          department: form.data.department,
+          availability: form.data.availability,
+          interests: form.data.interests,
+          schedule: {
+            day: form.data.day,
+            startTime: form.data.startTime,
+            endTime: form.data.endTime
+          }
+        }
+      }
+    });
+
+    if (error) return fail(401, withFiles({ form, msg: error.message }));
+    else if (user) return withFiles({ form, msg: `Welcome! ${user.user_metadata.firstName}` });
+    return fail(401, withFiles({ form, msg: 'Something went wrong' }));
   }
 };

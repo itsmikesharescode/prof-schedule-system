@@ -8,6 +8,7 @@
   import { loginSchema, type LoginSchema } from './schema';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import { Loader } from 'lucide-svelte';
+  import { toast } from 'svelte-sonner';
 
   interface Props {
     loginForm: SuperValidated<Infer<LoginSchema>>;
@@ -18,7 +19,18 @@
   let open = $state(false);
 
   const form = superForm(loginForm, {
-    validators: zodClient(loginSchema)
+    validators: zodClient(loginSchema),
+    onUpdate({ result }) {
+      const { data, status } = result;
+      switch (status) {
+        case 200:
+          toast.success('', { description: data.msg });
+          break;
+        case 401:
+          toast.error('', { description: data.msg });
+          break;
+      }
+    }
   });
 
   const { form: formData, enhance, submitting } = form;
@@ -46,7 +58,7 @@
     </AlertDialog.Header>
 
     <div class="p-4">
-      <form method="POST" use:enhance>
+      <form method="POST" action="?/loginEvent" use:enhance>
         <Form.Field {form} name="email">
           <Form.Control>
             {#snippet children({ props })}

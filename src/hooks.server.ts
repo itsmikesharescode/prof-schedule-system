@@ -47,13 +47,42 @@ const authGuard: Handle = async ({ event, resolve }) => {
   const { session, user } = await event.locals.safeGetSession();
   event.locals.session = session;
   event.locals.user = user;
+  const path = event.url.pathname;
 
-  if (!event.locals.session && event.url.pathname.startsWith('/private')) {
-    redirect(303, '/auth');
+  //no auth checks
+  if (!user && path.startsWith('/admin')) {
+    redirect(303, '/?msg="no-session"');
   }
 
-  if (event.locals.session && event.url.pathname === '/auth') {
-    redirect(303, '/private');
+  if (!user && path.startsWith('/program-head')) {
+    redirect(303, '/?msg="no-session"');
+  }
+
+  if (!user && path.startsWith('/professor')) {
+    redirect(303, '/?msg="no-session"');
+  }
+
+  //auth checks
+  if (user && path.startsWith('/admin')) {
+    const { role } = user.user_metadata;
+    if (role !== 'admin') redirect(303, '/');
+  }
+
+  if (user && path.startsWith('/program-head')) {
+    const { role } = user.user_metadata;
+    if (role !== 'program-head') redirect(303, '/');
+  }
+
+  if (user && path.startsWith('/professor')) {
+    const { role } = user.user_metadata;
+    if (role !== 'professor') redirect(303, '/');
+  }
+
+  if (user && path === '/') {
+    const { role } = user.user_metadata;
+    if (role === 'admin') redirect(303, '/admin');
+    if (role === 'program-head') redirect(303, '/program-head');
+    if (role === 'professor') redirect(303, '/professor');
   }
 
   return resolve(event);
