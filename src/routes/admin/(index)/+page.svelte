@@ -2,11 +2,13 @@
   import * as Table from '$lib/components/ui/table/index.js';
   import TableMenu from './components/TableMenu.svelte';
   import AddProgram from './components/AddProgram/AddProgram.svelte';
+
+  const { data } = $props();
 </script>
 
 <div class="flex flex-col gap-4">
-  <div class="flex justify-end">
-    <AddProgram />
+  <div class="sticky top-2 z-50 flex justify-end">
+    <AddProgram addProgramForm={data.addProgramForm} />
   </div>
 
   <Table.Root>
