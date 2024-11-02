@@ -16,10 +16,13 @@
     <Table.Header>
       <Table.Row>
         <Table.Head class="w-[50px]"></Table.Head>
-        <Table.Head class="w-[100px]">Department</Table.Head>
-        <Table.Head>Description</Table.Head>
-        <Table.Head>Program Head</Table.Head>
-        <Table.Head class="text-right">Created At</Table.Head>
+        <Table.Head class="w-[100px]">User ID</Table.Head>
+        <Table.Head>Email</Table.Head>
+        <Table.Head>Name</Table.Head>
+        <Table.Head class="text-right">Prof ID</Table.Head>
+        <Table.Head class="text-right">Position</Table.Head>
+        <Table.Head class="text-right">Department</Table.Head>
+        <Table.Head class="text-right">Status</Table.Head>
       </Table.Row>
     </Table.Header>
     <Table.Body>
@@ -28,10 +31,13 @@
           <Table.Cell class="">
             <TableMenu updateProfessorForm={data.updateProfessorForm} />
           </Table.Cell>
-          <Table.Cell class="font-medium">BSIS</Table.Cell>
-          <Table.Cell>Bachelor of Science in Information System</Table.Cell>
+          <Table.Cell class="font-medium">123123xx2</Table.Cell>
+          <Table.Cell>sample@gmail.com</Table.Cell>
           <Table.Cell>Magdiwang, Magdalo Macapagal</Table.Cell>
-          <Table.Cell class="text-right">{new Date().toLocaleDateString()}</Table.Cell>
+          <Table.Cell class="text-right">25436x</Table.Cell>
+          <Table.Cell class="text-right">Professor</Table.Cell>
+          <Table.Cell class="text-right">IT</Table.Cell>
+          <Table.Cell class="text-right">Active</Table.Cell>
         </Table.Row>
       {/each}
     </Table.Body>
