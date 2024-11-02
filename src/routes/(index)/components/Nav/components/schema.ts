@@ -6,7 +6,9 @@ export const loginSchema = z.object({
 });
 
 export const signupSchema = loginSchema.extend({
-  name: z.string()
+  title: z
+    .string()
+    .refine((v) => ['Professor', 'Program Head'].includes(v), { message: 'Must select title.' })
 });
 
 export type LoginSchema = typeof loginSchema;

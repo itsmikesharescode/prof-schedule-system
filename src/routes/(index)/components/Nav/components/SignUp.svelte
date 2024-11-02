@@ -24,7 +24,7 @@
   const { form: formData, enhance, submitting } = form;
 </script>
 
-<Button size="sm" onclick={() => (open = true)}>Sign Up</Button>
+<Button variant="secondary" size="sm" onclick={() => (open = true)}>Sign Up</Button>
 <AlertDialog.Root bind:open>
   <AlertDialog.Content class="p-0">
     <button

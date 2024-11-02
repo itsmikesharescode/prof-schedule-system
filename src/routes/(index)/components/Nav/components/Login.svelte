@@ -15,7 +15,7 @@
 
   let { loginForm }: Props = $props();
 
-  let open = $state(true);
+  let open = $state(false);
 
   const form = superForm(loginForm, {
     validators: zodClient(loginSchema)
