@@ -3,6 +3,7 @@
   import type { Infer, SuperValidated } from 'sveltekit-superforms';
   import Login from './components/Login.svelte';
   import type { LoginSchema, SignupSchema } from './components/schema';
+  import SignUp from './components/SignUp.svelte';
 
   interface Props {
     loginForm: SuperValidated<Infer<LoginSchema>>;
@@ -21,7 +22,7 @@
 
     <div class="flex items-center gap-2">
       <Login {loginForm} />
-      <Button size="sm" variant="secondary">Sign up</Button>
+      <SignUp {registerForm} />
     </div>
   </div>
 </nav>

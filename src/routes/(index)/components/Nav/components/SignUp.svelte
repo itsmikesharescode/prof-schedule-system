@@ -5,26 +5,26 @@
   import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
   import * as Form from '$lib/components/ui/form/index.js';
   import { Input } from '$lib/components/ui/input/index.js';
-  import { loginSchema, type LoginSchema } from './schema';
+  import { signupSchema, type SignupSchema } from './schema';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import { Loader } from 'lucide-svelte';
 
   interface Props {
-    loginForm: SuperValidated<Infer<LoginSchema>>;
+    registerForm: SuperValidated<Infer<SignupSchema>>;
   }
 
-  let { loginForm }: Props = $props();
+  let { registerForm }: Props = $props();
 
   let open = $state(true);
 
-  const form = superForm(loginForm, {
-    validators: zodClient(loginSchema)
+  const form = superForm(registerForm, {
+    validators: zodClient(signupSchema)
   });
 
   const { form: formData, enhance, submitting } = form;
 </script>
 
-<Button size="sm" onclick={() => (open = true)}>Log in</Button>
+<Button size="sm" onclick={() => (open = true)}>Sign Up</Button>
 <AlertDialog.Root bind:open>
   <AlertDialog.Content class="p-0">
     <button
@@ -41,7 +41,7 @@
     <AlertDialog.Header class="rounded-t-lg bg-gradient-to-l from-[#3331C2] to-black p-2">
       <div class="flex items-center gap-2">
         <img src="/favicon.png" alt="system logo" class="h-[50px] w-[50px]" />
-        <AlertDialog.Title class="text-white">ProfSched - Log in</AlertDialog.Title>
+        <AlertDialog.Title class="text-white">ProfSched - Sign Up</AlertDialog.Title>
       </div>
     </AlertDialog.Header>
 
@@ -86,7 +86,7 @@
                 <Loader class="size-4 animate-spin text-white" />
               </div>
             {/if}
-            Log in
+            Create Account
           </Form.Button>
         </AlertDialog.Footer>
       </form>
