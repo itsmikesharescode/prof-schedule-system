@@ -9,6 +9,8 @@
   import { zodClient } from 'sveltekit-superforms/adapters';
   import { Loader } from 'lucide-svelte';
   import SelectPicker from '$lib/components/general/SelectPicker.svelte';
+  import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
+  import * as Tabs from '$lib/components/ui/tabs/index.js';
 
   interface Props {
     registerForm: SuperValidated<Infer<SignupSchema>>;
@@ -17,6 +19,8 @@
   let { registerForm }: Props = $props();
 
   let open = $state(true);
+  let activeTab = $state('Account Details');
+  let finishedTab = $state<string[]>(['Account Details']);
 
   const form = superForm(registerForm, {
     validators: zodClient(signupSchema)
@@ -27,7 +31,7 @@
 
 <Button variant="secondary" size="sm" onclick={() => (open = true)}>Sign Up</Button>
 <AlertDialog.Root bind:open>
-  <AlertDialog.Content class="p-0">
+  <AlertDialog.Content class="max-h-screen p-0">
     <button
       onclick={() => {
         open = false;
@@ -46,71 +50,146 @@
       </div>
     </AlertDialog.Header>
 
-    <div class="p-4">
-      <form method="POST" use:enhance>
-        <Form.Field {form} name="title">
-          <Form.Control>
-            {#snippet children({ props })}
-              <Form.Label>Title</Form.Label>
-              <SelectPicker
-                name="Select title"
-                {props}
-                class=""
-                selections={[
-                  { label: 'Professor', value: 'Professor' },
-                  { label: 'Program Head', value: 'Program Head' }
-                ]}
-                selected={$formData.title}
-              />
-              <input type="hidden" {...props} bind:value={$formData.title} />
-            {/snippet}
-          </Form.Control>
-          <Form.FieldErrors />
-        </Form.Field>
+    <Tabs.Root bind:value={activeTab} class="w-full">
+      <ScrollArea class="h-[60dvh] p-4">
+        <form method="POST" use:enhance class="overflow-auto">
+          <Tabs.Content value="Account Details">
+            <Form.Field {form} name="title">
+              <Form.Control>
+                {#snippet children({ props })}
+                  <Form.Label>Title</Form.Label>
+                  <SelectPicker
+                    name="Select title"
+                    {props}
+                    class=""
+                    selections={[
+                      { label: 'Professor', value: 'Professor' },
+                      { label: 'Program Head', value: 'Program Head' }
+                    ]}
+                    selected={$formData.title}
+                  />
+                  <input type="hidden" {...props} bind:value={$formData.title} />
+                {/snippet}
+              </Form.Control>
+              <Form.FieldErrors />
+            </Form.Field>
 
-        <Form.Field {form} name="email">
-          <Form.Control>
-            {#snippet children({ props })}
-              <Form.Label>Email</Form.Label>
-              <Input
-                type="email"
-                {...props}
-                bind:value={$formData.email}
-                placeholder="Enter your email"
-              />
-            {/snippet}
-          </Form.Control>
-          <Form.FieldErrors />
-        </Form.Field>
+            <Form.Field {form} name="firstName">
+              <Form.Control>
+                {#snippet children({ props })}
+                  <Form.Label>First Name</Form.Label>
+                  <Input
+                    {...props}
+                    bind:value={$formData.firstName}
+                    placeholder="Enter your first name"
+                  />
+                {/snippet}
+              </Form.Control>
+              <Form.FieldErrors />
+            </Form.Field>
 
-        <Form.Field {form} name="password">
-          <Form.Control>
-            {#snippet children({ props })}
-              <Form.Label>Password</Form.Label>
-              <Input
-                type="password"
-                {...props}
-                bind:value={$formData.password}
-                placeholder="Enter your password"
-              />
-            {/snippet}
-          </Form.Control>
-          <Form.FieldErrors />
-        </Form.Field>
+            <Form.Field {form} name="middleName">
+              <Form.Control>
+                {#snippet children({ props })}
+                  <Form.Label>Middle Name</Form.Label>
+                  <Input
+                    {...props}
+                    bind:value={$formData.middleName}
+                    placeholder="Enter your middle name"
+                  />
+                {/snippet}
+              </Form.Control>
+              <Form.FieldErrors />
+            </Form.Field>
 
-        <AlertDialog.Footer>
-          <Form.Button disabled={$submitting} class="relative">
-            {#if $submitting}
-              <div
-                class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center rounded-lg bg-primary"
-              >
-                <Loader class="size-4 animate-spin text-white" />
-              </div>
-            {/if}
-            Create Account
-          </Form.Button>
-        </AlertDialog.Footer>
-      </form>
-    </div>
+            <Form.Field {form} name="lastName">
+              <Form.Control>
+                {#snippet children({ props })}
+                  <Form.Label>Last Name</Form.Label>
+                  <Input
+                    {...props}
+                    bind:value={$formData.lastName}
+                    placeholder="Enter your first name"
+                  />
+                {/snippet}
+              </Form.Control>
+              <Form.FieldErrors />
+            </Form.Field>
+
+            <Form.Field {form} name="email">
+              <Form.Control>
+                {#snippet children({ props })}
+                  <Form.Label>Email</Form.Label>
+                  <Input
+                    type="email"
+                    {...props}
+                    bind:value={$formData.email}
+                    placeholder="Enter your email"
+                  />
+                {/snippet}
+              </Form.Control>
+              <Form.FieldErrors />
+            </Form.Field>
+
+            <Form.Field {form} name="password">
+              <Form.Control>
+                {#snippet children({ props })}
+                  <Form.Label>Password</Form.Label>
+                  <Input
+                    type="password"
+                    {...props}
+                    bind:value={$formData.password}
+                    placeholder="Enter your password"
+                  />
+                {/snippet}
+              </Form.Control>
+              <Form.FieldErrors />
+            </Form.Field>
+
+            <Form.Field {form} name="confirmPassword">
+              <Form.Control>
+                {#snippet children({ props })}
+                  <Form.Label>Confirm Password</Form.Label>
+                  <Input
+                    type="password"
+                    {...props}
+                    bind:value={$formData.confirmPassword}
+                    placeholder="Confirm your password"
+                  />
+                {/snippet}
+              </Form.Control>
+              <Form.FieldErrors />
+            </Form.Field>
+          </Tabs.Content>
+
+          <Tabs.Content value="Academic Details">Change your password here.</Tabs.Content>
+          <Tabs.Content value="Interest">Change your password here.</Tabs.Content>
+
+          <AlertDialog.Footer>
+            <Form.Button disabled={$submitting} class="relative">
+              {#if $submitting}
+                <div
+                  class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center rounded-lg bg-primary"
+                >
+                  <Loader class="size-4 animate-spin text-white" />
+                </div>
+              {/if}
+              Create Account
+            </Form.Button>
+          </AlertDialog.Footer>
+        </form>
+      </ScrollArea>
+
+      <div class="flex items-center justify-center bg-primary">
+        <span class=" text-sm font-bold text-white">Steps</span>
+      </div>
+      <Tabs.List class="w-full">
+        {#each ['Account Details', 'Academic Details', 'Interest'] as tab}
+          <Tabs.Trigger disabled={!finishedTab.includes(tab)} value={tab} class="w-full">
+            {tab}
+          </Tabs.Trigger>
+        {/each}
+      </Tabs.List>
+    </Tabs.Root>
   </AlertDialog.Content>
 </AlertDialog.Root>
