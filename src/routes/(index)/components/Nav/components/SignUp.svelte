@@ -16,6 +16,8 @@
   import Combobox from '$lib/components/general/Combobox.svelte';
   import { Checkbox } from '$lib/components/ui/checkbox/index.js';
   import { Label } from '$lib/components/ui/label/index.js';
+  import { page } from '$app/stores';
+  import { goto } from '$app/navigation';
   interface Props {
     registerForm: SuperValidated<Infer<SignupSchema>>;
   }
@@ -39,8 +41,12 @@
   const removeInterest = (id: string) => {
     $formData.interests = $formData.interests.filter((i) => i !== id);
   };
-
+  const detectURL = $derived($page.url.searchParams.get('register') === 'true');
   $effect(() => {
+    if (detectURL) {
+      open = true;
+    }
+
     if (
       $formData.photo.length &&
       $formData.title.length &&
@@ -74,7 +80,8 @@
 <AlertDialog.Root bind:open>
   <AlertDialog.Content class="max-h-screen p-0">
     <button
-      onclick={() => {
+      onclick={async () => {
+        await goto('/', { noScroll: true });
         open = false;
         form.reset();
         finishedTab = ['Account Details'];

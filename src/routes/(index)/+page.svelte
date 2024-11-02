@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
+  import Button from '$lib/components/ui/button/button.svelte';
   import Nav from './components/Nav/Nav.svelte';
 
   const { data } = $props();
@@ -7,6 +9,7 @@
 <Nav loginForm={data.loginForm} registerForm={data.registerForm} />
 
 <div
+  id="hero-one"
   class="flex min-h-screen flex-col items-center justify-center"
   style="background-image: url('/landing/bg-landing.webp'); background-size: cover; background-position: center;"
 >
@@ -48,4 +51,19 @@
       </div>
     </div>
   </div>
+</div>
+
+<div id="hero-two" class="grid min-h-screen grid-cols-[1fr_2fr]">
+  <div class="flex flex-col items-center justify-center gap-2.5">
+    <div class="flex max-w-[250px] flex-col gap-2.5">
+      <span class=" text-7xl font-bold">Faculty Member</span>
+      <span class=" text-sm text-muted-foreground"> at ONE CAINTA COLLEGE? </span>
+      <Button
+        onclick={() => {
+          goto('/?register=true', { noScroll: true });
+        }}>Get Started</Button
+      >
+    </div>
+  </div>
+  <div class="bg-blue-500"></div>
 </div>
