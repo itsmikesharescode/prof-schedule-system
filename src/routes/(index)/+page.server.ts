@@ -11,13 +11,27 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions: Actions = {
-  loginEvent: async ({ request }) => {
+  loginEvent: async ({ request, supabase }) => {
     const form = await superValidate(request, zod(loginSchema));
 
     if (!form.valid) {
       return fail(400, { form });
     }
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: form.data.email,
+      password: form.data.password
+    });
+
+    if (error) {
+      return fail(401, { form, msg: error.message });
+    } else if (data.user) {
+      return { form, msg: `Welcome back! ${data.user.user_metadata.firstName}` };
+    }
+
+    return fail(401, { form, msg: 'Something went wrong' });
   },
+
   registerEvent: async ({ request, fetch }) => {
     const form = await superValidate(request, zod(signupSchema));
 
