@@ -110,3 +110,70 @@ export const availableTimes = [
   { value: '09:30 PM', label: '09:30 PM' },
   { value: '10:00 PM', label: '10:00 PM' }
 ];
+
+export const interests = [
+  {
+    value: 'Accounting and Control',
+    label: 'Accounting and Control'
+  },
+  {
+    value: 'Business Ethics and Corporate Social Responsibility',
+    label: 'Business Ethics and Corporate Social Responsibility'
+  },
+  {
+    value: 'Corporate Governance',
+    label: 'Corporate Governance'
+  },
+  {
+    value: 'Decision Analysis',
+    label: 'Decision Analysis'
+  },
+  {
+    value: 'Economics',
+    label: 'Economics'
+  },
+  {
+    value: 'Entrepreneurship',
+    label: 'Entrepreneurship'
+  },
+  {
+    value: 'Finance',
+    label: 'Finance'
+  },
+  {
+    value: 'Information Technologies',
+    label: 'Information Technologies'
+  },
+  {
+    value: 'Innovation and Change',
+    label: 'Innovation and Change'
+  },
+  {
+    value: 'Knowledge and Communication',
+    label: 'Knowledge and Communication'
+  },
+  {
+    value: 'Leadership and People Management',
+    label: 'Leadership and People Management'
+  },
+  {
+    value: 'Marketing',
+    label: 'Marketing'
+  },
+  {
+    value: 'Service and Operations Management',
+    label: 'Service and Operations Management'
+  },
+  {
+    value: 'Strategy',
+    label: 'Strategy'
+  },
+  {
+    value: 'Negotiation',
+    label: 'Negotiation'
+  },
+  {
+    value: 'Family-owned business',
+    label: 'Family-owned business'
+  }
+];

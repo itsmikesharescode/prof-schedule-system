@@ -30,7 +30,8 @@ export const signupSchema = z
     endTime: z.string().min(1, { message: 'Must enter end time.' }),
     availability: z.string().refine((v) => ['Part Time', 'Full Time'].includes(v), {
       message: 'Must select availability.'
-    })
+    }),
+    interests: z.array(z.string())
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ['confirmPassword'],

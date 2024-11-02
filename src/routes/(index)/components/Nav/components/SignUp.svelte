@@ -12,9 +12,10 @@
   import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
   import * as Tabs from '$lib/components/ui/tabs/index.js';
   import ImagePicker from '$lib/components/general/ImagePicker.svelte';
-  import { availableTimes, days, departments, titles } from '$lib/metadata';
+  import { availableTimes, days, departments, interests, titles } from '$lib/metadata';
   import Combobox from '$lib/components/general/Combobox.svelte';
-
+  import { Checkbox } from '$lib/components/ui/checkbox/index.js';
+  import { Label } from '$lib/components/ui/label/index.js';
   interface Props {
     registerForm: SuperValidated<Infer<SignupSchema>>;
   }
@@ -30,6 +31,14 @@
   });
 
   const { form: formData, enhance, submitting } = form;
+
+  function addItem(id: string) {
+    $formData.interests = [...$formData.interests, id];
+  }
+
+  function removeItem(id: string) {
+    $formData.interests = $formData.interests.filter((i) => i !== id);
+  }
 
   $effect(() => {});
 </script>
@@ -297,7 +306,39 @@
               <Form.FieldErrors />
             </Form.Field>
           </Tabs.Content>
-          <Tabs.Content value="Interest">Change your password here.</Tabs.Content>
+
+          <Tabs.Content value="Interest" class="flex flex-col gap-4">
+            <Label class="text-lg font-bold">Interests</Label>
+            <Form.Fieldset {form} name="interests">
+              <div class="space-y-2">
+                {#each interests as interest}
+                  {@const checked = $formData.interests.includes(interest.value)}
+                  <div class="flex flex-row items-start space-x-3">
+                    <Form.Control>
+                      {#snippet children({ props })}
+                        <Checkbox
+                          {...props}
+                          {checked}
+                          value={interest.value}
+                          onCheckedChange={(v) => {
+                            if (v) {
+                              addItem(interest.value);
+                            } else {
+                              removeItem(interest.value);
+                            }
+                          }}
+                        />
+                        <Form.Label class="font-normal">
+                          {interest.label}
+                        </Form.Label>
+                      {/snippet}
+                    </Form.Control>
+                  </div>
+                {/each}
+                <Form.FieldErrors />
+              </div>
+            </Form.Fieldset>
+          </Tabs.Content>
 
           <AlertDialog.Footer>
             <Form.Button disabled={$submitting} class="relative">
