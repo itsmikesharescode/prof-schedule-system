@@ -1,6 +1,7 @@
 <script lang="ts">
   import Button from '$lib/components/ui/button/button.svelte';
   import { useUserState } from '$lib/runes/userState.svelte';
+  import Login from './components/Login.svelte';
 
   const userState = useUserState();
 </script>
@@ -13,7 +14,7 @@
     </div>
 
     <div class="flex items-center gap-2">
-      <Button size="sm">Log in</Button>
+      <Login />
       <Button size="sm" variant="secondary">Sign up</Button>
     </div>
   </div>
