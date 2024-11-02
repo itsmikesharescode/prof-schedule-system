@@ -36,6 +36,9 @@
       switch (status) {
         case 200:
           toast.success('', { description: data.msg });
+          form.reset();
+          finishedTab = ['Account Details'];
+          open = false;
           break;
         case 401:
           toast.error('', { description: data.msg });
@@ -54,13 +57,14 @@
     $formData.interests = $formData.interests.filter((i) => i !== id);
   };
   const detectURL = $derived($page.url.searchParams.get('register') === 'true');
+
   $effect(() => {
     if (detectURL) {
       open = true;
     }
 
     if (
-      $formData.photo.length &&
+      $formData.photo &&
       $formData.title.length &&
       $formData.firstName.length &&
       $formData.lastName.length &&
@@ -76,7 +80,7 @@
     ) {
       finishedTab = ['Account Details', 'Academic Details', 'Interest'];
     } else if (
-      $formData.photo.length &&
+      $formData.photo &&
       $formData.title.length &&
       $formData.firstName.length &&
       $formData.lastName.length &&
@@ -86,6 +90,8 @@
       finishedTab = ['Account Details', 'Academic Details'];
     }
   });
+
+  const file = fileProxy(form, 'photo');
 </script>
 
 <Button variant="secondary" size="sm" onclick={() => (open = true)}>Sign Up</Button>
@@ -126,7 +132,7 @@
                 {#snippet children({ props })}
                   <Form.Label>Photo</Form.Label>
                   <ImagePicker bind:imageLink={$formData.photo} />
-                  <input type="hidden" {...props} bind:value={$formData.photo} />
+                  <input class="hidden" type="file" {...props} bind:files={$file} />
                 {/snippet}
               </Form.Control>
               <Form.FieldErrors />
@@ -392,18 +398,17 @@
 
           <AlertDialog.Footer>
             <div class="">
-              {#if $formData.interests.length}
-                <Form.Button disabled={$submitting} class="relative">
-                  {#if $submitting}
-                    <div
-                      class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center rounded-lg bg-primary"
-                    >
-                      <Loader class="size-4 animate-spin text-white" />
-                    </div>
-                  {/if}
-                  Create Account
-                </Form.Button>
-              {/if}
+              <!-- {#if $formData.interests.length} -->
+              <Form.Button disabled={$submitting} class="relative">
+                {#if $submitting}
+                  <div
+                    class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center rounded-lg bg-primary"
+                  >
+                    <Loader class="size-4 animate-spin text-white" />
+                  </div>
+                {/if}
+                Create Account
+              </Form.Button>
             </div>
           </AlertDialog.Footer>
         </form>

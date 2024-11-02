@@ -8,7 +8,7 @@ export const loginSchema = z.object({
 
 export const signupSchema = z
   .object({
-    photo: z.string().min(1, { message: 'Must upload a 1 by 1 photo.' }),
+    photo: z.instanceof(File),
     title: z
       .string()
       .refine((v) => titles.map((t) => t.value).includes(v), { message: 'Must select title.' }),

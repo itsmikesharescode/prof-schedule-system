@@ -39,16 +39,11 @@ export const actions: Actions = {
       return fail(400, withFiles({ form }));
     }
 
-    const res = await fetch(form.data.photo);
-    const blob = await res.blob();
-    const file = new File([blob], 'photo.png', { type: 'image/png' });
-
     const { data: uploadRes, error: uploadError } = await supabase.storage
       .from('user_photos')
-      .upload(crypto.randomUUID(), file);
+      .upload(crypto.randomUUID(), form.data.photo);
 
     if (uploadError) {
-      console.log(uploadError);
       return withFiles({ form, msg: uploadError.message });
     }
 
@@ -80,5 +75,9 @@ export const actions: Actions = {
         }
       }
     });
+
+    if (error) return fail(401, withFiles({ form, msg: error.message }));
+    else if (user) return withFiles({ form, msg: `Welcome! ${user.user_metadata.firstName}` });
+    return fail(401, withFiles({ form, msg: 'Something went wrong' }));
   }
 };
