@@ -4,7 +4,7 @@
   import type { Infer, SuperValidated } from 'sveltekit-superforms';
   import type { UpdateProgramSchema } from './UpdateProgram/schema';
   import UpdateProgram from './UpdateProgram/UpdateProgram.svelte';
-
+  import DeleteProgram from './DeleteProgram/DeleteProgram.svelte';
   interface Props {
     updateProgramForm: SuperValidated<Infer<UpdateProgramSchema>>;
   }
@@ -12,6 +12,7 @@
   let { updateProgramForm }: Props = $props();
 
   let showUpdate = $state(false);
+  let showDelete = $state(false);
 </script>
 
 <DropdownMenu.Root>
@@ -26,7 +27,7 @@
         <Pencil class="size-4" />
         Update
       </DropdownMenu.Item>
-      <DropdownMenu.Item>
+      <DropdownMenu.Item onclick={() => (showDelete = true)}>
         <Trash2 class="size-4" />
         Delete
       </DropdownMenu.Item>
@@ -35,3 +36,4 @@
 </DropdownMenu.Root>
 
 <UpdateProgram bind:showUpdate {updateProgramForm} />
+<DeleteProgram bind:showDelete />
