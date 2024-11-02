@@ -68,7 +68,7 @@
     },
     {
       title: 'Subjects',
-      url: '/admin/Subjects',
+      url: '/admin/subjects',
       icon: CalendarCog
     },
     {
