@@ -27,7 +27,10 @@
 <AlertDialog.Root bind:open>
   <AlertDialog.Content class="p-0">
     <button
-      onclick={() => (open = false)}
+      onclick={() => {
+        open = false;
+        form.reset();
+      }}
       class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
     >
       <X class="size-4" />
@@ -41,7 +44,7 @@
       </div>
     </AlertDialog.Header>
 
-    <div class="p-2">
+    <div class="p-4">
       <form method="POST" use:enhance>
         <Form.Field {form} name="email">
           <Form.Control>
