@@ -11,6 +11,7 @@
   import SelectPicker from '$lib/components/general/SelectPicker.svelte';
   import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
   import * as Tabs from '$lib/components/ui/tabs/index.js';
+  import ImagePicker from '$lib/components/general/ImagePicker.svelte';
 
   interface Props {
     registerForm: SuperValidated<Infer<SignupSchema>>;
@@ -52,8 +53,19 @@
 
     <Tabs.Root bind:value={activeTab} class="w-full">
       <ScrollArea class="h-[60dvh] p-4">
-        <form method="POST" use:enhance class="overflow-auto">
+        <form method="POST" enctype="multipart/form-data" use:enhance class="overflow-auto">
           <Tabs.Content value="Account Details">
+            <Form.Field {form} name="photo">
+              <Form.Control>
+                {#snippet children({ props })}
+                  <Form.Label>Photo</Form.Label>
+                  <ImagePicker bind:image={$formData.photo} />
+                  <input type="hidden" {...props} bind:value={$formData.photo} />
+                {/snippet}
+              </Form.Control>
+              <Form.FieldErrors />
+            </Form.Field>
+
             <Form.Field {form} name="title">
               <Form.Control>
                 {#snippet children({ props })}

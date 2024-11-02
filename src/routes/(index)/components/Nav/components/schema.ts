@@ -5,8 +5,11 @@ export const loginSchema = z.object({
   password: z.string().min(1, { message: 'Must enter a password.' })
 });
 
-export const signupSchema = loginSchema
-  .extend({
+export const signupSchema = z
+  .object({
+    photo: z
+      .instanceof(File, { message: 'Must upload a 1x1 photo.' })
+      .refine((f) => f.size < 1_000_000, 'Max 1 MB upload size.'),
     title: z
       .string()
       .refine((v) => ['Professor', 'Program Head'].includes(v), { message: 'Must select title.' }),
