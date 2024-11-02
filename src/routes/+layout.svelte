@@ -3,7 +3,6 @@
   import '../app.css';
   import { invalidate } from '$app/navigation';
   import { initUserState, useUserState } from '$lib/runes/userState.svelte';
-  import Nav from '$lib/components/general/nav/Nav.svelte';
 
   let { children, data } = $props();
 
@@ -26,5 +25,4 @@
   });
 </script>
 
-<Nav />
 {@render children()}

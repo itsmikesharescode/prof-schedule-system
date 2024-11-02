@@ -1,6 +1,6 @@
 import { fail, superValidate } from 'sveltekit-superforms';
 import type { Actions, PageServerLoad } from './$types';
-import { loginSchema, signupSchema } from '$lib/components/general/nav/components/schema';
+import { loginSchema, signupSchema } from './components/Nav/components/schema';
 import { zod } from 'sveltekit-superforms/adapters';
 
 export const load: PageServerLoad = async () => {
