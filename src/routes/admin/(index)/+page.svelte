@@ -7,7 +7,7 @@
 </script>
 
 <div class="flex flex-col gap-4">
-  <div class="sticky top-2 z-50 flex justify-end">
+  <div class="sticky top-2 z-30 flex justify-end">
     <AddProgram addProgramForm={data.addProgramForm} />
   </div>
 
