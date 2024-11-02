@@ -1,6 +1,17 @@
 <script lang="ts">
   import { EllipsisVertical, Pencil, Trash2 } from 'lucide-svelte';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
+  import type { Infer, SuperValidated } from 'sveltekit-superforms';
+  import type { UpdateProgramSchema } from './UpdateProgram/schema';
+  import UpdateProgram from './UpdateProgram/UpdateProgram.svelte';
+
+  interface Props {
+    updateProgramForm: SuperValidated<Infer<UpdateProgramSchema>>;
+  }
+
+  let { updateProgramForm }: Props = $props();
+
+  let showUpdate = $state(false);
 </script>
 
 <DropdownMenu.Root>
@@ -11,7 +22,7 @@
     <DropdownMenu.Group>
       <DropdownMenu.GroupHeading>Actions</DropdownMenu.GroupHeading>
       <DropdownMenu.Separator />
-      <DropdownMenu.Item>
+      <DropdownMenu.Item onclick={() => (showUpdate = true)}>
         <Pencil class="size-4" />
         Update
       </DropdownMenu.Item>
@@ -22,3 +33,5 @@
     </DropdownMenu.Group>
   </DropdownMenu.Content>
 </DropdownMenu.Root>
+
+<UpdateProgram bind:showUpdate {updateProgramForm} />

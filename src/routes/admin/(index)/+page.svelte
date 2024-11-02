@@ -26,7 +26,7 @@
       {#each Array(20) as _}
         <Table.Row>
           <Table.Cell class="">
-            <TableMenu />
+            <TableMenu updateProgramForm={data.updateProgramForm} />
           </Table.Cell>
           <Table.Cell class="font-medium">BSIS</Table.Cell>
           <Table.Cell>Bachelor of Science in Information System</Table.Cell>
