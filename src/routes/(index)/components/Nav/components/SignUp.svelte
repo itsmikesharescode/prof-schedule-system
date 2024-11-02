@@ -12,6 +12,7 @@
   import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
   import * as Tabs from '$lib/components/ui/tabs/index.js';
   import ImagePicker from '$lib/components/general/ImagePicker.svelte';
+  import { days, departments, titles } from '$lib/metadata';
 
   interface Props {
     registerForm: SuperValidated<Infer<SignupSchema>>;
@@ -21,13 +22,15 @@
 
   let open = $state(true);
   let activeTab = $state('Account Details');
-  let finishedTab = $state<string[]>(['Account Details']);
+  let finishedTab = $state<string[]>(['Account Details', 'Academic Details']);
 
   const form = superForm(registerForm, {
     validators: zodClient(signupSchema)
   });
 
   const { form: formData, enhance, submitting } = form;
+
+  $effect(() => {});
 </script>
 
 <Button variant="secondary" size="sm" onclick={() => (open = true)}>Sign Up</Button>
@@ -80,10 +83,7 @@
                     name="Select title"
                     {props}
                     class=""
-                    selections={[
-                      { label: 'Professor', value: 'Professor' },
-                      { label: 'Program Head', value: 'Program Head' }
-                    ]}
+                    selections={titles}
                     bind:selected={$formData.title}
                   />
                   <input type="hidden" {...props} bind:value={$formData.title} />
@@ -180,7 +180,70 @@
             </Form.Field>
           </Tabs.Content>
 
-          <Tabs.Content value="Academic Details">Change your password here.</Tabs.Content>
+          <Tabs.Content value="Academic Details">
+            <Form.Field {form} name="previousSchool">
+              <Form.Control>
+                {#snippet children({ props })}
+                  <Form.Label>Previous School</Form.Label>
+                  <Input
+                    {...props}
+                    bind:value={$formData.previousSchool}
+                    placeholder="Enter your previous school"
+                  />
+                {/snippet}
+              </Form.Control>
+              <Form.FieldErrors />
+            </Form.Field>
+
+            <Form.Field {form} name="yearsOfTeaching">
+              <Form.Control>
+                {#snippet children({ props })}
+                  <Form.Label>Previous School</Form.Label>
+                  <Input
+                    type="number"
+                    {...props}
+                    bind:value={$formData.yearsOfTeaching}
+                    placeholder="Enter your years of teaching"
+                  />
+                {/snippet}
+              </Form.Control>
+              <Form.FieldErrors />
+            </Form.Field>
+
+            <Form.Field {form} name="department">
+              <Form.Control>
+                {#snippet children({ props })}
+                  <Form.Label>Department</Form.Label>
+                  <SelectPicker
+                    name="Select department"
+                    {props}
+                    class=""
+                    selections={departments}
+                    bind:selected={$formData.department}
+                  />
+                  <input type="hidden" {...props} bind:value={$formData.department} />
+                {/snippet}
+              </Form.Control>
+              <Form.FieldErrors />
+            </Form.Field>
+
+            <Form.Field {form} name="day">
+              <Form.Control>
+                {#snippet children({ props })}
+                  <Form.Label>Day</Form.Label>
+                  <SelectPicker
+                    name="Select day"
+                    {props}
+                    class=""
+                    selections={days}
+                    bind:selected={$formData.day}
+                  />
+                  <input type="hidden" {...props} bind:value={$formData.day} />
+                {/snippet}
+              </Form.Control>
+              <Form.FieldErrors />
+            </Form.Field>
+          </Tabs.Content>
           <Tabs.Content value="Interest">Change your password here.</Tabs.Content>
 
           <AlertDialog.Footer>

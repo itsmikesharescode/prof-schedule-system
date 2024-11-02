@@ -1,3 +1,4 @@
+import { days, departments, titles } from '$lib/metadata';
 import { z } from 'zod';
 
 export const loginSchema = z.object({
@@ -10,13 +11,23 @@ export const signupSchema = z
     photo: z.string().min(1, { message: 'Must upload a 1 by 1 photo.' }),
     title: z
       .string()
-      .refine((v) => ['Professor', 'Program Head'].includes(v), { message: 'Must select title.' }),
+      .refine((v) => titles.map((t) => t.value).includes(v), { message: 'Must select title.' }),
     firstName: z.string().min(1, { message: 'Must enter first name.' }),
     middleName: z.string().min(1, { message: 'Must enter middle name.' }),
     lastName: z.string().min(1, { message: 'Must enter last name.' }),
     email: z.string().email(),
     password: z.string().min(8, { message: 'Must enter a password.' }),
-    confirmPassword: z.string()
+    confirmPassword: z.string(),
+    previousSchool: z.string().min(1, { message: 'Must enter previous school.' }),
+    yearsOfTeaching: z.number().min(1, { message: 'Must enter years of teaching.' }),
+    department: z.string().refine((v) => departments.map((t) => t.value).includes(v), {
+      message: 'Must select department.'
+    }),
+    day: z.string().refine((v) => days.map((t) => t.value).includes(v), {
+      message: 'Must select day.'
+    }),
+    startTime: z.string().min(1, { message: 'Must enter start time.' }),
+    endTime: z.string().min(1, { message: 'Must enter end time.' })
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ['confirmPassword'],
