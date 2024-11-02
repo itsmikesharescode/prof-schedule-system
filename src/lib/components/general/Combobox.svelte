@@ -7,34 +7,23 @@
   import { Button } from '$lib/components/ui/button/index.js';
   import { cn } from '$lib/utils.js';
 
-  const frameworks = [
-    {
-      value: 'sveltekit',
-      label: 'SvelteKit'
-    },
-    {
-      value: 'next.js',
-      label: 'Next.js'
-    },
-    {
-      value: 'nuxt.js',
-      label: 'Nuxt.js'
-    },
-    {
-      value: 'remix',
-      label: 'Remix'
-    },
-    {
-      value: 'astro',
-      label: 'Astro'
-    }
-  ];
+  interface Props {
+    selected: string;
+    selections: {
+      value: string;
+      label: string;
+    }[];
+    placeholder: string;
+    name: string;
+  }
+
+  let { selected = $bindable(), selections, placeholder, name }: Props = $props();
 
   let open = $state(false);
   let value = $state('');
   let triggerRef = $state<HTMLButtonElement>(null!);
 
-  const selectedValue = $derived(frameworks.find((f) => f.value === value)?.label);
+  const selectedValue = $derived(selections.find((f) => f.value === value)?.label);
 
   // We want to refocus the trigger button when the user selects
   // an item from the list so users can continue navigating the
@@ -45,6 +34,12 @@
       triggerRef.focus();
     });
   }
+
+  $effect(() => {
+    if (selectedValue) {
+      selected = selectedValue;
+    }
+  });
 </script>
 
 <Popover.Root bind:open>
@@ -57,27 +52,27 @@
         role="combobox"
         aria-expanded={open}
       >
-        {selectedValue || 'Select a framework...'}
+        {selected || { name }}
         <ChevronsUpDown class="ml-2 size-4 shrink-0 opacity-50" />
       </Button>
     {/snippet}
   </Popover.Trigger>
   <Popover.Content class="w-[200px] p-0">
     <Command.Root>
-      <Command.Input placeholder="Search framework..." />
+      <Command.Input {placeholder} />
       <Command.List>
-        <Command.Empty>No framework found.</Command.Empty>
+        <Command.Empty>No found.</Command.Empty>
         <Command.Group>
-          {#each frameworks as framework}
+          {#each selections as selection}
             <Command.Item
-              value={framework.value}
+              value={selection.value}
               onSelect={() => {
-                value = framework.value;
+                value = selection.value;
                 closeAndFocusTrigger();
               }}
             >
-              <Check class={cn('mr-2 size-4', value !== framework.value && 'text-transparent')} />
-              {framework.label}
+              <Check class={cn('mr-2 size-4', value !== selection.value && 'text-transparent')} />
+              {selection.label}
             </Command.Item>
           {/each}
         </Command.Group>
