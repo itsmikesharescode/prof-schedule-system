@@ -11,6 +11,8 @@
   } from 'lucide-svelte';
   import * as Sidebar from '$lib/components/ui/sidebar/index.js';
   import { page } from '$app/stores';
+  import * as Popover from '$lib/components/ui/popover/index.js';
+  import Profile from './components/Profile.svelte';
 
   const site_map = [
     {
@@ -76,9 +78,6 @@
   </Sidebar.Content>
 
   <Sidebar.Footer>
-    <Sidebar.MenuButton variant="outline">
-      <LogOut />
-      <span class="text-sm font-semibold">Log out</span>
-    </Sidebar.MenuButton>
+    <Profile />
   </Sidebar.Footer>
 </Sidebar.Root>

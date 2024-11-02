@@ -3,7 +3,7 @@
   import AdminSidebar from './(components)/Nav/AdminSidebar.svelte';
   const { children } = $props();
 
-  let open = $state(false);
+  let open = $state(true);
 </script>
 
 {@render children()}
