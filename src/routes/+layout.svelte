@@ -3,6 +3,7 @@
   import '../app.css';
   import { invalidate } from '$app/navigation';
   import { initUserState, useUserState } from '$lib/runes/userState.svelte';
+
   let { children, data } = $props();
 
   initUserState();
