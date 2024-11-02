@@ -1,18 +1,21 @@
 <script lang="ts">
   import * as Popover from '$lib/components/ui/popover/index.js';
-  import * as Sidebar from '$lib/components/ui/sidebar/index.js';
   import * as Avatar from '$lib/components/ui/avatar/index.js';
   import { Settings } from 'lucide-svelte';
   import Logout from './Logout.svelte';
+  import Button from '$lib/components/ui/button/button.svelte';
+
+  //todo update this to dropdown menu
 </script>
 
 <Popover.Root>
-  <Popover.Trigger>
-    <Sidebar.MenuButton variant="outline" class="text-sm font-semibold">
+  <Popover.Trigger class="w-full">
+    <Button size="sm" class="flex w-full items-center justify-start gap-2">
       <Settings />
       Profile
-    </Sidebar.MenuButton>
+    </Button>
   </Popover.Trigger>
+
   <Popover.Content class="flex flex-col gap-4">
     <div class="flex items-center gap-2">
       <Avatar.Root>
