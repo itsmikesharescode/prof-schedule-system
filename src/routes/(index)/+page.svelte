@@ -2,6 +2,7 @@
   import { goto } from '$app/navigation';
   import Button from '$lib/components/ui/button/button.svelte';
   import Nav from './components/Nav/Nav.svelte';
+  import Programs from './components/Programs/Programs.svelte';
 
   const { data } = $props();
 </script>
@@ -53,7 +54,7 @@
   </div>
 </div>
 
-<div id="hero-two" class="grid min-h-screen grid-cols-[1fr_2fr]">
+<div id="hero-two" class="grid min-h-screen grid-cols-[400px,1fr]">
   <div class="flex flex-col items-center justify-center gap-2.5">
     <div class="flex max-w-[250px] flex-col gap-2.5">
       <span class=" text-7xl font-bold">Faculty Member</span>
@@ -65,5 +66,11 @@
       >
     </div>
   </div>
-  <div class="bg-blue-500"></div>
+  <div
+    class="flex flex-col items-center justify-center gap-5 bg-gradient-to-l from-[#5de0e6] to-[#004aad]"
+  >
+    <span class="text-center text-7xl font-bold text-white">Programs</span>
+
+    <Programs />
+  </div>
 </div>
