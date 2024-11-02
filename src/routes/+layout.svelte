@@ -3,6 +3,7 @@
   import '../app.css';
   import { invalidate } from '$app/navigation';
   import { initUserState, useUserState } from '$lib/runes/userState.svelte';
+  import Footer from '$lib/components/general/Footer.svelte';
 
   let { children, data } = $props();
 
@@ -26,3 +27,4 @@
 </script>
 
 {@render children()}
+<Footer />
