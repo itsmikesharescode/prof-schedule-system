@@ -2,6 +2,14 @@
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index';
   import Button from '$lib/components/ui/button/button.svelte';
   import X from 'lucide-svelte/icons/x';
+  import type { Infer, SuperValidated } from 'sveltekit-superforms';
+  import type { LoginSchema } from './schema';
+
+  interface Props {
+    loginForm: SuperValidated<Infer<LoginSchema>>;
+  }
+
+  let { loginForm }: Props = $props();
 
   let open = $state(true);
 </script>

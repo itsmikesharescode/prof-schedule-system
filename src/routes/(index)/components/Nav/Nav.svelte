@@ -1,9 +1,15 @@
 <script lang="ts">
   import Button from '$lib/components/ui/button/button.svelte';
-  import { useUserState } from '$lib/runes/userState.svelte';
+  import type { Infer, SuperValidated } from 'sveltekit-superforms';
   import Login from './components/Login.svelte';
+  import type { LoginSchema, SignupSchema } from './components/schema';
 
-  const userState = useUserState();
+  interface Props {
+    loginForm: SuperValidated<Infer<LoginSchema>>;
+    registerForm: SuperValidated<Infer<SignupSchema>>;
+  }
+
+  let { loginForm, registerForm }: Props = $props();
 </script>
 
 <nav class="bg-gradient-to-l from-[#3331C2] to-black p-2">
@@ -14,7 +20,7 @@
     </div>
 
     <div class="flex items-center gap-2">
-      <Login />
+      <Login {loginForm} />
       <Button size="sm" variant="secondary">Sign up</Button>
     </div>
   </div>
