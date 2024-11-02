@@ -1,8 +1,14 @@
 <script lang="ts">
-  import Nav from './(components)/Nav/Nav.svelte';
-
+  import * as Sidebar from '$lib/components/ui/sidebar/index.js';
+  import AdminSidebar from './(components)/Nav/AdminSidebar.svelte';
   const { children } = $props();
 </script>
 
-<Nav />
 {@render children()}
+<Sidebar.Provider>
+  <AdminSidebar />
+  <main>
+    <Sidebar.Trigger />
+    {@render children?.()}
+  </main>
+</Sidebar.Provider>
