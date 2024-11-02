@@ -22,7 +22,7 @@
 
   let { registerForm }: Props = $props();
 
-  let open = $state(true);
+  let open = $state(false);
   let activeTab = $state('Account Details');
   let finishedTab = $state<string[]>(['Account Details']);
 

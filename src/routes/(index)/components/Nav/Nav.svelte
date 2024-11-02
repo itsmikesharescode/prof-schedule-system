@@ -13,7 +13,7 @@
   let { loginForm, registerForm }: Props = $props();
 </script>
 
-<nav class="bg-gradient-to-l from-[#3331C2] to-black p-2">
+<nav class="sticky top-0 bg-gradient-to-l from-[#3331C2] to-black p-2">
   <div class="container flex items-center justify-between">
     <div class="flex items-center gap-2">
       <img src="/favicon.png" alt="system logo" class="h-[50px] w-[50px]" />
