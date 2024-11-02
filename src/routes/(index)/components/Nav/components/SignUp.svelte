@@ -52,8 +52,14 @@
     </AlertDialog.Header>
 
     <Tabs.Root bind:value={activeTab} class="w-full">
-      <ScrollArea class="h-[60dvh] p-4">
-        <form method="POST" enctype="multipart/form-data" use:enhance class="overflow-auto">
+      <ScrollArea class="h-[60dvh]">
+        <form
+          method="POST"
+          action="/registerEvent"
+          enctype="multipart/form-data"
+          use:enhance
+          class="overflow-auto p-4"
+        >
           <Tabs.Content value="Account Details">
             <Form.Field {form} name="photo">
               <Form.Control>

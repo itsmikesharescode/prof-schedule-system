@@ -1,4 +1,4 @@
-import { fail, superValidate } from 'sveltekit-superforms';
+import { fail, superValidate, withFiles } from 'sveltekit-superforms';
 import type { Actions, PageServerLoad } from './$types';
 import { loginSchema, signupSchema } from './components/Nav/components/schema';
 import { zod } from 'sveltekit-superforms/adapters';
@@ -20,9 +20,9 @@ export const actions: Actions = {
   },
   registerEvent: async ({ request }) => {
     const form = await superValidate(request, zod(signupSchema));
-
+    console.log(form.data);
     if (!form.valid) {
-      return fail(400, { form });
+      return fail(400, withFiles({ form }));
     }
   }
 };
