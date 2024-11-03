@@ -1,4 +1,3 @@
-import { days, departments, titles } from '$lib/metadata';
 import { z } from 'zod';
 
 export const addRoomSchema = z.object({
