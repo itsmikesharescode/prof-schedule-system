@@ -8,6 +8,8 @@
   import { zodClient } from 'sveltekit-superforms/adapters';
   import * as Form from '$lib/components/ui/form/index.js';
   import { Input } from '$lib/components/ui/input/index.js';
+  import { toast } from 'svelte-sonner';
+  import { LoaderCircle } from 'lucide-svelte';
 
   interface Props {
     loginForm: SuperValidated<Infer<LoginSchema>>;
@@ -18,7 +20,18 @@
   let open = $state(false);
 
   const form = superForm(loginForm, {
-    validators: zodClient(loginSchema)
+    validators: zodClient(loginSchema),
+    onUpdate({ result }) {
+      const { status, data } = result;
+      switch (status) {
+        case 200:
+          toast.success('', { description: data.msg });
+          break;
+        case 401:
+          toast.error('', { description: data.msg });
+          break;
+      }
+    }
   });
 
   const { form: formData, enhance, submitting } = form;
@@ -41,7 +54,7 @@
       <AlertDialog.Title>Log in to ProfSched</AlertDialog.Title>
     </AlertDialog.Header>
 
-    <form method="POST" use:enhance>
+    <form method="POST" action="?/loginEvent" use:enhance>
       <Form.Field {form} name="email">
         <Form.Control>
           {#snippet children({ props })}
@@ -56,14 +69,28 @@
         <Form.Control>
           {#snippet children({ props })}
             <Form.Label>Password</Form.Label>
-            <Input {...props} bind:value={$formData.password} placeholder="Enter your password" />
+            <Input
+              type="password"
+              {...props}
+              bind:value={$formData.password}
+              placeholder="Enter your password"
+            />
           {/snippet}
         </Form.Control>
         <Form.FieldErrors />
       </Form.Field>
 
       <AlertDialog.Footer>
-        <Form.Button size="sm">Log in</Form.Button>
+        <Form.Button disabled={$submitting} size="sm" class="relative">
+          {#if $submitting}
+            <div
+              class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center rounded-lg bg-primary"
+            >
+              <LoaderCircle class="size-4 animate-spin" />
+            </div>
+          {/if}
+          Log in
+        </Form.Button>
       </AlertDialog.Footer>
     </form>
   </AlertDialog.Content>
