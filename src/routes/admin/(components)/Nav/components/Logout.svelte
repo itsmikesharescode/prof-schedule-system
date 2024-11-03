@@ -5,6 +5,7 @@
   import { goto } from '$app/navigation';
   import { LoaderCircle } from 'lucide-svelte';
   import { useSupabaseState } from '$lib/runes/supabaseState.svelte';
+
   let open = $state(false);
   let loading = $state(false);
 
