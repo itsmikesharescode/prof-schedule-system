@@ -10,7 +10,7 @@
   import ImagePicker from '$lib/components/general/ImagePicker.svelte';
   import { ScrollArea } from '$lib/components/ui/scroll-area/index';
   import Combobox from '$lib/components/general/Combobox.svelte';
-  import { availableTimes, days, departments, interests } from '$lib/metadata';
+  import { availableTimes, days, departments, interests, titles } from '$lib/metadata';
   import SelectPicker from '$lib/components/general/SelectPicker.svelte';
   import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte';
 
@@ -87,7 +87,14 @@
               <Form.Control>
                 {#snippet children({ props })}
                   <Form.Label>Title</Form.Label>
-                  <Input {...props} bind:value={$formData.title} />
+                  <SelectPicker
+                    name="Select title"
+                    {props}
+                    class=""
+                    selections={titles}
+                    bind:selected={$formData.title}
+                  />
+                  <input type="hidden" {...props} bind:value={$formData.title} />
                 {/snippet}
               </Form.Control>
               <Form.Description />
@@ -98,7 +105,11 @@
               <Form.Control>
                 {#snippet children({ props })}
                   <Form.Label>First Name</Form.Label>
-                  <Input {...props} bind:value={$formData.firstName} />
+                  <Input
+                    {...props}
+                    bind:value={$formData.firstName}
+                    placeholder="Enter first name"
+                  />
                 {/snippet}
               </Form.Control>
               <Form.Description />
@@ -109,7 +120,11 @@
               <Form.Control>
                 {#snippet children({ props })}
                   <Form.Label>Middle Name</Form.Label>
-                  <Input {...props} bind:value={$formData.middleName} />
+                  <Input
+                    {...props}
+                    bind:value={$formData.middleName}
+                    placeholder="Enter middle name"
+                  />
                 {/snippet}
               </Form.Control>
               <Form.Description />
@@ -120,7 +135,23 @@
               <Form.Control>
                 {#snippet children({ props })}
                   <Form.Label>Last Name</Form.Label>
-                  <Input {...props} bind:value={$formData.lastName} />
+                  <Input {...props} bind:value={$formData.lastName} placeholder="Enter last name" />
+                {/snippet}
+              </Form.Control>
+              <Form.Description />
+              <Form.FieldErrors />
+            </Form.Field>
+
+            <Form.Field {form} name="email">
+              <Form.Control>
+                {#snippet children({ props })}
+                  <Form.Label>Last Name</Form.Label>
+                  <Input
+                    type="email"
+                    {...props}
+                    bind:value={$formData.email}
+                    placeholder="Enter email"
+                  />
                 {/snippet}
               </Form.Control>
               <Form.Description />
@@ -131,7 +162,12 @@
               <Form.Control>
                 {#snippet children({ props })}
                   <Form.Label>Password</Form.Label>
-                  <Input {...props} bind:value={$formData.password} />
+                  <Input
+                    type="password"
+                    {...props}
+                    bind:value={$formData.password}
+                    placeholder="Enter password"
+                  />
                 {/snippet}
               </Form.Control>
               <Form.Description />
@@ -142,7 +178,12 @@
               <Form.Control>
                 {#snippet children({ props })}
                   <Form.Label>Confirm Password</Form.Label>
-                  <Input {...props} bind:value={$formData.confirmPassword} />
+                  <Input
+                    type="password"
+                    {...props}
+                    bind:value={$formData.confirmPassword}
+                    placeholder="Confirm password"
+                  />
                 {/snippet}
               </Form.Control>
               <Form.Description />
