@@ -2,6 +2,7 @@ import { days, departments, titles } from '$lib/metadata';
 import { z } from 'zod';
 
 export const updateSchoolYearSchema = z.object({
+  id: z.number(),
   schoolYear: z
     .string()
     .regex(/^\d{4}-\d{4}$/, {
