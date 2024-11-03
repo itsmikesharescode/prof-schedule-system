@@ -1,12 +1,7 @@
 import { days, departments, titles } from '$lib/metadata';
 import { z } from 'zod';
 
-export const loginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(1, { message: 'Must enter a password.' })
-});
-
-export const signupSchema = z
+export const registerSchema = z
   .object({
     photo: z.instanceof(File),
     title: z
@@ -38,5 +33,4 @@ export const signupSchema = z
     message: 'Passwords do not match.'
   });
 
-export type LoginSchema = typeof loginSchema;
-export type SignupSchema = typeof signupSchema;
+export type RegisterSchema = typeof registerSchema;

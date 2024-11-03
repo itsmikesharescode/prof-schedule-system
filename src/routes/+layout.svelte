@@ -3,7 +3,7 @@
   import '../app.css';
   import { invalidate } from '$app/navigation';
   import { initUserState, useUserState } from '$lib/runes/userState.svelte';
-  import Footer from '$lib/components/general/Footer.svelte';
+  import { ModeWatcher } from 'mode-watcher';
   import { Toaster } from '$lib/components/ui/sonner/index';
 
   let { children, data } = $props();
@@ -27,6 +27,6 @@
   });
 </script>
 
+<ModeWatcher />
 <Toaster position="top-left" richColors />
 {@render children()}
-<!-- <Footer /> -->

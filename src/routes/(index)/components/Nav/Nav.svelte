@@ -1,28 +1,30 @@
 <script lang="ts">
-  import Button from '$lib/components/ui/button/button.svelte';
+  import Darkmode from '$lib/components/general/Darkmode.svelte';
   import type { Infer, SuperValidated } from 'sveltekit-superforms';
-  import Login from './components/Login.svelte';
-  import type { LoginSchema, SignupSchema } from './components/schema';
-  import SignUp from './components/SignUp.svelte';
+  import Register from './components/Register/Register.svelte';
+  import type { RegisterSchema } from './components/Register/schema';
+  import type { LoginSchema } from './components/Login/schema';
+  import Login from './components/Login/Login.svelte';
 
   interface Props {
+    registerForm: SuperValidated<Infer<RegisterSchema>>;
     loginForm: SuperValidated<Infer<LoginSchema>>;
-    registerForm: SuperValidated<Infer<SignupSchema>>;
   }
 
-  let { loginForm, registerForm }: Props = $props();
+  const { registerForm, loginForm }: Props = $props();
 </script>
 
-<nav class="sticky top-0 z-50 bg-gradient-to-l from-[#3331C2] to-black p-2">
-  <div class="container flex items-center justify-between">
+<nav class="sticky top-0 z-50 w-full border-b-2 bg-secondary">
+  <div class="container flex items-center justify-between p-2">
     <div class="flex items-center gap-2">
-      <img src="/favicon.png" alt="system logo" class="h-[50px] w-[50px]" />
-      <span class="text-2xl font-bold text-white">ProfSched</span>
+      <img src="/favicon.png" alt="system logo" class="h-10 w-10" />
+      <span class="text-xl font-bold">ProfSched</span>
     </div>
 
-    <div class="flex items-center gap-2">
+    <div class="flex items-center gap-2.5">
       <Login {loginForm} />
-      <SignUp {registerForm} />
+      <Register {registerForm} />
+      <Darkmode />
     </div>
   </div>
 </nav>
