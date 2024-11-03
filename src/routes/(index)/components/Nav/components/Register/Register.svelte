@@ -95,7 +95,7 @@
               <Form.Control>
                 {#snippet children({ props })}
                   <Form.Label>Title</Form.Label>
-                  <Input {...props} bind:value={$formData.title} />
+                  <Input {...props} bind:value={$formData.title} placeholder="Enter your title" />
                 {/snippet}
               </Form.Control>
               <Form.Description />
@@ -106,7 +106,11 @@
               <Form.Control>
                 {#snippet children({ props })}
                   <Form.Label>First Name</Form.Label>
-                  <Input {...props} bind:value={$formData.firstName} />
+                  <Input
+                    {...props}
+                    bind:value={$formData.firstName}
+                    placeholder="Enter your first name"
+                  />
                 {/snippet}
               </Form.Control>
               <Form.Description />
@@ -117,7 +121,11 @@
               <Form.Control>
                 {#snippet children({ props })}
                   <Form.Label>Middle Name</Form.Label>
-                  <Input {...props} bind:value={$formData.middleName} />
+                  <Input
+                    {...props}
+                    bind:value={$formData.middleName}
+                    placeholder="Enter your middle name"
+                  />
                 {/snippet}
               </Form.Control>
               <Form.Description />
@@ -128,7 +136,11 @@
               <Form.Control>
                 {#snippet children({ props })}
                   <Form.Label>Last Name</Form.Label>
-                  <Input {...props} bind:value={$formData.lastName} />
+                  <Input
+                    {...props}
+                    bind:value={$formData.lastName}
+                    placeholder="Enter your last name"
+                  />
                 {/snippet}
               </Form.Control>
               <Form.Description />
@@ -139,7 +151,12 @@
               <Form.Control>
                 {#snippet children({ props })}
                   <Form.Label>Password</Form.Label>
-                  <Input {...props} bind:value={$formData.password} />
+                  <Input
+                    type="password"
+                    {...props}
+                    bind:value={$formData.password}
+                    placeholder="Enter your password"
+                  />
                 {/snippet}
               </Form.Control>
               <Form.Description />
@@ -150,7 +167,12 @@
               <Form.Control>
                 {#snippet children({ props })}
                   <Form.Label>Confirm Password</Form.Label>
-                  <Input {...props} bind:value={$formData.confirmPassword} />
+                  <Input
+                    type="password"
+                    {...props}
+                    bind:value={$formData.confirmPassword}
+                    placeholder="Confirm your password"
+                  />
                 {/snippet}
               </Form.Control>
               <Form.Description />
