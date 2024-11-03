@@ -20,7 +20,10 @@
 
 <div class="flex flex-col gap-4">
   <div class="sticky top-2 z-30 flex justify-end">
-    <AddSchoolYear addSchoolYearForm={data.addSchoolYearForm} />
+    <div class="flex w-full items-center justify-between">
+      <FilterPicker name="Select filter" class="max-w-fit" selections={departments} />
+      <AddSchoolYear addSchoolYearForm={data.addSchoolYearForm} />
+    </div>
   </div>
 
   <Table.Root>
