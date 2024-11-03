@@ -87,7 +87,9 @@
       <Sidebar.GroupContent>
         <Sidebar.Menu>
           {#each site_map as site (site.title)}
-            <Sidebar.MenuItem class={site.url === $page.url.pathname ? 'bg-gray-100' : ''}>
+            <Sidebar.MenuItem
+              class={site.url === $page.url.pathname ? 'bg-gray-100 dark:bg-secondary/90' : ''}
+            >
               <Sidebar.MenuButton>
                 {#snippet child({ props })}
                   <a href={site.url} {...props}>
@@ -117,7 +119,11 @@
           <Sidebar.GroupContent>
             <Sidebar.Menu>
               {#each records_map as record (record.title)}
-                <Sidebar.MenuItem class={record.url === $page.url.pathname ? 'bg-gray-100' : ''}>
+                <Sidebar.MenuItem
+                  class={record.url === $page.url.pathname
+                    ? 'bg-gray-100 dark:bg-secondary/90'
+                    : ''}
+                >
                   <Sidebar.MenuButton>
                     {#snippet child({ props })}
                       <a href={record.url} {...props}>
