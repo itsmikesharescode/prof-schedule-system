@@ -1,15 +1,17 @@
 <script lang="ts">
   import Darkmode from '$lib/components/general/Darkmode.svelte';
-  import Button from '$lib/components/ui/button/button.svelte';
   import type { Infer, SuperValidated } from 'sveltekit-superforms';
   import Register from './components/Register/Register.svelte';
   import type { RegisterSchema } from './components/Register/schema';
+  import type { LoginSchema } from './components/Login/schema';
+  import Login from './components/Login/Login.svelte';
 
   interface Props {
     registerForm: SuperValidated<Infer<RegisterSchema>>;
+    loginForm: SuperValidated<Infer<LoginSchema>>;
   }
 
-  let { registerForm }: Props = $props();
+  const { registerForm, loginForm }: Props = $props();
 </script>
 
 <nav class="sticky top-0 z-50 w-full border-b-2 bg-secondary">
@@ -20,7 +22,7 @@
     </div>
 
     <div class="flex items-center gap-2.5">
-      <Button size="sm">Log in</Button>
+      <Login {loginForm} />
       <Register {registerForm} />
       <Darkmode />
     </div>

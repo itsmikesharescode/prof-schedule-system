@@ -1,12 +1,11 @@
 <script lang="ts">
-  import Nav from './components/Nav/Nav.svelte';
   import WhyProfSched from './components/Heros/WhyProfSched.svelte';
   import ProfSchedBody from './components/Heros/ProfSchedBody.svelte';
-
+  import Nav from './components/Nav/Nav.svelte';
   const { data } = $props();
 </script>
 
-<Nav registerForm={data.registerForm} />
+<Nav loginForm={data.loginForm} registerForm={data.registerForm} />
 
 <main class="min-h-screen">
   <div class="container mt-5 flex flex-col gap-5 p-3">
