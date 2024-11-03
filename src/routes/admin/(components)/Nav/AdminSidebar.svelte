@@ -57,8 +57,8 @@
       icon: CalendarCog
     },
     {
-      title: 'Year Level',
-      url: '/admin/year-level',
+      title: 'Year Levels',
+      url: '/admin/year-levels',
       icon: CalendarCog
     },
     {
