@@ -30,7 +30,9 @@
       <AlertDialog.Description>You are about to log out in the system.</AlertDialog.Description>
     </AlertDialog.Header>
     <AlertDialog.Footer>
-      <Button disabled={loading} size="sm" variant="secondary">Cancel</Button>
+      <Button disabled={loading} size="sm" variant="secondary" onclick={() => (open = false)}>
+        Cancel
+      </Button>
       <Button disabled={loading} size="sm" class="relative" onclick={handleLogout}>
         {#if loading}
           <div class="absolute inset-0 flex items-center justify-center rounded-lg bg-primary">
