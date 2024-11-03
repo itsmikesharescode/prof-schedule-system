@@ -10,7 +10,7 @@
   import ImagePicker from '$lib/components/general/ImagePicker.svelte';
   import { ScrollArea } from '$lib/components/ui/scroll-area/index';
   import Combobox from '$lib/components/general/Combobox.svelte';
-  import { availableTimes, days, departments, interests } from '$lib/metadata';
+  import { availableTimes, days, departments, interests, titles } from '$lib/metadata';
   import SelectPicker from '$lib/components/general/SelectPicker.svelte';
   import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte';
   import { page } from '$app/stores';
@@ -72,7 +72,13 @@
       </AlertDialog.Description>
     </AlertDialog.Header>
     <ScrollArea class="h-[80dvh]">
-      <form method="POST" enctype="multipart/form-data" use:enhance class=" ">
+      <form
+        method="POST"
+        action="?/registerEvent"
+        enctype="multipart/form-data"
+        use:enhance
+        class=" "
+      >
         <div class="grid grid-cols-3 gap-6 px-6 pb-6">
           <!--Personal Details-->
           <div class="">
@@ -95,7 +101,14 @@
               <Form.Control>
                 {#snippet children({ props })}
                   <Form.Label>Title</Form.Label>
-                  <Input {...props} bind:value={$formData.title} placeholder="Enter your title" />
+                  <SelectPicker
+                    name="Select title"
+                    {props}
+                    class=""
+                    selections={titles}
+                    bind:selected={$formData.title}
+                  />
+                  <input type="hidden" {...props} bind:value={$formData.title} />
                 {/snippet}
               </Form.Control>
               <Form.Description />
@@ -140,6 +153,22 @@
                     {...props}
                     bind:value={$formData.lastName}
                     placeholder="Enter your last name"
+                  />
+                {/snippet}
+              </Form.Control>
+              <Form.Description />
+              <Form.FieldErrors />
+            </Form.Field>
+
+            <Form.Field {form} name="email">
+              <Form.Control>
+                {#snippet children({ props })}
+                  <Form.Label>Email</Form.Label>
+                  <Input
+                    type="email"
+                    {...props}
+                    bind:value={$formData.email}
+                    placeholder="Enter your email"
                   />
                 {/snippet}
               </Form.Control>
@@ -340,7 +369,13 @@
         </div>
 
         <div class="pointer-events-none sticky bottom-6 left-0 right-0 flex justify-end px-6">
-          <Form.Button size="sm" class="pointer-events-auto relative">
+          <Form.Button
+            onclick={() => {
+              console.log($formData);
+            }}
+            size="sm"
+            class="pointer-events-auto relative"
+          >
             {#if $submitting}
               <div
                 class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center rounded-lg bg-primary"

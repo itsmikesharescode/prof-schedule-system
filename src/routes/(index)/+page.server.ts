@@ -34,7 +34,7 @@ export const actions: Actions = {
     return fail(401, { form, msg: 'Something went wrong' });
   },
 
-  registerEvent: async ({ request, fetch, locals: { supabase } }) => {
+  registerEvent: async ({ request, locals: { supabase } }) => {
     const form = await superValidate(request, zod(registerSchema));
 
     if (!form.valid) {
