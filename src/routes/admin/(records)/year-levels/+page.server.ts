@@ -15,14 +15,14 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions: Actions = {
-  addSchoolYearEvent: async ({ request, locals: { supabase } }) => {
+  addYearLevelEvent: async ({ request, locals: { supabase } }) => {
     const form = await superValidate(request, zod(addYearLevelSchema));
 
     if (!form.valid) {
       return fail(400, { form });
     }
   },
-  updateSchoolYearEvent: async ({ request, locals: { supabase } }) => {
+  updateYearLevelEvent: async ({ request, locals: { supabase } }) => {
     const form = await superValidate(request, zod(updateYearLevelSchema));
 
     if (!form.valid) {

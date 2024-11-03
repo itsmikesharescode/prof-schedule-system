@@ -6,7 +6,7 @@
   import { zodClient } from 'sveltekit-superforms/adapters';
   import * as Form from '$lib/components/ui/form/index.js';
   import { Input } from '$lib/components/ui/input/index.js';
-  import { updateSchoolYearSchema, type UpdateSchoolYearSchema } from './schema';
+  import { updateSectionSchema, type UpdateSectionSchema } from './schema';
   import ImagePicker from '$lib/components/general/ImagePicker.svelte';
   import { ScrollArea } from '$lib/components/ui/scroll-area/index';
   import Combobox from '$lib/components/general/Combobox.svelte';
@@ -15,14 +15,14 @@
   import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte';
 
   interface Props {
-    updateSchoolYearForm: SuperValidated<Infer<UpdateSchoolYearSchema>>;
+    updateSectionForm: SuperValidated<Infer<UpdateSectionSchema>>;
     showUpdate: boolean;
   }
 
-  let { showUpdate = $bindable(), updateSchoolYearForm }: Props = $props();
+  let { showUpdate = $bindable(), updateSectionForm }: Props = $props();
 
-  const form = superForm(updateSchoolYearForm, {
-    validators: zodClient(updateSchoolYearSchema)
+  const form = superForm(updateSectionForm, {
+    validators: zodClient(updateSectionSchema)
   });
 
   const { form: formData, enhance, submitting } = form;
@@ -55,11 +55,22 @@
     </AlertDialog.Header>
 
     <form method="POST" use:enhance>
-      <Form.Field {form} name="schoolYear">
+      <Form.Field {form} name="class">
         <Form.Control>
           {#snippet children({ props })}
-            <Form.Label>School Year</Form.Label>
-            <Input {...props} bind:value={$formData.schoolYear} placeholder="Enter school year" />
+            <Form.Label>Class</Form.Label>
+            <Input {...props} bind:value={$formData.class} placeholder="Enter class" />
+          {/snippet}
+        </Form.Control>
+        <Form.Description />
+        <Form.FieldErrors />
+      </Form.Field>
+
+      <Form.Field {form} name="sectionCode">
+        <Form.Control>
+          {#snippet children({ props })}
+            <Form.Label>Section Code</Form.Label>
+            <Input {...props} bind:value={$formData.sectionCode} placeholder="Enter section code" />
           {/snippet}
         </Form.Control>
         <Form.Description />
