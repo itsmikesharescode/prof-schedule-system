@@ -2,9 +2,12 @@
   import Nav from './components/Nav/Nav.svelte';
   import WhyProfSched from './components/Heros/WhyProfSched.svelte';
   import ProfSchedBody from './components/Heros/ProfSchedBody.svelte';
+
+  const { data } = $props();
 </script>
 
-<Nav />
+<Nav registerForm={data.registerForm} />
+
 <main class="min-h-screen">
   <div class="container mt-5 flex flex-col gap-5 p-3">
     <WhyProfSched />
