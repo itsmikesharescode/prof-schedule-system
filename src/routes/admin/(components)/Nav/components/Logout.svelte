@@ -1,16 +1,22 @@
 <script lang="ts">
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
   import Button from '$lib/components/ui/button/button.svelte';
-  import { page } from '$app/stores';
   import { LogOut } from 'lucide-svelte';
   import { goto } from '$app/navigation';
   import { LoaderCircle } from 'lucide-svelte';
+  import { useSupabaseState } from '$lib/runes/supabaseState.svelte';
+
   let open = $state(false);
   let loading = $state(false);
 
+  const supabaseState = useSupabaseState();
+  const sb = supabaseState.get();
+
   const handleLogout = async () => {
+    if (!sb) return;
+
     loading = true;
-    const { error } = await $page.data.supabase.auth.signOut();
+    const { error } = await sb.auth.signOut();
     if (error) {
       console.error(error);
     }
