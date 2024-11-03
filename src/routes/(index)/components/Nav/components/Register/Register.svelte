@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
   import Button from '$lib/components/ui/button/button.svelte';
-  import { X, Plus } from 'lucide-svelte';
+  import { X, LoaderCircle } from 'lucide-svelte';
   import { fileProxy, type Infer, superForm, type SuperValidated } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import * as Form from '$lib/components/ui/form/index.js';
@@ -318,7 +318,16 @@
         </div>
 
         <div class="pointer-events-none sticky bottom-6 left-0 right-0 flex justify-end px-6">
-          <Form.Button size="sm" class="pointer-events-auto">Create Account</Form.Button>
+          <Form.Button size="sm" class="pointer-events-auto relative">
+            {#if $submitting}
+              <div
+                class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center rounded-lg bg-primary"
+              >
+                <LoaderCircle class="size-4 animate-spin" />
+              </div>
+            {/if}
+            Create Account
+          </Form.Button>
         </div>
       </form>
     </ScrollArea>

@@ -57,6 +57,7 @@ export const actions: Actions = {
       password: form.data.password,
       options: {
         data: {
+          approve: false,
           role: 'professor',
           photo: uploadRes.fullPath,
           email: form.data.email,
