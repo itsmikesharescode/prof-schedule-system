@@ -60,6 +60,7 @@ const authGuard: Handle = async ({ event, resolve }) => {
   const { session, user } = await event.locals.safeGetSession();
   event.locals.session = session;
   event.locals.user = user;
+
   const path = event.url.pathname;
 
   //no auth checks

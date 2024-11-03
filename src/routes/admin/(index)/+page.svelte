@@ -2,13 +2,18 @@
   import * as Table from '$lib/components/ui/table/index.js';
   import TableMenu from './components/TableMenu.svelte';
   import AddProgram from './components/AddProgram/AddProgram.svelte';
+  import FilterPicker from '$lib/components/general/FilterPicker.svelte';
+  import { departments } from '$lib/metadata';
 
   const { data } = $props();
 </script>
 
 <div class="flex flex-col gap-4">
   <div class="sticky top-2 z-30 flex justify-end">
-    <AddProgram addProgramForm={data.addProgramForm} />
+    <div class="flex w-full items-center justify-between">
+      <FilterPicker name="Select filter" class="max-w-fit" selections={departments} />
+      <AddProgram addProgramForm={data.addProgramForm} />
+    </div>
   </div>
 
   <Table.Root>
