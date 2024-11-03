@@ -13,6 +13,8 @@
   import { availableTimes, days, departments, interests } from '$lib/metadata';
   import SelectPicker from '$lib/components/general/SelectPicker.svelte';
   import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte';
+  import { page } from '$app/stores';
+  import { goto } from '$app/navigation';
 
   interface Props {
     registerForm: SuperValidated<Infer<RegisterSchema>>;
@@ -37,6 +39,14 @@
   const removeInterest = (id: string) => {
     $formData.interests = $formData.interests.filter((i) => i !== id);
   };
+
+  const detectURL = $derived($page.url.searchParams.get('moveto') === 'register');
+
+  $effect(() => {
+    if (detectURL) {
+      open = true;
+    }
+  });
 </script>
 
 <Button size="sm" onclick={() => (open = true)}>Sign Up Free</Button>
@@ -44,7 +54,8 @@
 <AlertDialog.Root bind:open>
   <AlertDialog.Content class="max-w-7xl p-0">
     <button
-      onclick={() => {
+      onclick={async () => {
+        await goto('/', { noScroll: true });
         open = false;
         form.reset();
       }}
