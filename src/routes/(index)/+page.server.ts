@@ -1,12 +1,14 @@
 import { fail, superValidate, withFiles } from 'sveltekit-superforms';
 import type { Actions, PageServerLoad } from './$types';
-import { loginSchema, signupSchema } from './components/Nav/components/schema';
+
 import { zod } from 'sveltekit-superforms/adapters';
+import { loginSchema } from './components/Nav/components/Login/schema';
+import { registerSchema } from './components/Nav/components/Register/schema';
 
 export const load: PageServerLoad = async () => {
   return {
     loginForm: await superValidate(zod(loginSchema), { id: crypto.randomUUID() }),
-    registerForm: await superValidate(zod(signupSchema), { id: crypto.randomUUID() })
+    registerForm: await superValidate(zod(registerSchema), { id: crypto.randomUUID() })
   };
 };
 
@@ -33,7 +35,7 @@ export const actions: Actions = {
   },
 
   registerEvent: async ({ request, fetch, locals: { supabase } }) => {
-    const form = await superValidate(request, zod(signupSchema));
+    const form = await superValidate(request, zod(registerSchema));
 
     if (!form.valid) {
       return fail(400, withFiles({ form }));
