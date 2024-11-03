@@ -6,6 +6,7 @@
   import { departments } from '$lib/metadata';
   import emblaCarouselSvelte from 'embla-carousel-svelte';
   import Autoplay from 'embla-carousel-autoplay';
+  import { goto } from '$app/navigation';
 
   const plugin = Autoplay({ delay: 2000, stopOnInteraction: true });
 </script>
@@ -15,7 +16,11 @@
     <div class="flex max-w-xs flex-col gap-2.5">
       <span class="text-7xl font-semibold">Faculty Member</span>
       <span class="text-muted-foreground">at ONE CAINTA COLLEGE?</span>
-      <Button class="max-w-fit"
+      <Button
+        class="max-w-fit"
+        onclick={() => {
+          goto('/?moveto=register', { noScroll: true });
+        }}
         >Get Started
         <MoveRight class="size-4" />
       </Button>
