@@ -2,8 +2,20 @@
   import * as Table from '$lib/components/ui/table/index.js';
   import AddSchoolYear from './components/AddSchoolYear/AddSchoolYear.svelte';
   import TableMenu from './components/TableMenu.svelte';
+  import { departments } from '$lib/metadata';
+  import { page } from '$app/stores';
+  import { Skeleton } from '$lib/components/ui/skeleton/index';
+  import FilterPicker from '$lib/components/general/FilterPicker.svelte';
 
   const { data } = $props();
+
+  const detectURL = $derived($page.url.searchParams.get('filter'));
+
+  $effect(() => {
+    if (detectURL) {
+      //stream the filter here if there is no filter gather all rows, else filter it
+    }
+  });
 </script>
 
 <div class="flex flex-col gap-4">
@@ -21,6 +33,19 @@
       </Table.Row>
     </Table.Header>
     <Table.Body>
+      <!--Display if streaming data-->
+      {#if false}
+        {#each Array(5) as _}
+          <Table.Row>
+            <Table.Cell class="">
+              <Skeleton class="h-[20px] rounded-full" />
+            </Table.Cell>
+            <Table.Cell class="font-medium"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
+            <Table.Cell class="text-right"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
+          </Table.Row>
+        {/each}
+      {/if}
+
       {#each Array(20) as _}
         <Table.Row>
           <Table.Cell class="">
