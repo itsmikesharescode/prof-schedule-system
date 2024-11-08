@@ -14,6 +14,7 @@
   import { Label } from '$lib/components/ui/label/index.js';
   import { flip } from 'svelte/animate';
   import { fly, scale } from 'svelte/transition';
+  import { toast } from 'svelte-sonner';
 
   interface Props {
     addScheduleForm: SuperValidated<Infer<AddScheduleSchema>>;
@@ -24,7 +25,29 @@
   let open = $state(false);
 
   const form = superForm(addScheduleForm, {
-    validators: zodClient(addScheduleSchema)
+    validators: zodClient(addScheduleSchema),
+    dataType: 'json',
+    onUpdate: ({ form }) => {
+      if (
+        form.data.schoolYear &&
+        form.data.semester &&
+        form.data.yearLevel &&
+        form.data.section &&
+        !form.valid
+      )
+        return toast.error('Please answer the schedule details.');
+
+      subjects = [
+        {
+          id: crypto.randomUUID(),
+          name: '',
+          startTime: '',
+          endTime: '',
+          day: '',
+          room: ''
+        }
+      ];
+    }
   });
 
   const { form: formData, enhance, submitting } = form;
@@ -55,6 +78,12 @@
       lastSubjectCard?.scrollIntoView({ behavior: 'smooth' });
     }, 0);
   }
+
+  $effect(() => {
+    if (subjects.length) {
+      $formData.subjects = subjects;
+    }
+  });
 </script>
 
 <Button size="sm" onclick={() => (open = true)}>
@@ -83,7 +112,7 @@
     </AlertDialog.Header>
 
     <ScrollArea class="max-h-[70dvh]">
-      <form method="POST" enctype="multipart/form-data" use:enhance class=" ">
+      <form method="POST" action="?/addScheduleEvent" use:enhance class=" ">
         <div class="grid grid-cols-[1fr,3fr] gap-6 px-6 pb-6">
           <!--Records-->
           <div class="">
@@ -207,6 +236,16 @@
               </div>
             </div>
 
+            <Form.Field {form} name="subjects">
+              <Form.Control>
+                {#snippet children({ props })}
+                  <input type="hidden" {...props} bind:value={$formData.subjects} />
+                {/snippet}
+              </Form.Control>
+              <Form.Description />
+              <Form.FieldErrors />
+            </Form.Field>
+
             <div class="mb-6 flex">
               <span class="font-semibold text-muted-foreground underline">Schedule Details</span>
             </div>
@@ -222,7 +261,12 @@
                 >
                   <div class="flex w-full max-w-sm flex-col gap-1.5">
                     <Label for="name">Subject Name</Label>
-                    <Input type="name" id="name" placeholder="Enter subject name" />
+                    <Input
+                      type="name"
+                      id="name"
+                      placeholder="Enter subject name"
+                      bind:value={subject.name}
+                    />
                   </div>
 
                   <div class="flex w-full max-w-sm flex-col gap-1.5">
