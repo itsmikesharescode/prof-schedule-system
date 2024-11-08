@@ -9,13 +9,6 @@
 
   let image = $state<File | null>(null);
   let url = $state<string | null>(null);
-
-  $effect(() => {
-    // Create new object URL when image changes
-    if (image) {
-      url = URL.createObjectURL(image);
-    }
-  });
 </script>
 
 {#if imageLink}
@@ -46,6 +39,7 @@
       oninput={(e) => {
         image = e.currentTarget.files?.item(0) as File;
         imageLink = e.currentTarget.files?.item(0) as File;
+        url = URL.createObjectURL(image);
       }}
     />
     <span class="text-xs font-bold text-muted-foreground">Upload Photo</span>
