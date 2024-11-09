@@ -4,13 +4,13 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { addSchoolYearSchema } from './components/AddSchoolYear/schema';
 import { fail } from '@sveltejs/kit';
 import { updateSchoolYearSchema } from './components/UpdateSchoolYear/schema';
-import { streamSchoolYear } from './db_calls/streamSchoolYear';
+import { streamSchoolYear } from '../../(db_calls)/streamSchoolYear';
 
-export const load: PageServerLoad = async ({ locals: { supabase } }) => {
+export const load: PageServerLoad = async ({ locals: { supabase }, url }) => {
   return {
     addSchoolYearForm: await superValidate(zod(addSchoolYearSchema)),
     updateSchoolYearForm: await superValidate(zod(updateSchoolYearSchema)),
-    streamSchoolYear: streamSchoolYear(supabase)
+    streamSchoolYear: streamSchoolYear(supabase, url.searchParams.get('filter'))
   };
 };
 
