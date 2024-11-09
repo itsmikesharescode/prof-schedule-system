@@ -13,8 +13,9 @@
   import SelectPicker from '$lib/components/general/SelectPicker.svelte';
   import { Label } from '$lib/components/ui/label/index.js';
   import { flip } from 'svelte/animate';
-  import { fly, scale } from 'svelte/transition';
+  import { fly } from 'svelte/transition';
   import { toast } from 'svelte-sonner';
+  import { cubicInOut } from 'svelte/easing';
 
   interface Props {
     addScheduleForm: SuperValidated<Infer<AddScheduleSchema>>;
@@ -36,6 +37,8 @@
         !form.valid
       )
         return toast.error('Please answer the schedule details.');
+
+      if (!form.valid) return;
 
       subjects = [
         {
@@ -112,7 +115,7 @@
     </AlertDialog.Header>
 
     <ScrollArea class="max-h-[70dvh]">
-      <form method="POST" action="?/addScheduleEvent" use:enhance class=" ">
+      <form method="POST" action="?/addScheduleEvent" use:enhance class="">
         <div class="grid grid-cols-[1fr,3fr] gap-6 px-6 pb-6">
           <!--Records-->
           <div class="">
@@ -217,26 +220,27 @@
           </div>
 
           <!--Schedule Details-->
-          <div class="">
-            <div class="absolute left-0 right-6 top-0 z-10 flex justify-end">
+          <div class="overflow-hidden">
+            <div class="pointer-events-none absolute left-0 right-6 top-0 z-10 flex justify-end">
               <div class="flex items-center gap-2">
                 {#if subjects.length > 3}
                   <Button
                     size="sm"
-                    class=""
+                    class="pointer-events-auto"
                     variant="destructive"
                     onclick={() => {
-                      let deepCopy = subjects[0];
-                      subjects = [deepCopy];
+                      subjects = subjects.slice(0, 1);
                     }}
                     >Delete All
                   </Button>
                 {/if}
-                <Button size="sm" class="" onclick={addSubject}>Add Subject</Button>
+                <Button size="sm" class="pointer-events-auto" onclick={addSubject}>
+                  Add Subject
+                </Button>
               </div>
             </div>
 
-            <Form.Field {form} name="subjects">
+            <Form.Field {form} name="subjects" class="hidden">
               <Form.Control>
                 {#snippet children({ props })}
                   <input type="hidden" {...props} bind:value={$formData.subjects} />
@@ -254,8 +258,8 @@
               {#each subjects as subject (subject)}
                 <div
                   animate:flip={{ duration: 300 }}
-                  in:fly={{ x: -100, duration: 1000, delay: 200 }}
-                  out:fly={{ x: -100, duration: 100 }}
+                  in:fly={{ x: -100, duration: 500, delay: 200, easing: cubicInOut }}
+                  out:fly={{ x: 100, duration: 500, easing: cubicInOut }}
                   bind:this={lastSubjectCard}
                   class="relative grid grid-cols-3 gap-6 rounded-lg border-2 p-6"
                 >
