@@ -51,5 +51,14 @@ export const actions: Actions = {
 
     if (error) return fail(401, { form, msg: error.message });
     return { form, msg: 'Successfully updated.' };
+  },
+  deleteYearLevelEvent: async ({ request, locals: { supabase } }) => {
+    const formData = await request.formData();
+    const id = formData.get('id') as string;
+
+    const { error } = await supabase.from('year_levels_tb').delete().eq('id', id);
+
+    if (error) return fail(401, { msg: error.message });
+    return { msg: 'Successfully deleted.' };
   }
 };
