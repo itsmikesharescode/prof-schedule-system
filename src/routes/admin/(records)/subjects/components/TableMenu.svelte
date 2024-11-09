@@ -5,12 +5,14 @@
   import type { UpdateSubjectSchema } from './UpdateSubject/schema';
   import UpdateSubject from './UpdateSubject/UpdateSubject.svelte';
   import DeleteSubject from './DeleteSubject/DeleteSubject.svelte';
+  import type { Database } from '$lib/database.types';
 
   interface Props {
+    subject: Database['public']['Tables']['subjects_tb']['Row'];
     updateSubjectForm: SuperValidated<Infer<UpdateSubjectSchema>>;
   }
 
-  let { updateSubjectForm }: Props = $props();
+  let { subject, updateSubjectForm }: Props = $props();
 
   let showUpdate = $state(false);
   let showDelete = $state(false);
@@ -36,5 +38,5 @@
   </DropdownMenu.Content>
 </DropdownMenu.Root>
 
-<UpdateSubject bind:showUpdate {updateSubjectForm} />
+<UpdateSubject {subject} bind:showUpdate {updateSubjectForm} />
 <DeleteSubject bind:showDelete />

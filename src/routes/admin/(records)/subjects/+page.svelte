@@ -57,7 +57,7 @@
         {#each subjects ?? [] as subject}
           <Table.Row>
             <Table.Cell class="">
-              <TableMenu updateSubjectForm={data.updateSubjectForm} />
+              <TableMenu {subject} updateSubjectForm={data.updateSubjectForm} />
             </Table.Cell>
             <Table.Cell class="truncate font-medium">{subject.name}</Table.Cell>
             <Table.Cell class="truncate font-medium">{subject.department}</Table.Cell>

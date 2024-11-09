@@ -41,5 +41,17 @@ export const actions: Actions = {
     if (!form.valid) {
       return fail(400, { form });
     }
+
+    const { error } = await supabase
+      .from('subjects_tb')
+      .update({
+        name: form.data.subjectName,
+        code: form.data.subjectCode,
+        unit: form.data.unit,
+        department: form.data.department
+      })
+      .eq('id', form.data.id);
+    if (error) return fail(401, { form, msg: error.message });
+    return { form, msg: 'Updated successfully' };
   }
 };
