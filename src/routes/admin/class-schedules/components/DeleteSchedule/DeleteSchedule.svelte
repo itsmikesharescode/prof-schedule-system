@@ -14,7 +14,7 @@
     <AlertDialog.Header>
       <AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
       <AlertDialog.Description>
-        This action cannot be undone. This will permanently delete the program.
+        This action cannot be undone. This will permanently delete the schedule.
       </AlertDialog.Description>
     </AlertDialog.Header>
     <AlertDialog.Footer>
