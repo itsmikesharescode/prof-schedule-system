@@ -31,14 +31,14 @@
     <Table.Header>
       <Table.Row>
         <Table.Head class="w-[50px]"></Table.Head>
-        <Table.Head class="w-[100px] truncate">Class</Table.Head>
+        <Table.Head class="w-full truncate">Class</Table.Head>
+        <Table.Head class="w-[100px] truncate">Department</Table.Head>
         <Table.Head class="w-[100px] truncate">Section Code</Table.Head>
-        <Table.Head class="text-right">Created At</Table.Head>
+        <Table.Head class="truncate">Created At</Table.Head>
       </Table.Row>
     </Table.Header>
     <Table.Body>
-      <!--Display if streaming data-->
-      {#if false}
+      {#await data.sections}
         {#each Array(5) as _}
           <Table.Row>
             <Table.Cell class="">
@@ -51,18 +51,22 @@
             <Table.Cell class="text-right"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
           </Table.Row>
         {/each}
-      {/if}
-
-      {#each Array(20) as _}
-        <Table.Row>
-          <Table.Cell class="">
-            <TableMenu updateSectionForm={data.updateSectionForm} />
-          </Table.Cell>
-          <Table.Cell class="truncate font-medium">Morning Class</Table.Cell>
-          <Table.Cell class="">2M</Table.Cell>
-          <Table.Cell class="text-right">{new Date().toLocaleDateString()}</Table.Cell>
-        </Table.Row>
-      {/each}
+      {:then sections}
+        {#each sections ?? [] as section}
+          <Table.Row>
+            <Table.Cell class="">
+              <TableMenu updateSectionForm={data.updateSectionForm} />
+            </Table.Cell>
+            <Table.Cell class="truncate font-medium">{section.class}</Table.Cell>
+            <Table.Cell class="truncate">{section.department}</Table.Cell>
+            <Table.Cell class="truncate">{section.section_code}</Table.Cell>
+            <Table.Cell class="truncate">
+              {new Date(section.created_at).toLocaleDateString()} @
+              {new Date(section.created_at).toLocaleTimeString()}
+            </Table.Cell>
+          </Table.Row>
+        {/each}
+      {/await}
     </Table.Body>
   </Table.Root>
 </div>
