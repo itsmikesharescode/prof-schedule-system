@@ -115,6 +115,33 @@ export type Database = {
         }
         Relationships: []
       }
+      subjects_tb: {
+        Row: {
+          code: string
+          created_at: string
+          department: string
+          id: number
+          name: string
+          unit: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          department: string
+          id?: number
+          name: string
+          unit: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          department?: string
+          id?: number
+          name?: string
+          unit?: string
+        }
+        Relationships: []
+      }
       year_levels_tb: {
         Row: {
           created_at: string

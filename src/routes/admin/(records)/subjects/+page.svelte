@@ -27,19 +27,18 @@
   </div>
 
   <Table.Root>
-    <Table.Caption>A list of your recent invoices.</Table.Caption>
     <Table.Header>
       <Table.Row>
         <Table.Head class="w-[50px]"></Table.Head>
-        <Table.Head class="w-[100px] truncate">Subject Name</Table.Head>
+        <Table.Head class="w-full truncate">Subject Name</Table.Head>
+        <Table.Head class="w-[100px] truncate">Department</Table.Head>
         <Table.Head class="w-[100px] truncate">Subject Code</Table.Head>
         <Table.Head class="w-[100px] truncate">Unit</Table.Head>
-        <Table.Head class="text-right">Created At</Table.Head>
+        <Table.Head class="truncate">Created At</Table.Head>
       </Table.Row>
     </Table.Header>
     <Table.Body>
-      <!--Display if streaming data-->
-      {#if false}
+      {#await data.subjects}
         {#each Array(5) as _}
           <Table.Row>
             <Table.Cell class="">
@@ -50,22 +49,27 @@
             >
             <Table.Cell class=""><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
             <Table.Cell class=""><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
-            <Table.Cell class="text-right"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
+            <Table.Cell class=""><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
+            <Table.Cell class=""><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
           </Table.Row>
         {/each}
-      {/if}
-
-      {#each Array(20) as _}
-        <Table.Row>
-          <Table.Cell class="">
-            <TableMenu updateSubjectForm={data.updateSubjectForm} />
-          </Table.Cell>
-          <Table.Cell class="truncate font-medium">Programming In Javascript</Table.Cell>
-          <Table.Cell class="">Prog101</Table.Cell>
-          <Table.Cell class="">3</Table.Cell>
-          <Table.Cell class="text-right">{new Date().toLocaleDateString()}</Table.Cell>
-        </Table.Row>
-      {/each}
+      {:then subjects}
+        {#each subjects ?? [] as subject}
+          <Table.Row>
+            <Table.Cell class="">
+              <TableMenu {subject} updateSubjectForm={data.updateSubjectForm} />
+            </Table.Cell>
+            <Table.Cell class="truncate font-medium">{subject.name}</Table.Cell>
+            <Table.Cell class="truncate font-medium">{subject.department}</Table.Cell>
+            <Table.Cell class="truncate font-medium">{subject.code}</Table.Cell>
+            <Table.Cell class="truncate font-medium">{subject.unit}</Table.Cell>
+            <Table.Cell class="truncate">
+              {@html new Date(subject.created_at).toLocaleDateString()} @
+              {@html new Date(subject.created_at).toLocaleTimeString()}
+            </Table.Cell>
+          </Table.Row>
+        {/each}
+      {/await}
     </Table.Body>
   </Table.Root>
 </div>

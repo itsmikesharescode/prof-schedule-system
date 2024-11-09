@@ -2,14 +2,14 @@ import type { Database } from '$lib/database.types';
 import type { PostgrestSingleResponse, SupabaseClient } from '@supabase/supabase-js';
 
 interface PromiseTypes {
-  Section: Database['public']['Tables']['sections_tb']['Row'];
+  Subject: Database['public']['Tables']['subjects_tb']['Row'];
 }
 
-export const streamSections = async (supabase: SupabaseClient | undefined) => {
+export const streamSubjects = async (supabase: SupabaseClient | undefined) => {
   if (!supabase) return null;
-  const { data, error } = (await supabase.from('sections_tb').select('*').order('created_at', {
+  const { data, error } = (await supabase.from('subjects_tb').select('*').order('created_at', {
     ascending: true
-  })) as PostgrestSingleResponse<PromiseTypes['Section'][]>;
+  })) as PostgrestSingleResponse<PromiseTypes['Subject'][]>;
 
   if (error) return null;
   return data;
