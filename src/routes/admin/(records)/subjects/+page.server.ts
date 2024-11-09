@@ -4,13 +4,15 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { addSubjectSchema } from './components/AddSubject/schema';
 import { fail } from '@sveltejs/kit';
 import { updateSubjectSchema } from './components/UpdateSubject/schema';
+import { streamSubjects } from './db_calls/streamSubjects';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   return {
     addSubjectForm: await superValidate(zod(addSubjectSchema), { id: crypto.randomUUID() }),
     updateSubjectForm: await superValidate(zod(updateSubjectSchema), {
       id: crypto.randomUUID()
-    })
+    }),
+    subjects: streamSubjects(supabase)
   };
 };
 
