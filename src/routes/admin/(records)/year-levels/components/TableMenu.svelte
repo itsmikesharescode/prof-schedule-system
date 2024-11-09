@@ -5,12 +5,14 @@
   import type { UpdateYearLevelSchema } from './UpdateYearLevel/schema';
   import UpdateYearLevel from './UpdateYearLevel/UpdateYearLevel.svelte';
   import DeleteYearLevel from './DeleteYearLevel/DeleteYearLevel.svelte';
+  import type { Database } from '$lib/database.types';
 
   interface Props {
     updateYearLevelForm: SuperValidated<Infer<UpdateYearLevelSchema>>;
+    yearLevel: Database['public']['Tables']['year_levels_tb']['Row'];
   }
 
-  let { updateYearLevelForm }: Props = $props();
+  let { updateYearLevelForm, yearLevel }: Props = $props();
 
   let showUpdate = $state(false);
   let showDelete = $state(false);
@@ -36,5 +38,5 @@
   </DropdownMenu.Content>
 </DropdownMenu.Root>
 
-<UpdateYearLevel bind:showUpdate {updateYearLevelForm} />
+<UpdateYearLevel {yearLevel} bind:showUpdate {updateYearLevelForm} />
 <DeleteYearLevel bind:showDelete />

@@ -52,7 +52,7 @@
         {#each yearLevels ?? [] as yearLevel}
           <Table.Row>
             <Table.Cell class="">
-              <TableMenu updateYearLevelForm={data.updateYearLevelForm} />
+              <TableMenu {yearLevel} updateYearLevelForm={data.updateYearLevelForm} />
             </Table.Cell>
             <Table.Cell class="truncate font-medium">{yearLevel.level}</Table.Cell>
             <Table.Cell class="truncate font-medium">{yearLevel.department}</Table.Cell>

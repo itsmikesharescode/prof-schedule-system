@@ -1,25 +1,23 @@
 <script lang="ts">
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import { X, Plus } from 'lucide-svelte';
-  import { fileProxy, type Infer, superForm, type SuperValidated } from 'sveltekit-superforms';
+  import { X, LoaderCircle } from 'lucide-svelte';
+  import { type Infer, superForm, type SuperValidated } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import * as Form from '$lib/components/ui/form/index.js';
   import { Input } from '$lib/components/ui/input/index.js';
   import { updateYearLevelSchema, type UpdateYearLevelSchema } from './schema';
   import ImagePicker from '$lib/components/general/ImagePicker.svelte';
-  import { ScrollArea } from '$lib/components/ui/scroll-area/index';
-  import Combobox from '$lib/components/general/Combobox.svelte';
-  import { availableTimes, days, departments, interests } from '$lib/metadata';
+  import { departments } from '$lib/metadata';
   import SelectPicker from '$lib/components/general/SelectPicker.svelte';
-  import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte';
+  import type { Database } from '$lib/database.types';
 
   interface Props {
+    yearLevel: Database['public']['Tables']['year_levels_tb']['Row'];
     updateYearLevelForm: SuperValidated<Infer<UpdateYearLevelSchema>>;
     showUpdate: boolean;
   }
 
-  let { showUpdate = $bindable(), updateYearLevelForm }: Props = $props();
+  let { showUpdate = $bindable(), updateYearLevelForm, yearLevel }: Props = $props();
 
   const form = superForm(updateYearLevelForm, {
     validators: zodClient(updateYearLevelSchema)
@@ -29,7 +27,9 @@
 
   $effect(() => {
     if (showUpdate) {
-      //populate id
+      $formData.id = yearLevel.id;
+      $formData.yearLevel = yearLevel.level;
+      $formData.department = yearLevel.department;
     }
   });
 </script>
@@ -55,7 +55,25 @@
     </AlertDialog.Header>
 
     <form method="POST" use:enhance>
+      <input type="hidden" name="id" bind:value={$formData.id} />
       <Form.Field {form} name="yearLevel">
+        <Form.Field {form} name="department">
+          <Form.Control>
+            {#snippet children({ props })}
+              <Form.Label>Department</Form.Label>
+              <SelectPicker
+                {...props}
+                bind:selected={$formData.department}
+                selections={departments}
+                name="Select department"
+              />
+              <input type="hidden" name={props.name} bind:value={$formData.department} />
+            {/snippet}
+          </Form.Control>
+          <Form.Description />
+          <Form.FieldErrors />
+        </Form.Field>
+
         <Form.Control>
           {#snippet children({ props })}
             <Form.Label>Year Level</Form.Label>
@@ -67,7 +85,16 @@
       </Form.Field>
 
       <AlertDialog.Footer>
-        <Form.Button size="sm">Update</Form.Button>
+        <Form.Button disabled={$submitting} size="sm" class="relative">
+          {#if $submitting}
+            <div
+              class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center rounded-lg bg-primary"
+            >
+              <LoaderCircle class="size-4 animate-spin" />
+            </div>
+          {/if}
+          Update
+        </Form.Button>
       </AlertDialog.Footer>
     </form>
   </AlertDialog.Content>
