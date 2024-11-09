@@ -230,6 +230,7 @@
           </div>
 
           <!--Schedule Details-->
+          <input type="hidden" name="subjects" bind:value={$formData.subjects} />
           <div class="overflow-hidden">
             <div class="pointer-events-none absolute left-0 right-6 top-0 z-10 flex justify-end">
               <div class="flex items-center gap-2">
@@ -250,16 +251,6 @@
                 </Button>
               </div>
             </div>
-
-            <Form.Field {form} name="subjects" class="hidden">
-              <Form.Control>
-                {#snippet children({ props })}
-                  <input type="hidden" {...props} bind:value={$formData.subjects} />
-                {/snippet}
-              </Form.Control>
-              <Form.Description />
-              <Form.FieldErrors />
-            </Form.Field>
 
             <div class="mb-6 flex">
               <span class="font-semibold text-muted-foreground underline">Schedule Details</span>

@@ -27,13 +27,19 @@
 
   const form = superForm(addSchoolYearForm, {
     validators: zodClient(addYearLevelSchema),
-    onUpdate: ({ result }) => {
+    dataType: 'json',
+    onUpdate: ({ result, form }) => {
       const { status, data } = result as Result<{ msg: string }>;
       switch (status) {
         case 200:
-          form.reset();
           open = false;
+          reset();
           toast.success(data.msg);
+          break;
+        case 400:
+          if (form.data.yearLevels && form.data.department && !form.valid)
+            return toast.error('Please answer the year level details.');
+          if (!form.valid) return;
           break;
         case 401:
           toast.error(data.msg);
@@ -42,7 +48,7 @@
     }
   });
 
-  const { form: formData, enhance, submitting } = form;
+  const { form: formData, enhance, submitting, reset } = form;
 
   let yearLevels = $state([
     {
@@ -62,6 +68,12 @@
       lastYearLevelCard?.scrollIntoView({ behavior: 'smooth' });
     }, 0);
   };
+
+  $effect(() => {
+    if (yearLevels.length) {
+      $formData.yearLevels = yearLevels;
+    }
+  });
 </script>
 
 <Button size="sm" onclick={() => (open = true)}>
@@ -90,6 +102,7 @@
     </AlertDialog.Header>
     <ScrollArea class="max-h-[70dvh]">
       <form method="POST" action="?/addYearLevelEvent" use:enhance class="px-6 pb-6">
+        <input type="hidden" name="yearLevels" bind:value={$formData.yearLevels} />
         <div class="grid grid-cols-2 gap-5 pb-5">
           <div class="">
             <div class="sticky top-0">
