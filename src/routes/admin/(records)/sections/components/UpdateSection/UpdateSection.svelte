@@ -1,18 +1,16 @@
 <script lang="ts">
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
   import Button from '$lib/components/ui/button/button.svelte';
-  import { X, Plus } from 'lucide-svelte';
-  import { fileProxy, type Infer, superForm, type SuperValidated } from 'sveltekit-superforms';
+  import { X, Plus, LoaderCircle } from 'lucide-svelte';
+  import { type Infer, superForm, type SuperValidated } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import * as Form from '$lib/components/ui/form/index.js';
   import { Input } from '$lib/components/ui/input/index.js';
   import { updateSectionSchema, type UpdateSectionSchema } from './schema';
-  import ImagePicker from '$lib/components/general/ImagePicker.svelte';
-  import { ScrollArea } from '$lib/components/ui/scroll-area/index';
-  import Combobox from '$lib/components/general/Combobox.svelte';
-  import { availableTimes, days, departments, interests } from '$lib/metadata';
   import SelectPicker from '$lib/components/general/SelectPicker.svelte';
-  import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte';
+  import { classPeriods, departments } from '$lib/metadata';
+  import type { Result } from '$lib/types';
+  import { toast } from 'svelte-sonner';
 
   interface Props {
     updateSectionForm: SuperValidated<Infer<UpdateSectionSchema>>;
@@ -22,16 +20,24 @@
   let { showUpdate = $bindable(), updateSectionForm }: Props = $props();
 
   const form = superForm(updateSectionForm, {
-    validators: zodClient(updateSectionSchema)
+    validators: zodClient(updateSectionSchema),
+    id: crypto.randomUUID(),
+    onUpdate: ({ result }) => {
+      const { status, data } = result as Result<{ msg: string }>;
+      switch (status) {
+        case 200:
+          form.reset();
+          showUpdate = false;
+          toast.success(data.msg);
+          break;
+        case 401:
+          toast.error(data.msg);
+          break;
+      }
+    }
   });
 
   const { form: formData, enhance, submitting } = form;
-
-  $effect(() => {
-    if (showUpdate) {
-      //populate id
-    }
-  });
 </script>
 
 <AlertDialog.Root bind:open={showUpdate}>
@@ -48,18 +54,41 @@
     </button>
 
     <AlertDialog.Header class="">
-      <AlertDialog.Title>Update School Year</AlertDialog.Title>
+      <AlertDialog.Title>Update Section</AlertDialog.Title>
       <AlertDialog.Description>
-        Fill the fields below to update a school year.
+        Fill the fields below to update the section.
       </AlertDialog.Description>
     </AlertDialog.Header>
 
-    <form method="POST" use:enhance>
+    <form method="POST" action="?/addSectionEvent" use:enhance>
+      <Form.Field {form} name="department">
+        <Form.Control>
+          {#snippet children({ props })}
+            <Form.Label>Department</Form.Label>
+            <SelectPicker
+              {...props}
+              name="Select Department"
+              selections={departments}
+              bind:selected={$formData.department}
+            />
+            <input type="hidden" {...props} bind:value={$formData.department} />
+          {/snippet}
+        </Form.Control>
+        <Form.Description />
+        <Form.FieldErrors />
+      </Form.Field>
+
       <Form.Field {form} name="class">
         <Form.Control>
           {#snippet children({ props })}
             <Form.Label>Class</Form.Label>
-            <Input {...props} bind:value={$formData.class} placeholder="Enter class" />
+            <SelectPicker
+              {...props}
+              name="Select Class"
+              selections={classPeriods}
+              bind:selected={$formData.class}
+            />
+            <input type="hidden" {...props} bind:value={$formData.class} />
           {/snippet}
         </Form.Control>
         <Form.Description />
@@ -78,7 +107,16 @@
       </Form.Field>
 
       <AlertDialog.Footer>
-        <Form.Button size="sm">Update</Form.Button>
+        <Form.Button disabled={$submitting} size="sm" class="relative">
+          {#if $submitting}
+            <div
+              class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center rounded-lg bg-primary"
+            >
+              <LoaderCircle class="size-4 animate-spin" />
+            </div>
+          {/if}
+          Update
+        </Form.Button>
       </AlertDialog.Footer>
     </form>
   </AlertDialog.Content>
