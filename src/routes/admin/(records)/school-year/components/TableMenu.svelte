@@ -38,5 +38,5 @@
   </DropdownMenu.Content>
 </DropdownMenu.Root>
 
-<UpdateSchoolYear bind:showUpdate {updateSchoolYearForm} />
+<UpdateSchoolYear {schoolYear} bind:showUpdate {updateSchoolYearForm} />
 <DeleteSchoolYear {schoolYear} bind:showDelete />

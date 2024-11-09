@@ -8,13 +8,14 @@
   import { updateSchoolYearSchema, type UpdateSchoolYearSchema } from './schema';
   import { departments } from '$lib/metadata';
   import SelectPicker from '$lib/components/general/SelectPicker.svelte';
-
+  import type { Database } from '$lib/database.types';
   interface Props {
+    schoolYear: Database['public']['Tables']['school_years_tb']['Row'];
     updateSchoolYearForm: SuperValidated<Infer<UpdateSchoolYearSchema>>;
     showUpdate: boolean;
   }
 
-  let { showUpdate = $bindable(), updateSchoolYearForm }: Props = $props();
+  let { showUpdate = $bindable(), updateSchoolYearForm, schoolYear }: Props = $props();
 
   const form = superForm(updateSchoolYearForm, {
     validators: zodClient(updateSchoolYearSchema)
@@ -24,7 +25,9 @@
 
   $effect(() => {
     if (showUpdate) {
-      //populate id
+      $formData.id = schoolYear.id;
+      $formData.department = schoolYear.department;
+      $formData.schoolYear = schoolYear.year;
     }
   });
 </script>
