@@ -45,5 +45,10 @@ export const actions: Actions = {
   deleteSchoolYearEvent: async ({ request, locals: { supabase } }) => {
     const formData = await request.formData();
     const id = formData.get('id') as string;
+
+    const { error } = await supabase.from('school_years_tb').delete().eq('id', id);
+
+    if (error) return fail(401, { msg: error.message });
+    return { msg: 'Successfully deleted.' };
   }
 };
