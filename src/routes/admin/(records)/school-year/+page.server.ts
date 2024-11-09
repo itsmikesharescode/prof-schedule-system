@@ -24,7 +24,8 @@ export const actions: Actions = {
 
     const { error } = await supabase.from('school_years_tb').insert([
       {
-        year: form.data.schoolYear
+        year: form.data.schoolYear,
+        department: form.data.department
       }
     ]);
 

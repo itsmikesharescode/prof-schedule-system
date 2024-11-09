@@ -76,7 +76,7 @@
               selections={departments}
               name="Select department"
             />
-            <input type="hidden" bind:value={$formData.department} />
+            <input type="hidden" name={props.name} bind:value={$formData.department} />
           {/snippet}
         </Form.Control>
         <Form.Description />
