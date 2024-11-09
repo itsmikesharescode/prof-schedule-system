@@ -71,8 +71,8 @@
       </AlertDialog.Description>
     </AlertDialog.Header>
 
-    <form method="POST" action="?/addSectionEvent" use:enhance>
-      <input type="hidden" bind:value={$formData.id} />
+    <form method="POST" action="?/updateSectionEvent" use:enhance>
+      <input type="hidden" name="id" bind:value={$formData.id} />
       <Form.Field {form} name="department">
         <Form.Control>
           {#snippet children({ props })}
