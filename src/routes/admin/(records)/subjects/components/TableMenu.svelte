@@ -39,4 +39,4 @@
 </DropdownMenu.Root>
 
 <UpdateSubject {subject} bind:showUpdate {updateSubjectForm} />
-<DeleteSubject bind:showDelete />
+<DeleteSubject {subject} bind:showDelete />
