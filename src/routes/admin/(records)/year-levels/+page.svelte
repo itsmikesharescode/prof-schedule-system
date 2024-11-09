@@ -32,9 +32,9 @@
     <Table.Header>
       <Table.Row>
         <Table.Head class="w-[50px]"></Table.Head>
-        <Table.Head class="w-full truncate">Year Levels</Table.Head>
-        <Table.Head class="w-[100px] truncate">Department</Table.Head>
-        <Table.Head class="w-[100px] truncate">Created At</Table.Head>
+        <Table.Head class="truncate">Year Levels</Table.Head>
+        <Table.Head class="truncate">Department</Table.Head>
+        <Table.Head class="truncate">Created At</Table.Head>
       </Table.Row>
     </Table.Header>
     <Table.Body>
@@ -47,6 +47,7 @@
             <Table.Cell class="truncate font-medium"
               ><Skeleton class="h-[20px] rounded-full" /></Table.Cell
             >
+            <Table.Cell class="text-right"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
             <Table.Cell class="text-right"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
           </Table.Row>
         {/each}

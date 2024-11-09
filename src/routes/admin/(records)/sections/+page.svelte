@@ -30,9 +30,9 @@
     <Table.Header>
       <Table.Row>
         <Table.Head class="w-[50px]"></Table.Head>
-        <Table.Head class="w-full truncate">Class</Table.Head>
-        <Table.Head class="w-[100px] truncate">Department</Table.Head>
-        <Table.Head class="w-[100px] truncate">Section Code</Table.Head>
+        <Table.Head class="truncate">Class</Table.Head>
+        <Table.Head class="truncate">Department</Table.Head>
+        <Table.Head class="truncate">Section Code</Table.Head>
         <Table.Head class="truncate">Created At</Table.Head>
       </Table.Row>
     </Table.Header>

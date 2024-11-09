@@ -31,9 +31,9 @@
     <Table.Header>
       <Table.Row>
         <Table.Head class="w-[50px]"></Table.Head>
-        <Table.Head class="w-full">School Year</Table.Head>
-        <Table.Head class="w-[100px] truncate">Department</Table.Head>
-        <Table.Head class="w-[300px] truncate">Created At</Table.Head>
+        <Table.Head class="truncate">School Year</Table.Head>
+        <Table.Head class="truncate">Department</Table.Head>
+        <Table.Head class="truncate">Created At</Table.Head>
       </Table.Row>
     </Table.Header>
     <Table.Body>
@@ -44,6 +44,7 @@
               <Skeleton class="h-[20px] rounded-full" />
             </Table.Cell>
             <Table.Cell class="font-medium"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
+            <Table.Cell class="text-right"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
             <Table.Cell class="text-right"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
           </Table.Row>
         {/each}

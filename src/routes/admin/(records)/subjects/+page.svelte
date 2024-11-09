@@ -30,10 +30,10 @@
     <Table.Header>
       <Table.Row>
         <Table.Head class="w-[50px]"></Table.Head>
-        <Table.Head class="w-full truncate">Subject Name</Table.Head>
-        <Table.Head class="w-[100px] truncate">Department</Table.Head>
-        <Table.Head class="w-[100px] truncate">Subject Code</Table.Head>
-        <Table.Head class="w-[100px] truncate">Unit</Table.Head>
+        <Table.Head class="truncate">Subject Name</Table.Head>
+        <Table.Head class="truncate">Department</Table.Head>
+        <Table.Head class="truncate">Subject Code</Table.Head>
+        <Table.Head class="truncate">Unit</Table.Head>
         <Table.Head class="truncate">Created At</Table.Head>
       </Table.Row>
     </Table.Header>
