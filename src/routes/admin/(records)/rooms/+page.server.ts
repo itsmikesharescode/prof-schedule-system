@@ -4,14 +4,15 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { addRoomSchema } from './components/AddRoom/schema';
 import { fail } from '@sveltejs/kit';
 import { updateRoomSchema } from './components/UpdateRoom/schema';
-import { number } from 'zod';
+import { streamRooms } from './db_calls/streamRooms';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   return {
     addRoomForm: await superValidate(zod(addRoomSchema), { id: crypto.randomUUID() }),
     updateRoomForm: await superValidate(zod(updateRoomSchema), {
       id: crypto.randomUUID()
-    })
+    }),
+    streamRooms: streamRooms(supabase)
   };
 };
 
