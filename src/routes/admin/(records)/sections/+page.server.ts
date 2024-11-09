@@ -7,10 +7,8 @@ import { updateSectionSchema } from './components/UpdateSection/schema';
 
 export const load: PageServerLoad = async () => {
   return {
-    addSectionForm: await superValidate(zod(addSectionSchema), { id: crypto.randomUUID() }),
-    updateSectionForm: await superValidate(zod(updateSectionSchema), {
-      id: crypto.randomUUID()
-    })
+    addSectionForm: await superValidate(zod(addSectionSchema)),
+    updateSectionForm: await superValidate(zod(updateSectionSchema))
   };
 };
 
@@ -21,6 +19,17 @@ export const actions: Actions = {
     if (!form.valid) {
       return fail(400, { form });
     }
+
+    const { error } = await supabase.from('sections_tb').insert([
+      {
+        class: form.data.class,
+        section_code: form.data.sectionCode,
+        department: form.data.department
+      }
+    ]);
+
+    if (error) return fail(401, { form, msg: error.message });
+    return { form, msg: 'Created successfully' };
   },
   updateSectionEvent: async ({ request, locals: { supabase } }) => {
     const form = await superValidate(request, zod(updateSectionSchema));

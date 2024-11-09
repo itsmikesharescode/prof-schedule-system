@@ -8,10 +8,8 @@ import { streamSchoolYear } from './db_calls/streamSchoolYear';
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   return {
-    addSchoolYearForm: await superValidate(zod(addSchoolYearSchema), { id: crypto.randomUUID() }),
-    updateSchoolYearForm: await superValidate(zod(updateSchoolYearSchema), {
-      id: crypto.randomUUID()
-    }),
+    addSchoolYearForm: await superValidate(zod(addSchoolYearSchema)),
+    updateSchoolYearForm: await superValidate(zod(updateSchoolYearSchema)),
     streamSchoolYear: streamSchoolYear(supabase)
   };
 };
