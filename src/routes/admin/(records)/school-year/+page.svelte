@@ -6,10 +6,26 @@
   import { page } from '$app/stores';
   import { Skeleton } from '$lib/components/ui/skeleton/index';
   import FilterPicker from '$lib/components/general/FilterPicker.svelte';
+  import { useSupabaseState } from '$lib/runes/supabaseState.svelte';
 
   const { data } = $props();
 
+  const supabaseState = useSupabaseState();
+  const supabase = supabaseState.get();
+
   const detectURL = $derived($page.url.searchParams.get('filter'));
+
+  const streamSchoolYear = async () => {
+    if (!supabase) return null;
+    // add pagination limit to 10 or 50 if needs scalability
+    const { data, error } = await supabase
+      .from('school_years_tb')
+      .select('*')
+      .order('created_at', { ascending: true });
+
+    if (error) return null;
+    return data;
+  };
 
   $effect(() => {
     if (detectURL) {
