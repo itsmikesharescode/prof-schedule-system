@@ -7,6 +7,8 @@
   import * as Form from '$lib/components/ui/form/index.js';
   import { Input } from '$lib/components/ui/input/index.js';
   import { addSchoolYearSchema, type AddSchoolYearSchema } from './schema';
+  import type { Result } from '$lib/types';
+  import { toast } from 'svelte-sonner';
 
   interface Props {
     addSchoolYearForm: SuperValidated<Infer<AddSchoolYearSchema>>;
@@ -18,7 +20,19 @@
 
   const form = superForm(addSchoolYearForm, {
     validators: zodClient(addSchoolYearSchema),
-    onUpdate: ({ result }) => {}
+    onUpdate: ({ result }) => {
+      const { status, data } = result as Result<{ msg: string }>;
+      switch (status) {
+        case 200:
+          form.reset();
+          open = false;
+          toast.success(data.msg);
+          break;
+        case 401:
+          toast.error(data.msg);
+          break;
+      }
+    }
   });
 
   const { form: formData, enhance, submitting } = form;
