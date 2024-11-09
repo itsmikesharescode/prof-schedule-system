@@ -9,6 +9,8 @@
   import { addSchoolYearSchema, type AddSchoolYearSchema } from './schema';
   import type { Result } from '$lib/types';
   import { toast } from 'svelte-sonner';
+  import SelectPicker from '$lib/components/general/SelectPicker.svelte';
+  import { departments } from '$lib/metadata';
 
   interface Props {
     addSchoolYearForm: SuperValidated<Infer<AddSchoolYearSchema>>;
@@ -64,6 +66,22 @@
     </AlertDialog.Header>
 
     <form method="POST" action="?/addSchoolYearEvent" use:enhance>
+      <Form.Field {form} name="department">
+        <Form.Control>
+          {#snippet children({ props })}
+            <Form.Label>Department</Form.Label>
+            <SelectPicker
+              {...props}
+              bind:selected={$formData.department}
+              selections={departments}
+              name="Select department"
+            />
+            <input type="hidden" bind:value={$formData.department} />
+          {/snippet}
+        </Form.Control>
+        <Form.Description />
+        <Form.FieldErrors />
+      </Form.Field>
       <Form.Field {form} name="schoolYear">
         <Form.Control>
           {#snippet children({ props })}
