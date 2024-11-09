@@ -2,7 +2,7 @@
   import * as Table from '$lib/components/ui/table/index.js';
   import AddRoom from './components/AddRoom/AddRoom.svelte';
   import TableMenu from './components/TableMenu.svelte';
-
+  import { Skeleton } from '$lib/components/ui/skeleton/index';
   const { data } = $props();
 </script>
 
@@ -12,28 +12,51 @@
   </div>
 
   <Table.Root>
-    <Table.Caption>A list of your recent invoices.</Table.Caption>
     <Table.Header>
       <Table.Row>
         <Table.Head class="w-[50px]"></Table.Head>
-        <Table.Head class="w-[100px] truncate">Room Type</Table.Head>
-        <Table.Head class="w-[100px] truncate">Room Number</Table.Head>
-        <Table.Head class="w-[100px] truncate">Room Code</Table.Head>
-        <Table.Head class="text-right">Created At</Table.Head>
+        <Table.Head class="truncate">Department</Table.Head>
+        <Table.Head class="truncate">Room Type</Table.Head>
+        <Table.Head class="truncate">Room Number</Table.Head>
+        <Table.Head class="truncate">Room Code</Table.Head>
+        <Table.Head class="truncate">Created At</Table.Head>
       </Table.Row>
     </Table.Header>
     <Table.Body>
-      {#each Array(20) as _}
-        <Table.Row>
-          <Table.Cell class="">
-            <TableMenu updateRoomForm={data.updateRoomForm} />
-          </Table.Cell>
-          <Table.Cell class="truncate font-medium">Lecture Room</Table.Cell>
-          <Table.Cell class="">2</Table.Cell>
-          <Table.Cell class="">Comlab2</Table.Cell>
-          <Table.Cell class="text-right">{new Date().toLocaleDateString()}</Table.Cell>
-        </Table.Row>
-      {/each}
+      {#await data.streamRooms}
+        {#each Array(5) as _}
+          <Table.Row>
+            <Table.Cell class="">
+              <Skeleton class="h-[20px] rounded-full" />
+            </Table.Cell>
+            <Table.Cell class="truncate font-medium"
+              ><Skeleton class="h-[20px] rounded-full" /></Table.Cell
+            >
+            <Table.Cell class="truncate font-medium">
+              <Skeleton class="h-[20px] rounded-full" />
+            </Table.Cell>
+            <Table.Cell class="truncate"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
+            <Table.Cell class="truncate"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
+            <Table.Cell class="truncate"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
+          </Table.Row>
+        {/each}
+      {:then rooms}
+        {#each rooms ?? [] as room}
+          <Table.Row>
+            <Table.Cell class="">
+              <TableMenu {room} updateRoomForm={data.updateRoomForm} />
+            </Table.Cell>
+            <Table.Cell class="truncate font-medium">{room.department}</Table.Cell>
+            <Table.Cell class="truncate font-medium">{room.type}</Table.Cell>
+            <Table.Cell class="truncate">{room.number}</Table.Cell>
+            <Table.Cell class="truncate">{room.code}</Table.Cell>
+            <Table.Cell class="truncate ">
+              {new Date(room.created_at).toLocaleDateString()} @
+              {new Date(room.created_at).toLocaleTimeString()}
+            </Table.Cell>
+          </Table.Row>
+        {/each}
+      {/await}
     </Table.Body>
   </Table.Root>
 </div>

@@ -5,12 +5,14 @@
   import type { UpdateRoomSchema } from './UpdateRoom/schema';
   import UpdateRoom from './UpdateRoom/UpdateRoom.svelte';
   import DeleteRoom from './DeleteRoom/DeleteRoom.svelte';
+  import type { Database } from '$lib/database.types';
 
   interface Props {
+    room: Database['public']['Tables']['rooms_tb']['Row'];
     updateRoomForm: SuperValidated<Infer<UpdateRoomSchema>>;
   }
 
-  let { updateRoomForm }: Props = $props();
+  let { room, updateRoomForm }: Props = $props();
 
   let showUpdate = $state(false);
   let showDelete = $state(false);
@@ -36,5 +38,5 @@
   </DropdownMenu.Content>
 </DropdownMenu.Root>
 
-<UpdateRoom bind:showUpdate {updateRoomForm} />
-<DeleteRoom bind:showDelete />
+<UpdateRoom {room} bind:showUpdate {updateRoomForm} />
+<DeleteRoom {room} bind:showDelete />

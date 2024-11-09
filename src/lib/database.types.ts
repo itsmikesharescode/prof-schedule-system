@@ -70,6 +70,33 @@ export type Database = {
         }
         Relationships: []
       }
+      rooms_tb: {
+        Row: {
+          code: string
+          created_at: string
+          department: string
+          id: number
+          number: number
+          type: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          department: string
+          id?: number
+          number: number
+          type: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          department?: string
+          id?: number
+          number?: number
+          type?: string
+        }
+        Relationships: []
+      }
       school_years_tb: {
         Row: {
           created_at: string
