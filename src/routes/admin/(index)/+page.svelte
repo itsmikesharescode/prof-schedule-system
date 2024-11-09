@@ -4,18 +4,9 @@
   import AddProgram from './components/AddProgram/AddProgram.svelte';
   import FilterPicker from '$lib/components/general/FilterPicker.svelte';
   import { departments } from '$lib/metadata';
-  import { page } from '$app/stores';
   import { Skeleton } from '$lib/components/ui/skeleton/index';
 
   const { data } = $props();
-
-  const detectURL = $derived($page.url.searchParams.get('filter'));
-
-  $effect(() => {
-    if (detectURL) {
-      //stream the filter here if there is no filter gather all rows, else filter it
-    }
-  });
 </script>
 
 <div class="flex flex-col gap-4">

@@ -4,13 +4,11 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { addProgramSchema } from './components/AddProgram/schema';
 import { fail } from '@sveltejs/kit';
 import { updateProgramSchema } from './components/UpdateProgram/schema';
-import { streamPrograms } from './db_calls/streamPrograms';
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   return {
     addProgramForm: await superValidate(zod(addProgramSchema)),
-    updateProgramForm: await superValidate(zod(updateProgramSchema)),
-    streamPrograms: streamPrograms(supabase)
+    updateProgramForm: await superValidate(zod(updateProgramSchema))
   };
 };
 
