@@ -8,10 +8,8 @@ import { streamYearLevels } from './db_calls/streamYearLevels';
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   return {
-    addYearLevelForm: await superValidate(zod(addYearLevelSchema), { id: crypto.randomUUID() }),
-    updateYearLevelForm: await superValidate(zod(updateYearLevelSchema), {
-      id: crypto.randomUUID()
-    }),
+    addYearLevelForm: await superValidate(zod(addYearLevelSchema)),
+    updateYearLevelForm: await superValidate(zod(updateYearLevelSchema)),
     yearLevels: streamYearLevels(supabase)
   };
 };
@@ -44,7 +42,7 @@ export const actions: Actions = {
     const { error } = await supabase
       .from('year_levels_tb')
       .update({
-        level: form.data.yearLevel,
+        levels: form.data.yearLevels,
         department: form.data.department
       })
       .eq('id', form.data.id);

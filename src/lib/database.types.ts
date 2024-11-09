@@ -96,19 +96,19 @@ export type Database = {
           created_at: string
           department: string
           id: number
-          level: Json
+          levels: Json
         }
         Insert: {
           created_at?: string
           department: string
           id?: number
-          level: Json
+          levels: Json
         }
         Update: {
           created_at?: string
           department?: string
           id?: number
-          level?: Json
+          levels?: Json
         }
         Relationships: []
       }
