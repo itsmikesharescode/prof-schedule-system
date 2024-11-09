@@ -180,15 +180,15 @@ export const interests = [
 
 export const classPeriods = [
   {
-    value: '7:00 AM - 12:00 PM',
-    label: 'Morning Class'
+    label: '7:00 AM ~ 12:00 PM',
+    value: 'Morning Class'
   },
   {
-    value: '1:00 PM - 5:00 PM',
-    label: 'Afternoon Class'
+    label: '1:00 PM ~ 5:00 PM',
+    value: 'Afternoon Class'
   },
   {
-    value: '6:00 PM - 9:00 PM',
-    label: 'Evening Class'
+    label: '6:00 PM ~ 9:00 PM',
+    value: 'Evening Class'
   }
 ];

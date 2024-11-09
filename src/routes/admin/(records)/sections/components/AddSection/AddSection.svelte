@@ -7,6 +7,8 @@
   import * as Form from '$lib/components/ui/form/index.js';
   import { Input } from '$lib/components/ui/input/index.js';
   import { addSectionSchema, type AddSectionSchema } from './schema';
+  import SelectPicker from '$lib/components/general/SelectPicker.svelte';
+  import { classPeriods } from '$lib/metadata';
 
   interface Props {
     addSectionForm: SuperValidated<Infer<AddSectionSchema>>;
@@ -53,7 +55,13 @@
         <Form.Control>
           {#snippet children({ props })}
             <Form.Label>Class</Form.Label>
-            <Input {...props} bind:value={$formData.class} placeholder="Enter class" />
+            <SelectPicker
+              {...props}
+              name="Select Class"
+              selections={classPeriods}
+              bind:selected={$formData.class}
+            />
+            <input type="hidden" {...props} bind:value={$formData.class} />
           {/snippet}
         </Form.Control>
         <Form.Description />
