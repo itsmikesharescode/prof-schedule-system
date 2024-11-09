@@ -4,13 +4,15 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { addSchoolYearSchema } from './components/AddSchoolYear/schema';
 import { fail } from '@sveltejs/kit';
 import { updateSchoolYearSchema } from './components/UpdateSchoolYear/schema';
+import { streamSchoolYear } from './db_calls/streamSchoolYear';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   return {
     addSchoolYearForm: await superValidate(zod(addSchoolYearSchema), { id: crypto.randomUUID() }),
     updateSchoolYearForm: await superValidate(zod(updateSchoolYearSchema), {
       id: crypto.randomUUID()
-    })
+    }),
+    streamSchoolYear: streamSchoolYear(supabase)
   };
 };
 

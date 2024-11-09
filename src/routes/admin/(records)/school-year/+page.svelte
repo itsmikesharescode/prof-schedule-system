@@ -7,14 +7,8 @@
   import { Skeleton } from '$lib/components/ui/skeleton/index';
   import FilterPicker from '$lib/components/general/FilterPicker.svelte';
   import { useSupabaseState } from '$lib/runes/supabaseState.svelte';
-  import type { Database } from '$lib/database.types';
-  import type { PostgrestSingleResponse } from '@supabase/supabase-js';
-  import { streamSchoolYear } from './db_calls/streamSchoolYear';
 
   const { data } = $props();
-
-  const supabaseState = useSupabaseState();
-  const supabase = supabaseState.get();
 
   const detectURL = $derived($page.url.searchParams.get('filter'));
 
@@ -43,7 +37,7 @@
       </Table.Row>
     </Table.Header>
     <Table.Body>
-      {#await streamSchoolYear(supabase)}
+      {#await data.streamSchoolYear}
         {#each Array(5) as _}
           <Table.Row>
             <Table.Cell class="">
