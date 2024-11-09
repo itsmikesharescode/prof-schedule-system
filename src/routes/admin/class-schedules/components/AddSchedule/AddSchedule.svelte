@@ -235,6 +235,7 @@
                   </Button>
                 {/if}
                 <Button size="sm" class="pointer-events-auto" onclick={addSubject}>
+                  <Plus class="size-4" />
                   Add Subject
                 </Button>
               </div>
