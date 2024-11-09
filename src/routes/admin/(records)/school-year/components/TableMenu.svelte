@@ -5,12 +5,14 @@
   import type { UpdateSchoolYearSchema } from './UpdateSchoolYear/schema';
   import UpdateSchoolYear from './UpdateSchoolYear/UpdateSchoolYear.svelte';
   import DeleteSchoolYear from './DeleteSchoolYear/DeleteSchoolYear.svelte';
+  import type { Database } from '$lib/database.types';
 
   interface Props {
+    schoolYear: Database['public']['Tables']['school_years_tb']['Row'];
     updateSchoolYearForm: SuperValidated<Infer<UpdateSchoolYearSchema>>;
   }
 
-  let { updateSchoolYearForm }: Props = $props();
+  let { updateSchoolYearForm, schoolYear }: Props = $props();
 
   let showUpdate = $state(false);
   let showDelete = $state(false);
@@ -37,4 +39,4 @@
 </DropdownMenu.Root>
 
 <UpdateSchoolYear bind:showUpdate {updateSchoolYearForm} />
-<DeleteSchoolYear bind:showDelete />
+<DeleteSchoolYear {schoolYear} bind:showDelete />

@@ -51,7 +51,7 @@
         {#each schoolYears ?? [] as schoolYear}
           <Table.Row>
             <Table.Cell class="">
-              <TableMenu updateSchoolYearForm={data.updateSchoolYearForm} />
+              <TableMenu {schoolYear} updateSchoolYearForm={data.updateSchoolYearForm} />
             </Table.Cell>
             <Table.Cell class="font-medium">{schoolYear.year}</Table.Cell>
             <Table.Cell class="text-right">
