@@ -27,19 +27,17 @@
   </div>
 
   <Table.Root>
-    <Table.Caption>A list of your recent invoices.</Table.Caption>
     <Table.Header>
       <Table.Row>
         <Table.Head class="w-[50px]"></Table.Head>
         <Table.Head class="w-[100px]">Department</Table.Head>
-        <Table.Head>Description</Table.Head>
-        <Table.Head>Program Head</Table.Head>
-        <Table.Head class="text-right">Created At</Table.Head>
+        <Table.Head class="truncate">Description</Table.Head>
+        <Table.Head class="truncate">Program Head</Table.Head>
+        <Table.Head class="truncate">Created At</Table.Head>
       </Table.Row>
     </Table.Header>
     <Table.Body>
-      <!--Display if streaming data-->
-      {#if false}
+      {#await data.streamPrograms}
         {#each Array(5) as _}
           <Table.Row>
             <Table.Cell class="">
@@ -48,22 +46,25 @@
             <Table.Cell class="font-medium"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
             <Table.Cell><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
             <Table.Cell><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
-            <Table.Cell class="text-right"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
+            <Table.Cell class=""><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
           </Table.Row>
         {/each}
-      {/if}
-
-      {#each Array(20) as _}
-        <Table.Row>
-          <Table.Cell class="">
-            <TableMenu updateProgramForm={data.updateProgramForm} />
-          </Table.Cell>
-          <Table.Cell class="font-medium">BSIS</Table.Cell>
-          <Table.Cell>Bachelor of Science in Information System</Table.Cell>
-          <Table.Cell>Magdiwang, Magdalo Macapagal</Table.Cell>
-          <Table.Cell class="text-right">{new Date().toLocaleDateString()}</Table.Cell>
-        </Table.Row>
-      {/each}
+      {:then programs}
+        {#each programs ?? [] as program}
+          <Table.Row>
+            <Table.Cell class="">
+              <TableMenu {program} updateProgramForm={data.updateProgramForm} />
+            </Table.Cell>
+            <Table.Cell class="truncate font-medium">{program.name}</Table.Cell>
+            <Table.Cell class="truncate">{program.description}</Table.Cell>
+            <Table.Cell class="truncate">{program.head}</Table.Cell>
+            <Table.Cell class="truncate">
+              {new Date(program.created_at).toLocaleDateString()} @
+              {new Date(program.created_at).toLocaleTimeString()}
+            </Table.Cell>
+          </Table.Row>
+        {/each}
+      {/await}
     </Table.Body>
   </Table.Root>
 </div>
