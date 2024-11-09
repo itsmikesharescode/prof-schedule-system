@@ -6,10 +6,11 @@
   import * as Form from '$lib/components/ui/form/index.js';
   import { Input } from '$lib/components/ui/input/index.js';
   import { updateYearLevelSchema, type UpdateYearLevelSchema } from './schema';
-  import ImagePicker from '$lib/components/general/ImagePicker.svelte';
   import { departments } from '$lib/metadata';
   import SelectPicker from '$lib/components/general/SelectPicker.svelte';
   import type { Database } from '$lib/database.types';
+  import type { Result } from '$lib/types';
+  import { toast } from 'svelte-sonner';
 
   interface Props {
     yearLevel: Database['public']['Tables']['year_levels_tb']['Row'];
@@ -20,7 +21,20 @@
   let { showUpdate = $bindable(), updateYearLevelForm, yearLevel }: Props = $props();
 
   const form = superForm(updateYearLevelForm, {
-    validators: zodClient(updateYearLevelSchema)
+    validators: zodClient(updateYearLevelSchema),
+    onUpdate: ({ result }) => {
+      const { status, data } = result as Result<{ msg: string }>;
+      switch (status) {
+        case 200:
+          form.reset();
+          showUpdate = false;
+          toast.success(data.msg);
+          break;
+        case 401:
+          toast.error(data.msg);
+          break;
+      }
+    }
   });
 
   const { form: formData, enhance, submitting } = form;
@@ -54,7 +68,7 @@
       </AlertDialog.Description>
     </AlertDialog.Header>
 
-    <form method="POST" use:enhance>
+    <form method="POST" action="?/updateYearLevelEvent" use:enhance>
       <input type="hidden" name="id" bind:value={$formData.id} />
       <Form.Field {form} name="yearLevel">
         <Form.Field {form} name="department">

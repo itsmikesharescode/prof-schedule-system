@@ -40,5 +40,16 @@ export const actions: Actions = {
     if (!form.valid) {
       return fail(400, { form });
     }
+
+    const { error } = await supabase
+      .from('year_levels_tb')
+      .update({
+        level: form.data.yearLevel,
+        department: form.data.department
+      })
+      .eq('id', form.data.id);
+
+    if (error) return fail(401, { form, msg: error.message });
+    return { form, msg: 'Successfully updated.' };
   }
 };
