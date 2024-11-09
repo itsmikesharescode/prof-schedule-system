@@ -31,8 +31,9 @@
     <Table.Header>
       <Table.Row>
         <Table.Head class="w-[50px]"></Table.Head>
-        <Table.Head class="w-[100px] truncate">School Year</Table.Head>
-        <Table.Head class="text-right">Created At</Table.Head>
+        <Table.Head class="w-full">School Year</Table.Head>
+        <Table.Head class="w-[100px] truncate">Department</Table.Head>
+        <Table.Head class="w-[300px] truncate">Created At</Table.Head>
       </Table.Row>
     </Table.Header>
     <Table.Body>
@@ -52,8 +53,9 @@
             <Table.Cell class="">
               <TableMenu {schoolYear} updateSchoolYearForm={data.updateSchoolYearForm} />
             </Table.Cell>
-            <Table.Cell class="font-medium">{schoolYear.year}</Table.Cell>
-            <Table.Cell class="text-right">
+            <Table.Cell class="truncate font-medium">{schoolYear.year}</Table.Cell>
+            <Table.Cell class="truncate font-medium">{schoolYear.department}</Table.Cell>
+            <Table.Cell class="truncate">
               {new Date(schoolYear.created_at).toLocaleDateString()} @
               {new Date(schoolYear.created_at).toLocaleTimeString()}
             </Table.Cell>

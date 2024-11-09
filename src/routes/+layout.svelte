@@ -31,5 +31,5 @@
 </script>
 
 <ModeWatcher />
-<Toaster position="top-right" richColors />
+<Toaster position="bottom-right" richColors />
 {@render children()}
