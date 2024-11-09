@@ -52,6 +52,30 @@ export type Database = {
         }
         Relationships: []
       }
+      programs_tb: {
+        Row: {
+          created_at: string
+          description: string
+          head: string
+          id: number
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          head: string
+          id?: number
+          name: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          head?: string
+          id?: number
+          name?: string
+        }
+        Relationships: []
+      }
       roles_tb: {
         Row: {
           created_at: string
