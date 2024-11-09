@@ -28,5 +28,10 @@ export const actions: Actions = {
     if (!form.valid) {
       return fail(400, { form });
     }
+  },
+
+  deleteSchoolYearEvent: async ({ request, locals: { supabase } }) => {
+    const formData = await request.formData();
+    const id = formData.get('id') as string;
   }
 };
