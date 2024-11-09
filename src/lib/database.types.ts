@@ -85,6 +85,27 @@ export type Database = {
         };
         Relationships: [];
       };
+      year_levels_tb: {
+        Row: {
+          created_at: string;
+          department: string;
+          id: number;
+          level: string;
+        };
+        Insert: {
+          created_at?: string;
+          department: string;
+          id?: number;
+          level: string;
+        };
+        Update: {
+          created_at?: string;
+          department?: string;
+          id?: number;
+          level?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: {
       [_ in never]: never;
