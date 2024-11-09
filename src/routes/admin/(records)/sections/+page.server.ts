@@ -4,7 +4,7 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { addSectionSchema } from './components/AddSection/schema';
 import { fail } from '@sveltejs/kit';
 import { updateSectionSchema } from './components/UpdateSection/schema';
-import { streamSections } from './db_calls/streamSchoolYear';
+import { streamSections } from './db_calls/streamSections';
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   return {
