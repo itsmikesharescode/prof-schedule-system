@@ -4,13 +4,13 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { addYearLevelSchema } from './components/AddYearLevel/schema';
 import { fail } from '@sveltejs/kit';
 import { updateYearLevelSchema } from './components/UpdateYearLevel/schema';
-import { streamYearLevels } from './db_calls/streamYearLevels';
+import { streamYearLevels } from '../../(db_calls)/streamYearLevels';
 
-export const load: PageServerLoad = async ({ locals: { supabase } }) => {
+export const load: PageServerLoad = async ({ locals: { supabase }, url }) => {
   return {
     addYearLevelForm: await superValidate(zod(addYearLevelSchema)),
     updateYearLevelForm: await superValidate(zod(updateYearLevelSchema)),
-    yearLevels: streamYearLevels(supabase)
+    yearLevels: streamYearLevels(supabase, url.searchParams.get('filter'))
   };
 };
 

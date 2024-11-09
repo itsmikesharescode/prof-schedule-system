@@ -3,29 +3,17 @@
   import AddYearLevel from './components/AddYearLevel/AddYearLevel.svelte';
   import TableMenu from './components/TableMenu.svelte';
   import { departments } from '$lib/metadata';
-  import { page } from '$app/stores';
   import { Skeleton } from '$lib/components/ui/skeleton/index';
   import FilterPicker from '$lib/components/general/FilterPicker.svelte';
   import * as Popover from '$lib/components/ui/popover/index.js';
   import { Badge } from '$lib/components/ui/badge/index.js';
 
   const { data } = $props();
-
-  const detectURL = $derived($page.url.searchParams.get('filter'));
-
-  $effect(() => {
-    if (detectURL) {
-      //stream the filter here if there is no filter gather all rows, else filter it
-    }
-  });
 </script>
 
 <div class="flex flex-col gap-4">
   <div class="sticky top-2 z-30 flex justify-end">
-    <div class="flex w-full items-center justify-between">
-      <FilterPicker name="Select filter" class="max-w-fit" selections={departments} />
-      <AddYearLevel addSchoolYearForm={data.addYearLevelForm} />
-    </div>
+    <AddYearLevel addSchoolYearForm={data.addYearLevelForm} />
   </div>
 
   <Table.Root>

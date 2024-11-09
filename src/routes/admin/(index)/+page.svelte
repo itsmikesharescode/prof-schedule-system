@@ -2,28 +2,24 @@
   import * as Table from '$lib/components/ui/table/index.js';
   import TableMenu from './components/TableMenu.svelte';
   import AddProgram from './components/AddProgram/AddProgram.svelte';
-  import FilterPicker from '$lib/components/general/FilterPicker.svelte';
-  import { departments } from '$lib/metadata';
-  import { page } from '$app/stores';
   import { Skeleton } from '$lib/components/ui/skeleton/index';
+  import { page } from '$app/stores';
+  import { invalidate } from '$app/navigation';
 
   const { data } = $props();
 
-  const detectURL = $derived($page.url.searchParams.get('filter'));
+  const detectFilter = $derived($page.url.searchParams.get('filter'));
 
   $effect(() => {
-    if (detectURL) {
-      //stream the filter here if there is no filter gather all rows, else filter it
+    if (detectFilter) {
+      invalidate('admin:filter');
     }
   });
 </script>
 
 <div class="flex flex-col gap-4">
   <div class="sticky top-2 z-30 flex justify-end">
-    <div class="flex w-full items-center justify-between">
-      <FilterPicker name="Select filter" class="max-w-fit" selections={departments} />
-      <AddProgram addProgramForm={data.addProgramForm} />
-    </div>
+    <AddProgram addProgramForm={data.addProgramForm} />
   </div>
 
   <Table.Root>
