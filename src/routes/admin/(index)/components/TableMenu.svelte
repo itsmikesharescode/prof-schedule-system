@@ -38,4 +38,4 @@
 </DropdownMenu.Root>
 
 <UpdateProgram {program} bind:showUpdate {updateProgramForm} />
-<DeleteProgram bind:showDelete />
+<DeleteProgram {program} bind:showDelete />

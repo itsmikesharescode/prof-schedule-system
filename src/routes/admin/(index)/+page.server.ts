@@ -31,7 +31,7 @@ export const actions: Actions = {
     ]);
 
     if (error) {
-      return fail(400, { form, msg: error.message });
+      return fail(401, { form, msg: error.message });
     }
     return { form, msg: 'Program added successfully' };
   },
@@ -52,8 +52,19 @@ export const actions: Actions = {
       .eq('id', form.data.id);
 
     if (error) {
-      return fail(400, { form, msg: error.message });
+      return fail(401, { form, msg: error.message });
     }
     return { form, msg: 'Program updated successfully' };
+  },
+  deleteProgramEvent: async ({ request, locals: { supabase } }) => {
+    const formData = await request.formData();
+    const id = formData.get('id') as string;
+
+    const { error } = await supabase.from('programs_tb').delete().eq('id', id);
+
+    if (error) {
+      return fail(401, { msg: error.message });
+    }
+    return { msg: 'Program deleted successfully' };
   }
 };
