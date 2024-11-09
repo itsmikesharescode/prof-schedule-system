@@ -16,7 +16,10 @@ export const updateSchoolYearSchema = z.object({
       {
         message: 'End year must be exactly one year after start year'
       }
-    )
+    ),
+  department: z.string().refine((v) => departments.find((d) => d.value === v), {
+    message: 'Department is required'
+  })
 });
 
 export type UpdateSchoolYearSchema = typeof updateSchoolYearSchema;
