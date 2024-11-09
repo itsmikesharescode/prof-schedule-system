@@ -4,13 +4,15 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { addYearLevelSchema } from './components/AddYearLevel/schema';
 import { fail } from '@sveltejs/kit';
 import { updateYearLevelSchema } from './components/UpdateYearLevel/schema';
+import { streamYearLevels } from './db_calls/streamYearLevels';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   return {
     addYearLevelForm: await superValidate(zod(addYearLevelSchema), { id: crypto.randomUUID() }),
     updateYearLevelForm: await superValidate(zod(updateYearLevelSchema), {
       id: crypto.randomUUID()
-    })
+    }),
+    yearLevels: streamYearLevels(supabase)
   };
 };
 
