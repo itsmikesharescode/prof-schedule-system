@@ -11,6 +11,11 @@
   import { departments } from '$lib/metadata';
   import type { Result } from '$lib/types';
   import { toast } from 'svelte-sonner';
+  import Label from '$lib/components/ui/label/label.svelte';
+  import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
+  import { cubicInOut } from 'svelte/easing';
+  import { flip } from 'svelte/animate';
+  import { fly } from 'svelte/transition';
 
   interface Props {
     addSchoolYearForm: SuperValidated<Infer<AddYearLevelSchema>>;
@@ -38,6 +43,25 @@
   });
 
   const { form: formData, enhance, submitting } = form;
+
+  let yearLevels = $state([
+    {
+      id: crypto.randomUUID(),
+      yearLevel: ''
+    }
+  ]);
+
+  let lastYearLevelCard = $state<HTMLElement>();
+
+  const addYearLevel = () => {
+    yearLevels.push({
+      id: crypto.randomUUID(),
+      yearLevel: ''
+    });
+    setTimeout(() => {
+      lastYearLevelCard?.scrollIntoView({ behavior: 'smooth' });
+    }, 0);
+  };
 </script>
 
 <Button size="sm" onclick={() => (open = true)}>
@@ -46,7 +70,7 @@
 </Button>
 
 <AlertDialog.Root bind:open>
-  <AlertDialog.Content class="">
+  <AlertDialog.Content class="max-w-[700px] p-0">
     <button
       onclick={() => {
         open = false;
@@ -58,54 +82,100 @@
       <span class="sr-only">Close</span>
     </button>
 
-    <AlertDialog.Header class="">
+    <AlertDialog.Header class="px-6 pt-6">
       <AlertDialog.Title>New Year Level</AlertDialog.Title>
       <AlertDialog.Description>
         Fill the fields below to create a new year level.
       </AlertDialog.Description>
     </AlertDialog.Header>
-
-    <form method="POST" action="?/addYearLevelEvent" use:enhance>
-      <Form.Field {form} name="department">
-        <Form.Control>
-          {#snippet children({ props })}
-            <Form.Label>Department</Form.Label>
-            <SelectPicker
-              {...props}
-              bind:selected={$formData.department}
-              selections={departments}
-              name="Select department"
-            />
-            <input type="hidden" name={props.name} bind:value={$formData.department} />
-          {/snippet}
-        </Form.Control>
-        <Form.Description />
-        <Form.FieldErrors />
-      </Form.Field>
-
-      <Form.Field {form} name="yearLevel">
-        <Form.Control>
-          {#snippet children({ props })}
-            <Form.Label>Year Level</Form.Label>
-            <Input {...props} bind:value={$formData.yearLevel} placeholder="Enter year level" />
-          {/snippet}
-        </Form.Control>
-        <Form.Description />
-        <Form.FieldErrors />
-      </Form.Field>
-
-      <AlertDialog.Footer>
-        <Form.Button disabled={$submitting} size="sm" class="relative">
-          {#if $submitting}
-            <div
-              class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center rounded-lg bg-primary"
-            >
-              <LoaderCircle class="size-4 animate-spin" />
+    <ScrollArea class="max-h-[70dvh]">
+      <form method="POST" action="?/addYearLevelEvent" use:enhance class="px-6 pb-6">
+        <div class="grid grid-cols-2 gap-5 pb-5">
+          <div class="">
+            <div class="sticky top-0">
+              <Form.Field {form} name="department">
+                <Form.Control>
+                  {#snippet children({ props })}
+                    <Form.Label>Department</Form.Label>
+                    <SelectPicker
+                      {...props}
+                      bind:selected={$formData.department}
+                      selections={departments}
+                      name="Select department"
+                    />
+                    <input type="hidden" name={props.name} bind:value={$formData.department} />
+                  {/snippet}
+                </Form.Control>
+                <Form.Description />
+                <Form.FieldErrors />
+              </Form.Field>
             </div>
-          {/if}
-          Create
-        </Form.Button>
-      </AlertDialog.Footer>
-    </form>
+          </div>
+
+          <div class="flex flex-col gap-2.5 overflow-hidden">
+            {#each yearLevels as yearLevel (yearLevel)}
+              <div
+                class="flex w-full flex-col gap-1.5 rounded-lg border-2 p-4"
+                animate:flip={{ duration: 300 }}
+                in:fly={{ x: -100, duration: 500, delay: 200, easing: cubicInOut }}
+                out:fly={{ x: 100, duration: 500, easing: cubicInOut }}
+                bind:this={lastYearLevelCard}
+              >
+                <Label for={`yearLevel-${yearLevel.id}`}>Year Level</Label>
+                <div class="flex items-center gap-5">
+                  <Input
+                    id={`yearLevel-${yearLevel.id}`}
+                    placeholder="Enter year level"
+                    bind:value={yearLevel.yearLevel}
+                  />
+                  {#if yearLevels.length > 1}
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      onclick={() => yearLevels.splice(yearLevels.indexOf(yearLevel), 1)}
+                    >
+                      Delete
+                    </Button>
+                  {/if}
+                </div>
+              </div>
+            {/each}
+          </div>
+        </div>
+
+        <div
+          class="pointer-events-none sticky bottom-6 left-6 right-6 flex items-center justify-between"
+        >
+          <div class="">
+            <Button size="sm" onclick={addYearLevel} class="pointer-events-auto">
+              Add Year Level
+            </Button>
+            {#if yearLevels.length > 3}
+              <Button
+                size="sm"
+                variant="destructive"
+                onclick={() => {
+                  yearLevels = yearLevels.slice(0, 1);
+                }}
+                class="pointer-events-auto"
+              >
+                Delete All
+              </Button>
+            {/if}
+          </div>
+
+          <Form.Button disabled={$submitting} size="sm" class="pointer-events-auto relative">
+            {#if $submitting}
+              <div
+                class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center rounded-lg bg-primary"
+              >
+                <LoaderCircle class="size-4 animate-spin" />
+              </div>
+            {/if}
+            Create
+          </Form.Button>
+        </div>
+      </form>
+    </ScrollArea>
   </AlertDialog.Content>
 </AlertDialog.Root>
