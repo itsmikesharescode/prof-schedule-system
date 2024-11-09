@@ -21,6 +21,15 @@ export const actions: Actions = {
     if (!form.valid) {
       return fail(400, { form });
     }
+
+    const { error } = await supabase.from('school_years_tb').insert([
+      {
+        year: form.data.schoolYear
+      }
+    ]);
+
+    if (error) return fail(401, { form, msg: error.message });
+    return { form, msg: 'Successfully added.' };
   },
   updateSchoolYearEvent: async ({ request, locals: { supabase } }) => {
     const form = await superValidate(request, zod(updateSchoolYearSchema));
