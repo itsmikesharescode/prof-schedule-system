@@ -27,6 +27,7 @@
 
   const form = superForm(addSchoolYearForm, {
     validators: zodClient(addYearLevelSchema),
+    id: crypto.randomUUID(),
     dataType: 'json',
     onUpdate: ({ result, form }) => {
       const { status, data } = result as Result<{ msg: string }>;
