@@ -36,10 +36,18 @@ export const actions: Actions = {
   },
   updateSchoolYearEvent: async ({ request, locals: { supabase } }) => {
     const form = await superValidate(request, zod(updateSchoolYearSchema));
-
+    console.log(form.data);
     if (!form.valid) {
       return fail(400, { form });
     }
+
+    const { error } = await supabase
+      .from('school_years_tb')
+      .update({ year: form.data.schoolYear, department: form.data.department })
+      .eq('id', form.data.id);
+
+    if (error) return fail(401, { form, msg: error.message });
+    return { form, msg: 'Successfully updated.' };
   },
 
   deleteSchoolYearEvent: async ({ request, locals: { supabase } }) => {
