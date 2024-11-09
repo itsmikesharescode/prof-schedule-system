@@ -45,7 +45,7 @@
         {#each rooms ?? [] as room}
           <Table.Row>
             <Table.Cell class="">
-              <TableMenu updateRoomForm={data.updateRoomForm} />
+              <TableMenu {room} updateRoomForm={data.updateRoomForm} />
             </Table.Cell>
             <Table.Cell class="truncate font-medium">{room.department}</Table.Cell>
             <Table.Cell class="truncate font-medium">{room.type}</Table.Cell>

@@ -1,29 +1,53 @@
 <script lang="ts">
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
   import Button from '$lib/components/ui/button/button.svelte';
-  import { X, Plus } from 'lucide-svelte';
+  import { X, Plus, LoaderCircle } from 'lucide-svelte';
   import { type Infer, superForm, type SuperValidated } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import * as Form from '$lib/components/ui/form/index.js';
   import { Input } from '$lib/components/ui/input/index.js';
   import { updateRoomSchema, type UpdateRoomSchema } from './schema';
+  import SelectPicker from '$lib/components/general/SelectPicker.svelte';
+  import { departments } from '$lib/metadata';
+  import type { Result } from '$lib/types';
+  import { toast } from 'svelte-sonner';
+  import type { Database } from '$lib/database.types';
 
   interface Props {
     updateRoomForm: SuperValidated<Infer<UpdateRoomSchema>>;
+    room: Database['public']['Tables']['rooms_tb']['Row'];
     showUpdate: boolean;
   }
 
-  let { showUpdate = $bindable(), updateRoomForm }: Props = $props();
+  let { showUpdate = $bindable(), updateRoomForm, room }: Props = $props();
 
   const form = superForm(updateRoomForm, {
-    validators: zodClient(updateRoomSchema)
+    validators: zodClient(updateRoomSchema),
+    id: crypto.randomUUID(),
+    onUpdate: ({ result }) => {
+      const { status, data } = result as Result<{ msg: string }>;
+      switch (status) {
+        case 200:
+          form.reset();
+          showUpdate = false;
+          toast.success(data.msg);
+          break;
+        case 401:
+          toast.error(data.msg);
+          break;
+      }
+    }
   });
 
   const { form: formData, enhance, submitting } = form;
 
   $effect(() => {
     if (showUpdate) {
-      //populate id
+      $formData.id = room.id;
+      $formData.department = room.department;
+      $formData.roomType = room.type;
+      $formData.roomNumber = room.number;
+      $formData.roomCode = room.code;
     }
   });
 </script>
@@ -43,10 +67,28 @@
 
     <AlertDialog.Header class="">
       <AlertDialog.Title>Update Room</AlertDialog.Title>
-      <AlertDialog.Description>Fill the fields below to update a room.</AlertDialog.Description>
+      <AlertDialog.Description>Fill the fields below to update the room.</AlertDialog.Description>
     </AlertDialog.Header>
 
-    <form method="POST" use:enhance>
+    <form method="POST" action="?/updateRoomEvent" use:enhance>
+      <input type="hidden" name="id" bind:value={$formData.id} />
+      <Form.Field {form} name="department">
+        <Form.Control>
+          {#snippet children({ props })}
+            <Form.Label>Department</Form.Label>
+            <SelectPicker
+              {...props}
+              name="Select department"
+              bind:selected={$formData.department}
+              selections={departments}
+            />
+            <input type="hidden" {...props} bind:value={$formData.department} />
+          {/snippet}
+        </Form.Control>
+        <Form.Description />
+        <Form.FieldErrors />
+      </Form.Field>
+
       <Form.Field {form} name="roomType">
         <Form.Control>
           {#snippet children({ props })}
@@ -62,7 +104,12 @@
         <Form.Control>
           {#snippet children({ props })}
             <Form.Label>Room Number</Form.Label>
-            <Input {...props} bind:value={$formData.roomNumber} placeholder="Enter room number" />
+            <Input
+              type="number"
+              {...props}
+              bind:value={$formData.roomNumber}
+              placeholder="Enter room number"
+            />
           {/snippet}
         </Form.Control>
         <Form.Description />
@@ -73,12 +120,7 @@
         <Form.Control>
           {#snippet children({ props })}
             <Form.Label>Room Code</Form.Label>
-            <Input
-              type="number"
-              {...props}
-              bind:value={$formData.roomCode}
-              placeholder="Enter room code"
-            />
+            <Input {...props} bind:value={$formData.roomCode} placeholder="Enter room code" />
           {/snippet}
         </Form.Control>
         <Form.Description />
@@ -86,7 +128,16 @@
       </Form.Field>
 
       <AlertDialog.Footer>
-        <Form.Button size="sm">Update</Form.Button>
+        <Form.Button size="sm" class="relative">
+          {#if $submitting}
+            <div
+              class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center rounded-lg bg-primary"
+            >
+              <LoaderCircle class="size-4 animate-spin" />
+            </div>
+          {/if}
+          Update
+        </Form.Button>
       </AlertDialog.Footer>
     </form>
   </AlertDialog.Content>
