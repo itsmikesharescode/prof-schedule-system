@@ -9,8 +9,7 @@
 </script>
 
 <div class="flex flex-col gap-4">
-  <div class="flex w-full items-center justify-between">
-    <FilterPicker name="Select filter" class="max-w-fit" selections={departments} />
+  <div class="flex w-full items-center justify-end">
     <AddRoom addRoomForm={data.addRoomForm} />
   </div>
 

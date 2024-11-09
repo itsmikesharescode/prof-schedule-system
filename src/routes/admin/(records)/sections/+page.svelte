@@ -11,10 +11,7 @@
 
 <div class="flex flex-col gap-4">
   <div class="sticky top-2 z-30 flex justify-end">
-    <div class="flex w-full items-center justify-between">
-      <FilterPicker name="Select filter" class="max-w-fit" selections={departments} />
-      <AddSection addSectionForm={data.addSectionForm} />
-    </div>
+    <AddSection addSectionForm={data.addSectionForm} />
   </div>
 
   <Table.Root>
