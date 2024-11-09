@@ -5,7 +5,7 @@ import { addProgramSchema } from './components/AddProgram/schema';
 import { fail } from '@sveltejs/kit';
 import { updateProgramSchema } from './components/UpdateProgram/schema';
 
-export const load: PageServerLoad = async ({ locals: { supabase } }) => {
+export const load: PageServerLoad = async () => {
   return {
     addProgramForm: await superValidate(zod(addProgramSchema)),
     updateProgramForm: await superValidate(zod(updateProgramSchema))

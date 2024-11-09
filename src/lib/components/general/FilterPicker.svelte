@@ -39,7 +39,7 @@
       {selected ? selected : props.name}
     </Select.Trigger>
     <Select.Content>
-      <a title="Filter by All" href="?">
+      <a title="Filter by All" href="?reset=true">
         <Select.Item value="All">All</Select.Item>
       </a>
 
