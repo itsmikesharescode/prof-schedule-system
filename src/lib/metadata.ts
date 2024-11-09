@@ -177,3 +177,18 @@ export const interests = [
     label: 'Family-owned business'
   }
 ];
+
+export const classPeriods = [
+  {
+    value: '7:00 AM - 12:00 PM',
+    label: 'Morning Class'
+  },
+  {
+    value: '1:00 PM - 5:00 PM',
+    label: 'Afternoon Class'
+  },
+  {
+    value: '6:00 PM - 9:00 PM',
+    label: 'Evening Class'
+  }
+];
