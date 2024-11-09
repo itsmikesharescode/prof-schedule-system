@@ -49,13 +49,14 @@
             >
             <Table.Cell class=""><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
             <Table.Cell class="text-right"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
+            <Table.Cell class="text-right"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
           </Table.Row>
         {/each}
       {:then sections}
         {#each sections ?? [] as section}
           <Table.Row>
             <Table.Cell class="">
-              <TableMenu updateSectionForm={data.updateSectionForm} />
+              <TableMenu {section} updateSectionForm={data.updateSectionForm} />
             </Table.Cell>
             <Table.Cell class="truncate font-medium">{section.class}</Table.Cell>
             <Table.Cell class="truncate">{section.department}</Table.Cell>

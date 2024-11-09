@@ -5,12 +5,14 @@
   import type { UpdateSectionSchema } from './UpdateSection/schema';
   import UpdateSchoolYear from './UpdateSection/UpdateSection.svelte';
   import DeleteSchoolYear from './DeleteSection/DeleteSection.svelte';
+  import type { Database } from '$lib/database.types';
 
   interface Props {
+    section: Database['public']['Tables']['sections_tb']['Row'];
     updateSectionForm: SuperValidated<Infer<UpdateSectionSchema>>;
   }
 
-  let { updateSectionForm }: Props = $props();
+  let { section, updateSectionForm }: Props = $props();
 
   let showUpdate = $state(false);
   let showDelete = $state(false);
@@ -36,5 +38,5 @@
   </DropdownMenu.Content>
 </DropdownMenu.Root>
 
-<UpdateSchoolYear bind:showUpdate {updateSectionForm} />
+<UpdateSchoolYear {section} bind:showUpdate {updateSectionForm} />
 <DeleteSchoolYear bind:showDelete />

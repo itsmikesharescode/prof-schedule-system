@@ -11,13 +11,15 @@
   import { classPeriods, departments } from '$lib/metadata';
   import type { Result } from '$lib/types';
   import { toast } from 'svelte-sonner';
+  import type { Database } from '$lib/database.types';
 
   interface Props {
+    section: Database['public']['Tables']['sections_tb']['Row'];
     updateSectionForm: SuperValidated<Infer<UpdateSectionSchema>>;
     showUpdate: boolean;
   }
 
-  let { showUpdate = $bindable(), updateSectionForm }: Props = $props();
+  let { showUpdate = $bindable(), updateSectionForm, section }: Props = $props();
 
   const form = superForm(updateSectionForm, {
     validators: zodClient(updateSectionSchema),
@@ -38,6 +40,15 @@
   });
 
   const { form: formData, enhance, submitting } = form;
+
+  $effect(() => {
+    if (showUpdate) {
+      $formData.id = section.id;
+      $formData.department = section.department;
+      $formData.class = section.class;
+      $formData.sectionCode = section.section_code;
+    }
+  });
 </script>
 
 <AlertDialog.Root bind:open={showUpdate}>
@@ -61,6 +72,7 @@
     </AlertDialog.Header>
 
     <form method="POST" action="?/addSectionEvent" use:enhance>
+      <input type="hidden" bind:value={$formData.id} />
       <Form.Field {form} name="department">
         <Form.Control>
           {#snippet children({ props })}
