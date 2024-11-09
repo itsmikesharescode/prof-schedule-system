@@ -5,11 +5,13 @@
   import type { UpdateProgramSchema } from './UpdateProgram/schema';
   import UpdateProgram from './UpdateProgram/UpdateProgram.svelte';
   import DeleteProgram from './DeleteProgram/DeleteProgram.svelte';
+  import type { Database } from '$lib/database.types';
   interface Props {
     updateProgramForm: SuperValidated<Infer<UpdateProgramSchema>>;
+    program: Database['public']['Tables']['programs_tb']['Row'];
   }
 
-  let { updateProgramForm }: Props = $props();
+  let { updateProgramForm, program }: Props = $props();
 
   let showUpdate = $state(false);
   let showDelete = $state(false);
@@ -35,5 +37,5 @@
   </DropdownMenu.Content>
 </DropdownMenu.Root>
 
-<UpdateProgram bind:showUpdate {updateProgramForm} />
+<UpdateProgram {program} bind:showUpdate {updateProgramForm} />
 <DeleteProgram bind:showDelete />

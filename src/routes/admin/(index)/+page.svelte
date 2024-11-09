@@ -53,7 +53,7 @@
         {#each programs ?? [] as program}
           <Table.Row>
             <Table.Cell class="">
-              <TableMenu updateProgramForm={data.updateProgramForm} />
+              <TableMenu {program} updateProgramForm={data.updateProgramForm} />
             </Table.Cell>
             <Table.Cell class="truncate font-medium">{program.name}</Table.Cell>
             <Table.Cell class="truncate">{program.description}</Table.Cell>
