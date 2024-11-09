@@ -6,6 +6,7 @@
   import { page } from '$app/stores';
   import { Skeleton } from '$lib/components/ui/skeleton/index';
   import FilterPicker from '$lib/components/general/FilterPicker.svelte';
+  import { useSupabaseState } from '$lib/runes/supabaseState.svelte';
 
   const { data } = $props();
 
@@ -27,17 +28,16 @@
   </div>
 
   <Table.Root>
-    <Table.Caption>A list of your recent invoices.</Table.Caption>
     <Table.Header>
       <Table.Row>
         <Table.Head class="w-[50px]"></Table.Head>
-        <Table.Head class="w-[100px] truncate">School Year</Table.Head>
-        <Table.Head class="text-right">Created At</Table.Head>
+        <Table.Head class="w-full">School Year</Table.Head>
+        <Table.Head class="w-[100px] truncate">Department</Table.Head>
+        <Table.Head class="w-[300px] truncate">Created At</Table.Head>
       </Table.Row>
     </Table.Header>
     <Table.Body>
-      <!--Display if streaming data-->
-      {#if false}
+      {#await data.streamSchoolYear}
         {#each Array(5) as _}
           <Table.Row>
             <Table.Cell class="">
@@ -47,17 +47,21 @@
             <Table.Cell class="text-right"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
           </Table.Row>
         {/each}
-      {/if}
-
-      {#each Array(20) as _}
-        <Table.Row>
-          <Table.Cell class="">
-            <TableMenu updateSchoolYearForm={data.updateSchoolYearForm} />
-          </Table.Cell>
-          <Table.Cell class="font-medium">123123xx2</Table.Cell>
-          <Table.Cell class="text-right">{new Date().toLocaleDateString()}</Table.Cell>
-        </Table.Row>
-      {/each}
+      {:then schoolYears}
+        {#each schoolYears ?? [] as schoolYear}
+          <Table.Row>
+            <Table.Cell class="">
+              <TableMenu {schoolYear} updateSchoolYearForm={data.updateSchoolYearForm} />
+            </Table.Cell>
+            <Table.Cell class="truncate font-medium">{schoolYear.year}</Table.Cell>
+            <Table.Cell class="truncate font-medium">{schoolYear.department}</Table.Cell>
+            <Table.Cell class="truncate">
+              {new Date(schoolYear.created_at).toLocaleDateString()} @
+              {new Date(schoolYear.created_at).toLocaleTimeString()}
+            </Table.Cell>
+          </Table.Row>
+        {/each}
+      {/await}
     </Table.Body>
   </Table.Root>
 </div>

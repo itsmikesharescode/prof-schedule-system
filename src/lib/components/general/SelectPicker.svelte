@@ -4,7 +4,7 @@
   import type { ClassNameValue } from 'tailwind-merge';
 
   interface Props {
-    props: {
+    props?: {
       name: string;
       id: string;
       'data-fs-error': string | undefined;
@@ -18,7 +18,7 @@
       value: string;
     }[];
     selected: string;
-    class: ClassNameValue;
+    class?: ClassNameValue;
     name: string;
   }
 
