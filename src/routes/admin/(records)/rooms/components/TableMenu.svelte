@@ -39,4 +39,4 @@
 </DropdownMenu.Root>
 
 <UpdateRoom {room} bind:showUpdate {updateRoomForm} />
-<DeleteRoom bind:showDelete />
+<DeleteRoom {room} bind:showDelete />
