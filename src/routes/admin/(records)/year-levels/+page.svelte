@@ -6,6 +6,8 @@
   import { page } from '$app/stores';
   import { Skeleton } from '$lib/components/ui/skeleton/index';
   import FilterPicker from '$lib/components/general/FilterPicker.svelte';
+  import * as Popover from '$lib/components/ui/popover/index.js';
+  import { Badge } from '$lib/components/ui/badge/index.js';
 
   const { data } = $props();
 
@@ -30,7 +32,7 @@
     <Table.Header>
       <Table.Row>
         <Table.Head class="w-[50px]"></Table.Head>
-        <Table.Head class="w-full truncate">Year Level</Table.Head>
+        <Table.Head class="w-full truncate">Year Levels</Table.Head>
         <Table.Head class="w-[100px] truncate">Department</Table.Head>
         <Table.Head class="w-[100px] truncate">Created At</Table.Head>
       </Table.Row>
@@ -54,7 +56,18 @@
             <Table.Cell class="">
               <TableMenu {yearLevel} updateYearLevelForm={data.updateYearLevelForm} />
             </Table.Cell>
-            <Table.Cell class="truncate font-medium">{yearLevel.level}</Table.Cell>
+            <Table.Cell class="truncate font-medium">
+              <Popover.Root>
+                <Popover.Trigger class="underline">View Levels</Popover.Trigger>
+                <Popover.Content>
+                  <div class="flex flex-wrap gap-2">
+                    {#each yearLevel.levels as level}
+                      <Badge variant="outline">{level.yearLevel}</Badge>
+                    {/each}
+                  </div>
+                </Popover.Content>
+              </Popover.Root>
+            </Table.Cell>
             <Table.Cell class="truncate font-medium">{yearLevel.department}</Table.Cell>
             <Table.Cell class="truncate">
               {new Date(yearLevel.created_at).toLocaleDateString()} @ {new Date(
