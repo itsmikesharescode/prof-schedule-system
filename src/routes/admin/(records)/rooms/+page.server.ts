@@ -4,6 +4,7 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { addRoomSchema } from './components/AddRoom/schema';
 import { fail } from '@sveltejs/kit';
 import { updateRoomSchema } from './components/UpdateRoom/schema';
+import { number } from 'zod';
 
 export const load: PageServerLoad = async () => {
   return {
@@ -21,6 +22,17 @@ export const actions: Actions = {
     if (!form.valid) {
       return fail(400, { form });
     }
+
+    const { error } = await supabase.from('rooms_tb').insert([
+      {
+        code: form.data.roomCode,
+        type: form.data.roomType,
+        department: form.data.department,
+        number: form.data.roomNumber
+      }
+    ]);
+    if (error) return fail(401, { form, msg: error.message });
+    return { form, msg: 'Added successfully' };
   },
   updateRoomEvent: async ({ request, locals: { supabase } }) => {
     const form = await superValidate(request, zod(updateRoomSchema));
