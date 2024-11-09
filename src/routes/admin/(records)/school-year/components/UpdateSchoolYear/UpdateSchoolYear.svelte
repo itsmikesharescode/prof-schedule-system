@@ -22,6 +22,7 @@
 
   const form = superForm(updateSchoolYearForm, {
     validators: zodClient(updateSchoolYearSchema),
+    id: crypto.randomUUID(),
     onUpdate: ({ result }) => {
       const { status, data } = result as Result<{ msg: string }>;
       switch (status) {

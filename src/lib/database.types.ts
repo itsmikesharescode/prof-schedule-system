@@ -91,6 +91,30 @@ export type Database = {
         }
         Relationships: []
       }
+      sections_tb: {
+        Row: {
+          class: string
+          created_at: string
+          department: string
+          id: number
+          section_code: string
+        }
+        Insert: {
+          class: string
+          created_at?: string
+          department: string
+          id?: number
+          section_code: string
+        }
+        Update: {
+          class?: string
+          created_at?: string
+          department?: string
+          id?: number
+          section_code?: string
+        }
+        Relationships: []
+      }
       year_levels_tb: {
         Row: {
           created_at: string
