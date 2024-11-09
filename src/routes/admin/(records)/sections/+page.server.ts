@@ -4,11 +4,13 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { addSectionSchema } from './components/AddSection/schema';
 import { fail } from '@sveltejs/kit';
 import { updateSectionSchema } from './components/UpdateSection/schema';
+import { streamSections } from './db_calls/streamSchoolYear';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   return {
     addSectionForm: await superValidate(zod(addSectionSchema)),
-    updateSectionForm: await superValidate(zod(updateSectionSchema))
+    updateSectionForm: await superValidate(zod(updateSectionSchema)),
+    sections: streamSections(supabase)
   };
 };
 
