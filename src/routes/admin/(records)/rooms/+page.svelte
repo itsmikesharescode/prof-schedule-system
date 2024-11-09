@@ -3,11 +3,14 @@
   import AddRoom from './components/AddRoom/AddRoom.svelte';
   import TableMenu from './components/TableMenu.svelte';
   import { Skeleton } from '$lib/components/ui/skeleton/index';
+  import FilterPicker from '$lib/components/general/FilterPicker.svelte';
+  import { departments } from '$lib/metadata';
   const { data } = $props();
 </script>
 
 <div class="flex flex-col gap-4">
-  <div class="sticky top-2 z-30 flex justify-end">
+  <div class="flex w-full items-center justify-between">
+    <FilterPicker name="Select filter" class="max-w-fit" selections={departments} />
     <AddRoom addRoomForm={data.addRoomForm} />
   </div>
 
