@@ -39,4 +39,4 @@
 </DropdownMenu.Root>
 
 <UpdateYearLevel {yearLevel} bind:showUpdate {updateYearLevelForm} />
-<DeleteYearLevel bind:showDelete />
+<DeleteYearLevel {yearLevel} bind:showDelete />
