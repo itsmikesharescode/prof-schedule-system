@@ -16,7 +16,7 @@ export const streamPrograms = async (
       .from('programs_tb')
       .select('*')
       .order('created_at', { ascending: true })
-      .eq('name', params)) as PostgrestSingleResponse<PromiseTypes['Program'][]>;
+      .eq('code', params)) as PostgrestSingleResponse<PromiseTypes['Program'][]>;
 
     if (error) return null;
     return data;
