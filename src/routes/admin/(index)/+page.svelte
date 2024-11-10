@@ -3,18 +3,8 @@
   import TableMenu from './components/TableMenu.svelte';
   import AddProgram from './components/AddProgram/AddProgram.svelte';
   import { Skeleton } from '$lib/components/ui/skeleton/index';
-  import { page } from '$app/stores';
-  import { invalidate } from '$app/navigation';
 
   const { data } = $props();
-
-  const detectFilter = $derived($page.url.searchParams.get('filter'));
-
-  $effect(() => {
-    if (detectFilter) {
-      invalidate('admin:filter');
-    }
-  });
 </script>
 
 <div class="flex flex-col gap-4">
