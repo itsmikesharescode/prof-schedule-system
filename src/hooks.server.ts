@@ -105,39 +105,61 @@ const authGuard: Handle = async ({ event, resolve }) => {
 
 const auxilary: Handle = async ({ event, resolve }) => {
   event.locals.transformImage = async (file, options) => {
-    const { maxSizeInMB = 1, maxWidth = 1280, maxHeight = 720, quality = 80 } = options;
+    try {
+      if (!file) {
+        console.error('transformImage: No file provided');
+        return null;
+      }
 
-    const buffer = Buffer.from(await file.arrayBuffer());
-    let processedImage = await sharp(buffer)
-      .resize(maxWidth, maxHeight, {
-        fit: 'inside',
-        withoutEnlargement: true
-      })
-      .avif({
-        quality,
-        effort: 6
-      })
-      .toBuffer();
+      const { maxSizeInMB = 1, maxWidth = 1280, maxHeight = 720, quality = 80 } = options;
 
-    // If image is still larger than maxSize, reduce quality until it fits
-    let currentQuality = quality;
-    while (processedImage.length > maxSizeInMB * 1024 * 1024 && currentQuality > 20) {
-      currentQuality -= 10;
-      processedImage = await sharp(buffer)
-        .resize(maxWidth, maxHeight, {
-          fit: 'inside',
-          withoutEnlargement: true
-        })
-        .avif({
-          quality: currentQuality,
-          effort: 9
-        })
-        .toBuffer();
+      const buffer = Buffer.from(await file.arrayBuffer());
+      let processedImage;
+
+      try {
+        processedImage = await sharp(buffer)
+          .resize(maxWidth, maxHeight, {
+            fit: 'inside',
+            withoutEnlargement: true
+          })
+          .avif({
+            quality,
+            effort: 6
+          })
+          .toBuffer();
+      } catch (sharpError) {
+        console.error('transformImage: Sharp processing error:', sharpError);
+        return null;
+      }
+
+      // If image is still larger than maxSize, reduce quality until it fits
+      let currentQuality = quality;
+      while (processedImage.length > maxSizeInMB * 1024 * 1024 && currentQuality > 20) {
+        try {
+          currentQuality -= 10;
+          processedImage = await sharp(buffer)
+            .resize(maxWidth, maxHeight, {
+              fit: 'inside',
+              withoutEnlargement: true
+            })
+            .avif({
+              quality: currentQuality,
+              effort: 9
+            })
+            .toBuffer();
+        } catch (qualityError) {
+          console.error('transformImage: Quality reduction error:', qualityError);
+          return null;
+        }
+      }
+
+      return new File([processedImage], file.name.replace(/\.[^/.]+$/, '.avif'), {
+        type: 'image/avif'
+      });
+    } catch (error) {
+      console.error('transformImage: Unexpected error:', error);
+      return null;
     }
-
-    return new File([processedImage], file.name.replace(/\.[^/.]+$/, '.avif'), {
-      type: 'image/avif'
-    });
   };
 
   return resolve(event);

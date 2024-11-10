@@ -13,14 +13,15 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions: Actions = {
-  addProfessorEvent: async ({ request, locals: { supabaseAdmin } }) => {
+  addProfessorEvent: async ({ request, locals: { supabaseAdmin, transformImage } }) => {
     const form = await superValidate(request, zod(addProfessorSchema));
 
     if (!form.valid) {
       return fail(400, { form });
     }
 
-    console.log(form.data);
+    const res = await transformImage(form.data.photo, {});
+    console.log(res?.type);
   },
   updateProfessorEvent: async ({ request, locals: { supabaseAdmin } }) => {
     const form = await superValidate(request, zod(updateProfessorSchema));
