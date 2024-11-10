@@ -51,7 +51,7 @@
             <Table.Cell class="">
               <TableMenu {program} updateProgramForm={data.updateProgramForm} />
             </Table.Cell>
-            <Table.Cell class="truncate font-medium">{program.name}</Table.Cell>
+            <Table.Cell class="truncate font-medium">{program.code}</Table.Cell>
             <Table.Cell class="truncate">{program.description}</Table.Cell>
             <Table.Cell class="truncate">{program.head}</Table.Cell>
             <Table.Cell class="truncate">
