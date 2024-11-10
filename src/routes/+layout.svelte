@@ -6,6 +6,7 @@
   import { ModeWatcher } from 'mode-watcher';
   import { Toaster } from '$lib/components/ui/sonner/index';
   import { initSupabaseState, useSupabaseState } from '$lib/runes/supabaseState.svelte';
+  import { auxiliaryState } from '$lib/runes/auxiliaryState.svelte';
 
   let { children, data } = $props();
 
@@ -24,9 +25,16 @@
     return () => sbCB.subscription.unsubscribe();
   });
 
+  const auxilarySetter = async () => {
+    //TODO: if there is better solution maybe replace this we need to promise all in the client for better navigation
+    let tempData = await data.streamDepartments;
+    auxiliaryState.setDepartments(tempData);
+  };
+
   $effect(() => {
     userState.set(data.user);
     supabaseState.set(data.supabase);
+    auxilarySetter();
   });
 </script>
 

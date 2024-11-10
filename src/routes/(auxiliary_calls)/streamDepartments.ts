@@ -1,4 +1,3 @@
-import type { Database } from '$lib/database.types';
 import type { PostgrestSingleResponse, SupabaseClient } from '@supabase/supabase-js';
 
 interface PromiseTypes {

@@ -5,6 +5,7 @@
   import { Label } from '$lib/components/ui/label/index';
   import { page } from '$app/stores';
   import { Skeleton } from '$lib/components/ui/skeleton/index.js';
+  import { auxiliaryState } from '$lib/runes/auxiliaryState.svelte';
   interface Props {
     streamDepartments: Promise<{ code: string; description: string }[] | null>;
     selections: {
