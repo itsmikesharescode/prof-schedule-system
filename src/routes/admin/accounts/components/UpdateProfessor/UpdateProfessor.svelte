@@ -36,6 +36,7 @@
         case 200:
           form.reset();
           toast.success(data.msg);
+          showUpdate = false;
           break;
         case 401:
           toast.error(data.msg);
@@ -59,6 +60,7 @@
   $effect(() => {
     if (showUpdate) {
       $formData.userId = professor.user_id;
+      $formData.photoPath = professor.user_meta_data.avatar;
       $formData.position = professor.user_meta_data.role;
       $formData.title = professor.user_meta_data.title;
       $formData.firstName = professor.user_meta_data.firstName;
@@ -104,6 +106,8 @@
         use:enhance
         class=" "
       >
+        <input type="hidden" name="userId" value={professor.user_id} />
+        <input type="hidden" name="photoPath" value={professor.user_meta_data.avatar} />
         <div class="grid grid-cols-3 gap-6 px-6 pb-6">
           <!--Personal Details-->
           <div class="">
@@ -115,7 +119,7 @@
                 {#snippet children({ props })}
                   <Form.Label>Photo</Form.Label>
                   <ImagePicker
-                    hasLink={`${PUBLIC_SUPABASE_STORAGE_URL}${professor.user_meta_data.avatar}`}
+                    hasLink={`${PUBLIC_SUPABASE_STORAGE_URL}${professor.user_meta_data.avatar}?${crypto.randomUUID()}`}
                     bind:imageLink={$formData.photo}
                   />
                   <input class="hidden" type="file" {...props} bind:files={$file} />
@@ -414,7 +418,7 @@
         </div>
 
         <div class="pointer-events-none sticky bottom-6 left-0 right-0 flex justify-end px-6">
-          <Form.Button size="sm" class="pointer-events-auto relative">
+          <Form.Button disabled={$submitting} size="sm" class="pointer-events-auto relative">
             {#if $submitting}
               <div
                 class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center rounded-lg bg-primary"
