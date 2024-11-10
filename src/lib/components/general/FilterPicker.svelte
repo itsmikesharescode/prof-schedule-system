@@ -52,8 +52,8 @@
         </div>
       {:then programs}
         {#each programs ?? [] as program}
-          <a title="Filter by {program.description}" href="?filter={program.name}">
-            <Select.Item value={program.name}>{program.name}</Select.Item>
+          <a title="Filter by {program.description}" href="?filter={program.code}">
+            <Select.Item value={program.code}>{program.code}</Select.Item>
           </a>
         {/each}
       {/await}
