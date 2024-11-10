@@ -3,7 +3,8 @@
   import TableMenu from './components/TableMenu.svelte';
   import AddProfessor from './components/AddProfessor/AddProfessor.svelte';
   import { Skeleton } from '$lib/components/ui/skeleton/index';
-
+  import { PUBLIC_SUPABASE_STORAGE_URL } from '$env/static/public';
+  import * as Avatar from '$lib/components/ui/avatar/index.js';
   const { data } = $props();
 </script>
 
@@ -16,9 +17,9 @@
     <Table.Header>
       <Table.Row>
         <Table.Head class="w-[50px]"></Table.Head>
-        <Table.Head class="w-[100px]">User ID</Table.Head>
+        <Table.Head class="w-[100px]">Full Name</Table.Head>
+        <Table.Head>User ID</Table.Head>
         <Table.Head>Email</Table.Head>
-        <Table.Head>Name</Table.Head>
         <Table.Head class="truncate">Position</Table.Head>
         <Table.Head class="truncate">Department</Table.Head>
         <Table.Head class="truncate">Status</Table.Head>
@@ -47,14 +48,28 @@
             <Table.Cell class="">
               <TableMenu {professor} updateProfessorForm={data.updateProfessorForm} />
             </Table.Cell>
+            <Table.Cell class="truncate">
+              <div class="flex items-center gap-2.5">
+                <Avatar.Root>
+                  <Avatar.Image
+                    src={`${PUBLIC_SUPABASE_STORAGE_URL}${professor.user_meta_data.avatar}`}
+                    alt="profile"
+                  />
+                  <Avatar.Fallback
+                    >{professor.user_meta_data.firstName[0].toUpperCase()}</Avatar.Fallback
+                  >
+                </Avatar.Root>
+                <div class="">
+                  {professor.user_meta_data.title}
+                  {' '}
+                  {professor.user_meta_data.lastName}, {professor.user_meta_data.firstName}{' '}
+                  {professor.user_meta_data.middleName}
+                </div>
+              </div>
+            </Table.Cell>
             <Table.Cell class="truncate font-medium">{professor.user_id}</Table.Cell>
             <Table.Cell class="truncate">{professor.user_meta_data.email}</Table.Cell>
-            <Table.Cell class="truncate">
-              {professor.user_meta_data.title}
-              {' '}
-              {professor.user_meta_data.lastName}, {professor.user_meta_data.firstName}{' '}
-              {professor.user_meta_data.middleName}
-            </Table.Cell>
+
             <Table.Cell class="truncate">{professor.user_meta_data.role}</Table.Cell>
             <Table.Cell class="truncate">{professor.user_meta_data.department}</Table.Cell>
             <Table.Cell class="truncate">
