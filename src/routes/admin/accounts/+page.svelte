@@ -2,20 +2,17 @@
   import * as Table from '$lib/components/ui/table/index.js';
   import TableMenu from './components/TableMenu.svelte';
   import AddProfessor from './components/AddProfessor/AddProfessor.svelte';
-  import { departments } from '$lib/metadata';
-  import { page } from '$app/stores';
   import { Skeleton } from '$lib/components/ui/skeleton/index';
 
   const { data } = $props();
 </script>
 
 <div class="flex flex-col gap-4">
-  <div class="sticky top-2 z-30 flex justify-end">
+  <div class="fixed bottom-3 right-3 z-30 flex justify-end">
     <AddProfessor addProfessorForm={data.addProfessorForm} />
   </div>
 
   <Table.Root>
-    <Table.Caption>A list of your recent invoices.</Table.Caption>
     <Table.Header>
       <Table.Row>
         <Table.Head class="w-[50px]"></Table.Head>
@@ -26,7 +23,6 @@
         <Table.Head class="truncate">Position</Table.Head>
         <Table.Head class="truncate">Department</Table.Head>
         <Table.Head class="truncate">Status</Table.Head>
-        <Table.Head class="truncate">Approved</Table.Head>
       </Table.Row>
     </Table.Header>
     <Table.Body>
@@ -44,7 +40,6 @@
             <Table.Cell class="text-right"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
             <Table.Cell class="text-right"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
             <Table.Cell class="text-right"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
-            <Table.Cell class="text-right"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
           </Table.Row>
         {/each}
       {:then professors}
@@ -53,14 +48,18 @@
             <Table.Cell class="">
               <TableMenu updateProfessorForm={data.updateProfessorForm} />
             </Table.Cell>
-            <Table.Cell class="truncate font-medium">123123xx2</Table.Cell>
-            <Table.Cell class="truncate">sample@gmail.com</Table.Cell>
-            <Table.Cell class="truncate">Magdiwang, Magdalo Macapagal</Table.Cell>
-            <Table.Cell class="truncate">25436x</Table.Cell>
-            <Table.Cell class="truncate">Professor</Table.Cell>
-            <Table.Cell class="truncate">IT</Table.Cell>
-            <Table.Cell class="truncate">Active</Table.Cell>
-            <Table.Cell class="truncate">False</Table.Cell>
+            <Table.Cell class="truncate font-medium">{professor.user_id}</Table.Cell>
+            <Table.Cell class="truncate">{professor.user_meta_data.email}</Table.Cell>
+            <Table.Cell class="truncate">
+              {professor.user_meta_data.lastName}, {professor.user_meta_data.firstName}{' '}
+              {professor.user_meta_data.middleName}
+            </Table.Cell>
+            <Table.Cell class="truncate">{professor.user_meta_data}</Table.Cell>
+            <Table.Cell class="truncate">{professor.user_meta_data.role}</Table.Cell>
+            <Table.Cell class="truncate">{professor.user_meta_data.department}</Table.Cell>
+            <Table.Cell class="truncate">
+              {professor.user_meta_data.approved ? 'Active' : 'Inactive'}
+            </Table.Cell>
           </Table.Row>
         {/each}
       {/await}
