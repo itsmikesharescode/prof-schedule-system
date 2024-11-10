@@ -109,5 +109,22 @@ export const actions: Actions = {
 
     if (updateUserErr) return fail(401, withFiles({ form, msg: updateUserErr.message }));
     return withFiles({ form, msg: 'Professor updated successfully' });
+  },
+
+  deleteProfessorEvent: async ({ request, locals: { supabaseAdmin } }) => {
+    const formData = await request.formData();
+    const userId = formData.get('userId') as string;
+    const photoPath = formData.get('photoPath') as string;
+
+    const { error: deleteErr } = await supabaseAdmin.storage
+      .from('profile_bucket')
+      .remove([photoPath.split('/')[1]]);
+
+    if (deleteErr) return fail(401, { msg: deleteErr.message });
+
+    const { error: deleteUserErr } = await supabaseAdmin.auth.admin.deleteUser(userId);
+
+    if (deleteUserErr) return fail(401, { msg: deleteUserErr.message });
+    return { msg: 'Professor deleted successfully' };
   }
 };

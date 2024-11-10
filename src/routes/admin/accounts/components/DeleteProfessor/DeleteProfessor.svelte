@@ -49,6 +49,7 @@
       <Button size="sm" variant="outline" onclick={() => (showDelete = false)}>Cancel</Button>
       <form method="POST" action="?/deleteProfessorEvent" use:enhance={deleteProfessorEvent}>
         <input name="userId" type="hidden" value={professor.user_id} />
+        <input name="photoPath" type="hidden" value={professor.user_meta_data.avatar} />
         <Button type="submit" disabled={deleteLoader} size="sm" class="relative">
           {#if deleteLoader}
             <div
