@@ -16,6 +16,7 @@
   import { cubicInOut } from 'svelte/easing';
   import { flip } from 'svelte/animate';
   import { fly } from 'svelte/transition';
+  import { auxiliaryState } from '$lib/runes/auxiliaryState.svelte';
 
   interface Props {
     addSchoolYearForm: SuperValidated<Infer<AddYearLevelSchema>>;
@@ -116,7 +117,7 @@
                     <SelectPicker
                       {...props}
                       bind:selected={$formData.department}
-                      selections={departments}
+                      selections={auxiliaryState.formatDepartments()}
                       name="Select department"
                     />
                     <input type="hidden" name={props.name} bind:value={$formData.department} />
