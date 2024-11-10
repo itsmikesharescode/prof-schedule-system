@@ -41,7 +41,7 @@
     if (showUpdate) {
       $formData.id = program.id;
       $formData.programHead = program.head;
-      $formData.department = program.name;
+      $formData.department = program.code;
       $formData.description = program.description;
     }
   });

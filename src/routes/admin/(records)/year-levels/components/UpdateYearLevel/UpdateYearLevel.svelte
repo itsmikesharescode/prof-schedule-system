@@ -17,6 +17,7 @@
   import { flip } from 'svelte/animate';
   import { fly } from 'svelte/transition';
   import type { Database } from '$lib/database.types';
+  import { auxiliaryState } from '$lib/runes/auxiliaryState.svelte';
 
   interface Props {
     yearLevel: Database['public']['Tables']['year_levels_tb']['Row'];
@@ -119,7 +120,7 @@
                     <SelectPicker
                       {...props}
                       bind:selected={$formData.department}
-                      selections={departments}
+                      selections={auxiliaryState.formatDepartments()}
                       name="Select department"
                     />
                     <input type="hidden" name={props.name} bind:value={$formData.department} />

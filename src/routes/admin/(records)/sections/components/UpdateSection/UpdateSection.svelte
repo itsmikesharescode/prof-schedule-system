@@ -12,6 +12,7 @@
   import type { Result } from '$lib/types';
   import { toast } from 'svelte-sonner';
   import type { Database } from '$lib/database.types';
+  import { auxiliaryState } from '$lib/runes/auxiliaryState.svelte';
 
   interface Props {
     section: Database['public']['Tables']['sections_tb']['Row'];
@@ -80,7 +81,7 @@
             <SelectPicker
               {...props}
               name="Select Department"
-              selections={departments}
+              selections={auxiliaryState.formatDepartments()}
               bind:selected={$formData.department}
             />
             <input type="hidden" {...props} bind:value={$formData.department} />
