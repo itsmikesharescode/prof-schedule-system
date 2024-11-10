@@ -17,6 +17,7 @@
   import type { Result } from '$lib/types';
   import { toast } from 'svelte-sonner';
   import type { Database } from '$lib/database.types';
+  import { PUBLIC_SUPABASE_STORAGE_URL } from '$env/static/public';
 
   interface Props {
     professor: Database['public']['Tables']['professors_tb']['Row'];
@@ -59,10 +60,13 @@
     if (showUpdate) {
       $formData.userId = professor.user_id;
       $formData.position = professor.user_meta_data.role;
+      $formData.title = professor.user_meta_data.title;
       $formData.firstName = professor.user_meta_data.firstName;
       $formData.middleName = professor.user_meta_data.middleName;
       $formData.lastName = professor.user_meta_data.lastName;
       $formData.email = professor.user_meta_data.email;
+      $formData.previousSchool = professor.user_meta_data.previousSchool;
+      $formData.yearsOfTeaching = professor.user_meta_data.yearsInService;
       $formData.department = professor.user_meta_data.department;
       $formData.day = professor.user_meta_data.preferredSchedule.day;
       $formData.startTime = professor.user_meta_data.preferredSchedule.startTime;
@@ -110,7 +114,10 @@
               <Form.Control>
                 {#snippet children({ props })}
                   <Form.Label>Photo</Form.Label>
-                  <ImagePicker bind:imageLink={$formData.photo} />
+                  <ImagePicker
+                    hasLink={`${PUBLIC_SUPABASE_STORAGE_URL}${professor.user_meta_data.avatar}`}
+                    bind:imageLink={$formData.photo}
+                  />
                   <input class="hidden" type="file" {...props} bind:files={$file} />
                 {/snippet}
               </Form.Control>

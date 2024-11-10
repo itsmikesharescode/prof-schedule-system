@@ -50,6 +50,8 @@
             <Table.Cell class="truncate font-medium">{professor.user_id}</Table.Cell>
             <Table.Cell class="truncate">{professor.user_meta_data.email}</Table.Cell>
             <Table.Cell class="truncate">
+              {professor.user_meta_data.title}
+              {' '}
               {professor.user_meta_data.lastName}, {professor.user_meta_data.firstName}{' '}
               {professor.user_meta_data.middleName}
             </Table.Cell>
