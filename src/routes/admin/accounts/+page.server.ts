@@ -4,11 +4,12 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { addProfessorSchema } from './components/AddProfessor/schema';
 import { fail } from '@sveltejs/kit';
 import { updateProfessorSchema } from './components/UpdateProfessor/schema';
-
-export const load: PageServerLoad = async () => {
+import { streamProfessors } from '../(db_calls)/streamProfessors';
+export const load: PageServerLoad = async ({ locals: { supabase }, url }) => {
   return {
     addProfessorForm: await superValidate(zod(addProfessorSchema)),
-    updateProfessorForm: await superValidate(zod(updateProfessorSchema))
+    updateProfessorForm: await superValidate(zod(updateProfessorSchema)),
+    streamProfessors: streamProfessors(supabase, url.searchParams.get('filter') ?? '')
   };
 };
 

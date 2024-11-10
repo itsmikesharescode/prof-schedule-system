@@ -5,17 +5,8 @@
   import { departments } from '$lib/metadata';
   import { page } from '$app/stores';
   import { Skeleton } from '$lib/components/ui/skeleton/index';
-  import FilterPicker from '$lib/components/general/FilterPicker.svelte';
 
   const { data } = $props();
-
-  const detectURL = $derived($page.url.searchParams.get('filter'));
-
-  $effect(() => {
-    if (detectURL) {
-      //stream the filter here if there is no filter gather all rows, else filter it
-    }
-  });
 </script>
 
 <div class="flex flex-col gap-4">
@@ -31,15 +22,16 @@
         <Table.Head class="w-[100px]">User ID</Table.Head>
         <Table.Head>Email</Table.Head>
         <Table.Head>Name</Table.Head>
-        <Table.Head class="text-right">Prof ID</Table.Head>
-        <Table.Head class="text-right">Position</Table.Head>
-        <Table.Head class="text-right">Department</Table.Head>
-        <Table.Head class="text-right">Status</Table.Head>
+        <Table.Head class="truncate">Prof ID</Table.Head>
+        <Table.Head class="truncate">Position</Table.Head>
+        <Table.Head class="truncate">Department</Table.Head>
+        <Table.Head class="truncate">Status</Table.Head>
+        <Table.Head class="truncate">Approved</Table.Head>
       </Table.Row>
     </Table.Header>
     <Table.Body>
       <!--Display if streaming data-->
-      {#if false}
+      {#await data.streamProfessors}
         {#each Array(5) as _}
           <Table.Row>
             <Table.Cell class="">
@@ -52,24 +44,26 @@
             <Table.Cell class="text-right"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
             <Table.Cell class="text-right"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
             <Table.Cell class="text-right"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
+            <Table.Cell class="text-right"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
           </Table.Row>
         {/each}
-      {/if}
-
-      {#each Array(20) as _}
-        <Table.Row>
-          <Table.Cell class="">
-            <TableMenu updateProfessorForm={data.updateProfessorForm} />
-          </Table.Cell>
-          <Table.Cell class="font-medium">123123xx2</Table.Cell>
-          <Table.Cell>sample@gmail.com</Table.Cell>
-          <Table.Cell>Magdiwang, Magdalo Macapagal</Table.Cell>
-          <Table.Cell class="text-right">25436x</Table.Cell>
-          <Table.Cell class="text-right">Professor</Table.Cell>
-          <Table.Cell class="text-right">IT</Table.Cell>
-          <Table.Cell class="text-right">Active</Table.Cell>
-        </Table.Row>
-      {/each}
+      {:then professors}
+        {#each professors ?? [] as professor}
+          <Table.Row>
+            <Table.Cell class="">
+              <TableMenu updateProfessorForm={data.updateProfessorForm} />
+            </Table.Cell>
+            <Table.Cell class="truncate font-medium">123123xx2</Table.Cell>
+            <Table.Cell class="truncate">sample@gmail.com</Table.Cell>
+            <Table.Cell class="truncate">Magdiwang, Magdalo Macapagal</Table.Cell>
+            <Table.Cell class="truncate">25436x</Table.Cell>
+            <Table.Cell class="truncate">Professor</Table.Cell>
+            <Table.Cell class="truncate">IT</Table.Cell>
+            <Table.Cell class="truncate">Active</Table.Cell>
+            <Table.Cell class="truncate">False</Table.Cell>
+          </Table.Row>
+        {/each}
+      {/await}
     </Table.Body>
   </Table.Root>
 </div>
