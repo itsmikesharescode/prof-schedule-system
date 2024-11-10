@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
   import Button from '$lib/components/ui/button/button.svelte';
-  import { X, Plus } from 'lucide-svelte';
+  import { X, Plus, LoaderCircle } from 'lucide-svelte';
   import { fileProxy, type Infer, superForm, type SuperValidated } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import * as Form from '$lib/components/ui/form/index.js';
@@ -13,6 +13,9 @@
   import { availableTimes, days, departments, interests, titles } from '$lib/metadata';
   import SelectPicker from '$lib/components/general/SelectPicker.svelte';
   import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte';
+  import { auxiliaryState } from '$lib/runes/auxiliaryState.svelte';
+  import type { Result } from '$lib/types';
+  import { toast } from 'svelte-sonner';
 
   interface Props {
     addProfessorForm: SuperValidated<Infer<AddProfessorSchema>>;
@@ -23,7 +26,21 @@
   let open = $state(false);
 
   const form = superForm(addProfessorForm, {
-    validators: zodClient(addProfessorSchema)
+    validators: zodClient(addProfessorSchema),
+    id: crypto.randomUUID(),
+    onUpdate: ({ result }) => {
+      const { status, data } = result as Result<{ msg: string }>;
+      switch (status) {
+        case 200:
+          form.reset();
+          open = false;
+          toast.success(data.msg);
+          break;
+        case 401:
+          toast.error(data.msg);
+          break;
+      }
+    }
   });
 
   const { form: formData, enhance, submitting } = form;
@@ -64,7 +81,13 @@
       </AlertDialog.Description>
     </AlertDialog.Header>
     <ScrollArea class="h-[80dvh]">
-      <form method="POST" enctype="multipart/form-data" use:enhance class=" ">
+      <form
+        method="POST"
+        action="?/addProfessorEvent"
+        enctype="multipart/form-data"
+        use:enhance
+        class=" "
+      >
         <div class="grid grid-cols-3 gap-6 px-6 pb-6">
           <!--Personal Details-->
           <div class="">
@@ -145,7 +168,7 @@
             <Form.Field {form} name="email">
               <Form.Control>
                 {#snippet children({ props })}
-                  <Form.Label>Last Name</Form.Label>
+                  <Form.Label>Email</Form.Label>
                   <Input
                     type="email"
                     {...props}
@@ -233,7 +256,7 @@
                     name="Select department"
                     {props}
                     class=""
-                    selections={departments}
+                    selections={auxiliaryState.formatDepartments()}
                     bind:selected={$formData.department}
                   />
                   <input type="hidden" {...props} bind:value={$formData.department} />
@@ -372,7 +395,16 @@
         </div>
 
         <div class="pointer-events-none sticky bottom-6 left-0 right-0 flex justify-end px-6">
-          <Form.Button size="sm" class="pointer-events-auto">Create</Form.Button>
+          <Form.Button disabled={$submitting} size="sm" class="pointer-events-auto relative">
+            {#if $submitting}
+              <div
+                class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center rounded-lg bg-primary"
+              >
+                <LoaderCircle class="size-4 animate-spin" />
+              </div>
+            {/if}
+            Create
+          </Form.Button>
         </div>
       </form>
     </ScrollArea>

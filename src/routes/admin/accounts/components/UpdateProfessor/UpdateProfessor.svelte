@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
   import Button from '$lib/components/ui/button/button.svelte';
-  import { X, Plus } from 'lucide-svelte';
+  import { X, Plus, LoaderCircle } from 'lucide-svelte';
   import { fileProxy, type Infer, superForm, type SuperValidated } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import * as Form from '$lib/components/ui/form/index.js';
@@ -13,16 +13,36 @@
   import { availableTimes, days, departments, interests, titles } from '$lib/metadata';
   import SelectPicker from '$lib/components/general/SelectPicker.svelte';
   import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte';
+  import { auxiliaryState } from '$lib/runes/auxiliaryState.svelte';
+  import type { Result } from '$lib/types';
+  import { toast } from 'svelte-sonner';
+  import type { Database } from '$lib/database.types';
+  import { PUBLIC_SUPABASE_STORAGE_URL } from '$env/static/public';
 
   interface Props {
+    professor: Database['public']['Tables']['professors_tb']['Row'];
     updateProfessorForm: SuperValidated<Infer<UpdateProfessorSchema>>;
     showUpdate: boolean;
   }
 
-  let { showUpdate = $bindable(), updateProfessorForm }: Props = $props();
+  let { showUpdate = $bindable(), updateProfessorForm, professor }: Props = $props();
 
   const form = superForm(updateProfessorForm, {
-    validators: zodClient(updateProfessorSchema)
+    validators: zodClient(updateProfessorSchema),
+    id: crypto.randomUUID(),
+    onUpdate: ({ result }) => {
+      const { status, data } = result as Result<{ msg: string }>;
+      switch (status) {
+        case 200:
+          form.reset();
+          toast.success(data.msg);
+          showUpdate = false;
+          break;
+        case 401:
+          toast.error(data.msg);
+          break;
+      }
+    }
   });
 
   const { form: formData, enhance, submitting } = form;
@@ -39,7 +59,22 @@
 
   $effect(() => {
     if (showUpdate) {
-      //populate id to update
+      $formData.userId = professor.user_id;
+      $formData.photoPath = professor.user_meta_data.avatar;
+      $formData.position = professor.user_meta_data.role;
+      $formData.title = professor.user_meta_data.title;
+      $formData.firstName = professor.user_meta_data.firstName;
+      $formData.middleName = professor.user_meta_data.middleName;
+      $formData.lastName = professor.user_meta_data.lastName;
+      $formData.email = professor.user_meta_data.email;
+      $formData.previousSchool = professor.user_meta_data.previousSchool;
+      $formData.yearsOfTeaching = professor.user_meta_data.yearsInService;
+      $formData.department = professor.user_meta_data.department;
+      $formData.day = professor.user_meta_data.preferredSchedule.day;
+      $formData.startTime = professor.user_meta_data.preferredSchedule.startTime;
+      $formData.endTime = professor.user_meta_data.preferredSchedule.endTime;
+      $formData.availability = professor.user_meta_data.preferredSchedule.available;
+      $formData.interests = professor.user_meta_data.interests;
     }
   });
 </script>
@@ -64,7 +99,15 @@
       </AlertDialog.Description>
     </AlertDialog.Header>
     <ScrollArea class="h-[80dvh]">
-      <form method="POST" enctype="multipart/form-data" use:enhance class=" ">
+      <form
+        method="POST"
+        action="?/updateProfessorEvent"
+        enctype="multipart/form-data"
+        use:enhance
+        class=" "
+      >
+        <input type="hidden" name="userId" value={professor.user_id} />
+        <input type="hidden" name="photoPath" value={professor.user_meta_data.avatar} />
         <div class="grid grid-cols-3 gap-6 px-6 pb-6">
           <!--Personal Details-->
           <div class="">
@@ -75,7 +118,10 @@
               <Form.Control>
                 {#snippet children({ props })}
                   <Form.Label>Photo</Form.Label>
-                  <ImagePicker bind:imageLink={$formData.photo} />
+                  <ImagePicker
+                    hasLink={`${PUBLIC_SUPABASE_STORAGE_URL}${professor.user_meta_data.avatar}?${crypto.randomUUID()}`}
+                    bind:imageLink={$formData.photo}
+                  />
                   <input class="hidden" type="file" {...props} bind:files={$file} />
                 {/snippet}
               </Form.Control>
@@ -233,7 +279,7 @@
                     name="Select department"
                     {props}
                     class=""
-                    selections={departments}
+                    selections={auxiliaryState.formatDepartments()}
                     bind:selected={$formData.department}
                   />
                   <input type="hidden" {...props} bind:value={$formData.department} />
@@ -372,7 +418,16 @@
         </div>
 
         <div class="pointer-events-none sticky bottom-6 left-0 right-0 flex justify-end px-6">
-          <Form.Button size="sm" class="pointer-events-auto">Update</Form.Button>
+          <Form.Button disabled={$submitting} size="sm" class="pointer-events-auto relative">
+            {#if $submitting}
+              <div
+                class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center rounded-lg bg-primary"
+              >
+                <LoaderCircle class="size-4 animate-spin" />
+              </div>
+            {/if}
+            Update
+          </Form.Button>
         </div>
       </form>
     </ScrollArea>

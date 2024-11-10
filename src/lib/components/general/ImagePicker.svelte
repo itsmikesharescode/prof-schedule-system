@@ -3,20 +3,22 @@
 
   interface Props {
     imageLink: File | null;
+    hasLink?: string;
   }
 
-  let { imageLink = $bindable() }: Props = $props();
+  let { imageLink = $bindable(), hasLink }: Props = $props();
 
   let image = $state<File | null>(null);
   let url = $state<string | null>(null);
 </script>
 
-{#if imageLink}
+{#if imageLink || hasLink}
   <div class="">
     <button
       onclick={(e) => {
         imageLink = null;
         image = null;
+        hasLink = undefined;
       }}
       type="button"
       class="group relative"
@@ -26,7 +28,7 @@
       >
         <span class="text-sm font-bold text-white">Remove</span>
       </div>
-      <img src={url} alt="uploadedimage" class="h-[128px] w-[161.13px] rounded-lg" />
+      <img src={url || hasLink} alt="uploadedimage" class="h-[128px] w-[161.13px] rounded-lg" />
     </button>
   </div>
 {:else}

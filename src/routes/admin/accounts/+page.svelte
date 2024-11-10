@@ -2,44 +2,32 @@
   import * as Table from '$lib/components/ui/table/index.js';
   import TableMenu from './components/TableMenu.svelte';
   import AddProfessor from './components/AddProfessor/AddProfessor.svelte';
-  import { departments } from '$lib/metadata';
-  import { page } from '$app/stores';
   import { Skeleton } from '$lib/components/ui/skeleton/index';
-  import FilterPicker from '$lib/components/general/FilterPicker.svelte';
-
+  import { PUBLIC_SUPABASE_STORAGE_URL } from '$env/static/public';
+  import * as Avatar from '$lib/components/ui/avatar/index.js';
   const { data } = $props();
-
-  const detectURL = $derived($page.url.searchParams.get('filter'));
-
-  $effect(() => {
-    if (detectURL) {
-      //stream the filter here if there is no filter gather all rows, else filter it
-    }
-  });
 </script>
 
 <div class="flex flex-col gap-4">
-  <div class="sticky top-2 z-30 flex justify-end">
+  <div class="fixed bottom-3 right-3 z-30 flex justify-end">
     <AddProfessor addProfessorForm={data.addProfessorForm} />
   </div>
 
   <Table.Root>
-    <Table.Caption>A list of your recent invoices.</Table.Caption>
     <Table.Header>
       <Table.Row>
         <Table.Head class="w-[50px]"></Table.Head>
-        <Table.Head class="w-[100px]">User ID</Table.Head>
+        <Table.Head class="w-[100px]">Full Name</Table.Head>
+        <Table.Head>Professor ID</Table.Head>
         <Table.Head>Email</Table.Head>
-        <Table.Head>Name</Table.Head>
-        <Table.Head class="text-right">Prof ID</Table.Head>
-        <Table.Head class="text-right">Position</Table.Head>
-        <Table.Head class="text-right">Department</Table.Head>
-        <Table.Head class="text-right">Status</Table.Head>
+        <Table.Head class="truncate">Position</Table.Head>
+        <Table.Head class="truncate">Department</Table.Head>
+        <Table.Head class="truncate">Status</Table.Head>
       </Table.Row>
     </Table.Header>
     <Table.Body>
       <!--Display if streaming data-->
-      {#if false}
+      {#await data.streamProfessors}
         {#each Array(5) as _}
           <Table.Row>
             <Table.Cell class="">
@@ -54,22 +42,46 @@
             <Table.Cell class="text-right"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
           </Table.Row>
         {/each}
-      {/if}
+      {:then professors}
+        {#each professors ?? [] as professor}
+          <Table.Row>
+            <Table.Cell class="">
+              <TableMenu
+                {professor}
+                updateProfessorForm={data.updateProfessorForm}
+                updateStatusForm={data.updateStatusForm}
+              />
+            </Table.Cell>
+            <Table.Cell class="truncate">
+              <div class="flex items-center gap-2.5">
+                <Avatar.Root>
+                  <Avatar.Image
+                    src={`${PUBLIC_SUPABASE_STORAGE_URL}${professor.user_meta_data.avatar}`}
+                    alt="profile"
+                  />
+                  <Avatar.Fallback
+                    >{professor.user_meta_data.firstName[0].toUpperCase()}</Avatar.Fallback
+                  >
+                </Avatar.Root>
+                <div class="">
+                  {professor.user_meta_data.title}
+                  {' '}
+                  {professor.user_meta_data.lastName}, {professor.user_meta_data.firstName}{' '}
+                  {professor.user_meta_data.middleName}
+                </div>
+              </div>
+            </Table.Cell>
+            <Table.Cell class="truncate font-medium">{professor.user_id}</Table.Cell>
+            <Table.Cell class="truncate">{professor.user_meta_data.email}</Table.Cell>
 
-      {#each Array(20) as _}
-        <Table.Row>
-          <Table.Cell class="">
-            <TableMenu updateProfessorForm={data.updateProfessorForm} />
-          </Table.Cell>
-          <Table.Cell class="font-medium">123123xx2</Table.Cell>
-          <Table.Cell>sample@gmail.com</Table.Cell>
-          <Table.Cell>Magdiwang, Magdalo Macapagal</Table.Cell>
-          <Table.Cell class="text-right">25436x</Table.Cell>
-          <Table.Cell class="text-right">Professor</Table.Cell>
-          <Table.Cell class="text-right">IT</Table.Cell>
-          <Table.Cell class="text-right">Active</Table.Cell>
-        </Table.Row>
-      {/each}
+            <Table.Cell class="truncate">{professor.user_meta_data.role}</Table.Cell>
+            <Table.Cell class="truncate">{professor.user_meta_data.department}</Table.Cell>
+            <Table.Cell class="truncate">
+              {professor.user_meta_data.approved ? 'Active' : 'Inactive'}
+            </Table.Cell>
+          </Table.Row>
+        {/each}
+      {/await}
     </Table.Body>
   </Table.Root>
 </div>
