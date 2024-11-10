@@ -35,6 +35,7 @@ export const actions: Actions = {
       password: form.data.password,
       email_confirm: true,
       user_metadata: {
+        approved: true,
         email: form.data.email,
         role: form.data.position,
         avatar: storageRes.fullPath,
