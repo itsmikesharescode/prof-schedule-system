@@ -3,13 +3,15 @@
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
   import type { Infer, SuperValidated } from 'sveltekit-superforms';
   import type { UpdateProfessorSchema } from './UpdateProfessor/schema';
-  import UpdateProgram from './UpdateProfessor/UpdateProfessor.svelte';
+  import UpdateProfessor from './UpdateProfessor/UpdateProfessor.svelte';
   import DeleteProgram from './DeleteProfessor/DeleteProfessor.svelte';
+  import type { Database } from '$lib/database.types';
   interface Props {
     updateProfessorForm: SuperValidated<Infer<UpdateProfessorSchema>>;
+    professor: Database['public']['Tables']['professors_tb']['Row'];
   }
 
-  let { updateProfessorForm }: Props = $props();
+  let { updateProfessorForm, professor }: Props = $props();
 
   let showUpdate = $state(false);
   let showDelete = $state(false);
@@ -35,5 +37,5 @@
   </DropdownMenu.Content>
 </DropdownMenu.Root>
 
-<UpdateProgram bind:showUpdate {updateProfessorForm} />
+<UpdateProfessor {professor} bind:showUpdate {updateProfessorForm} />
 <DeleteProgram bind:showDelete />

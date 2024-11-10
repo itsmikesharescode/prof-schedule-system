@@ -16,13 +16,15 @@
   import { auxiliaryState } from '$lib/runes/auxiliaryState.svelte';
   import type { Result } from '$lib/types';
   import { toast } from 'svelte-sonner';
+  import type { Database } from '$lib/database.types';
 
   interface Props {
+    professor: Database['public']['Tables']['professors_tb']['Row'];
     updateProfessorForm: SuperValidated<Infer<UpdateProfessorSchema>>;
     showUpdate: boolean;
   }
 
-  let { showUpdate = $bindable(), updateProfessorForm }: Props = $props();
+  let { showUpdate = $bindable(), updateProfessorForm, professor }: Props = $props();
 
   const form = superForm(updateProfessorForm, {
     validators: zodClient(updateProfessorSchema),
@@ -55,7 +57,18 @@
 
   $effect(() => {
     if (showUpdate) {
-      //populate id to update
+      $formData.userId = professor.user_id;
+      $formData.position = professor.user_meta_data.role;
+      $formData.firstName = professor.user_meta_data.firstName;
+      $formData.middleName = professor.user_meta_data.middleName;
+      $formData.lastName = professor.user_meta_data.lastName;
+      $formData.email = professor.user_meta_data.email;
+      $formData.department = professor.user_meta_data.department;
+      $formData.day = professor.user_meta_data.preferredSchedule.day;
+      $formData.startTime = professor.user_meta_data.preferredSchedule.startTime;
+      $formData.endTime = professor.user_meta_data.preferredSchedule.endTime;
+      $formData.availability = professor.user_meta_data.preferredSchedule.available;
+      $formData.interests = professor.user_meta_data.interests;
     }
   });
 </script>

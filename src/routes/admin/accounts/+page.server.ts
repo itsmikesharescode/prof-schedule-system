@@ -40,10 +40,13 @@ export const actions: Actions = {
         email: form.data.email,
         role: form.data.position,
         avatar: storageRes.fullPath,
+        title: form.data.title,
         firstName: form.data.firstName,
         middleName: form.data.middleName,
         lastName: form.data.lastName,
         department: form.data.department,
+        previousSchool: form.data.previousSchool,
+        yearsInService: form.data.yearsOfTeaching,
         preferredSchedule: {
           day: form.data.day,
           startTime: form.data.startTime,
@@ -63,5 +66,7 @@ export const actions: Actions = {
     if (!form.valid) {
       return fail(400, { form });
     }
+
+    console.log(form.data);
   }
 };

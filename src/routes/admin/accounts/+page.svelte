@@ -45,7 +45,7 @@
         {#each professors ?? [] as professor}
           <Table.Row>
             <Table.Cell class="">
-              <TableMenu updateProfessorForm={data.updateProfessorForm} />
+              <TableMenu {professor} updateProfessorForm={data.updateProfessorForm} />
             </Table.Cell>
             <Table.Cell class="truncate font-medium">{professor.user_id}</Table.Cell>
             <Table.Cell class="truncate">{professor.user_meta_data.email}</Table.Cell>

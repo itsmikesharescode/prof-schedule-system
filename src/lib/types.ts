@@ -9,11 +9,14 @@ export type UserMetaData = {
   email: string;
   avatar: string;
   approved: boolean;
-  lastName: string;
+  title: string;
   firstName: string;
+  middleName: string;
+  lastName: string;
   interests: string[];
   department: string;
-  middleName: string;
+  previousSchool: string;
+  yearsInService: number;
   preferredSchedule: {
     day: string;
     endTime: string;
