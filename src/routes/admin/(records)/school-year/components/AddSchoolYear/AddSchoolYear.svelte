@@ -11,6 +11,7 @@
   import { toast } from 'svelte-sonner';
   import SelectPicker from '$lib/components/general/SelectPicker.svelte';
   import { departments } from '$lib/metadata';
+  import { auxiliaryState } from '$lib/runes/auxiliaryState.svelte';
 
   interface Props {
     addSchoolYearForm: SuperValidated<Infer<AddSchoolYearSchema>>;
@@ -74,7 +75,7 @@
             <SelectPicker
               {...props}
               bind:selected={$formData.department}
-              selections={departments}
+              selections={auxiliaryState.formatDepartments()}
               name="Select department"
             />
             <input type="hidden" name={props.name} bind:value={$formData.department} />
