@@ -16,6 +16,7 @@
   import { cubicInOut } from 'svelte/easing';
   import { flip } from 'svelte/animate';
   import { fly } from 'svelte/transition';
+  import { auxiliaryState } from '$lib/runes/auxiliaryState.svelte';
 
   interface Props {
     addSchoolYearForm: SuperValidated<Infer<AddYearLevelSchema>>;
@@ -35,6 +36,7 @@
         case 200:
           open = false;
           reset();
+          yearLevels = [{ id: crypto.randomUUID(), yearLevel: '' }];
           toast.success(data.msg);
           break;
         case 400:
@@ -88,6 +90,7 @@
       onclick={() => {
         open = false;
         form.reset();
+        yearLevels = [{ id: crypto.randomUUID(), yearLevel: '' }];
       }}
       class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
     >
@@ -114,7 +117,7 @@
                     <SelectPicker
                       {...props}
                       bind:selected={$formData.department}
-                      selections={departments}
+                      selections={auxiliaryState.formatDepartments()}
                       name="Select department"
                     />
                     <input type="hidden" name={props.name} bind:value={$formData.department} />

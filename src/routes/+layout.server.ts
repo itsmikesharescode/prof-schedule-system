@@ -1,9 +1,11 @@
 import type { LayoutServerLoad } from './$types';
+import { streamDepartments } from './(auxiliary_calls)/streamDepartments';
 
-export const load: LayoutServerLoad = async ({ locals: { safeGetSession }, cookies }) => {
+export const load: LayoutServerLoad = async ({ locals: { safeGetSession, supabase }, cookies }) => {
   const { session } = await safeGetSession();
   return {
     session,
-    cookies: cookies.getAll()
+    cookies: cookies.getAll(),
+    streamDepartments: streamDepartments(supabase)
   };
 };

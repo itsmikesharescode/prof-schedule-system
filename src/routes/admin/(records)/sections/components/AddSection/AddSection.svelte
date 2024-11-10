@@ -11,6 +11,7 @@
   import { classPeriods, departments } from '$lib/metadata';
   import type { Result } from '$lib/types';
   import { toast } from 'svelte-sonner';
+  import { auxiliaryState } from '$lib/runes/auxiliaryState.svelte';
 
   interface Props {
     addSectionForm: SuperValidated<Infer<AddSectionSchema>>;
@@ -74,7 +75,7 @@
             <SelectPicker
               {...props}
               name="Select Department"
-              selections={departments}
+              selections={auxiliaryState.formatDepartments()}
               bind:selected={$formData.department}
             />
             <input type="hidden" {...props} bind:value={$formData.department} />

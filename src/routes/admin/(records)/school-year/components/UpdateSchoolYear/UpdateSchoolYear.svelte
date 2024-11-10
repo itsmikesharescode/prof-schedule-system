@@ -12,6 +12,7 @@
   import type { Result } from '$lib/types';
   import { toast } from 'svelte-sonner';
   import { LoaderCircle } from 'lucide-svelte';
+  import { auxiliaryState } from '$lib/runes/auxiliaryState.svelte';
   interface Props {
     schoolYear: Database['public']['Tables']['school_years_tb']['Row'];
     updateSchoolYearForm: SuperValidated<Infer<UpdateSchoolYearSchema>>;
@@ -79,7 +80,7 @@
             <SelectPicker
               {...props}
               bind:selected={$formData.department}
-              selections={departments}
+              selections={auxiliaryState.formatDepartments()}
               name="Select department"
             />
             <input type="hidden" name={props.name} bind:value={$formData.department} />

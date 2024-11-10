@@ -2,9 +2,7 @@
   import * as Table from '$lib/components/ui/table/index.js';
   import AddSchoolYear from './components/AddSchoolYear/AddSchoolYear.svelte';
   import TableMenu from './components/TableMenu.svelte';
-  import { departments } from '$lib/metadata';
   import { Skeleton } from '$lib/components/ui/skeleton/index';
-  import FilterPicker from '$lib/components/general/FilterPicker.svelte';
 
   const { data } = $props();
 </script>
