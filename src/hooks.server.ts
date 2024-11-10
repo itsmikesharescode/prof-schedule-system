@@ -102,4 +102,9 @@ const authGuard: Handle = async ({ event, resolve }) => {
   return resolve(event);
 };
 
+const auxilary: Handle = async ({ event, resolve }) => {
+  //TODO: implement image resize before uploading to database https://sharp.pixelplumbing.com/
+  return resolve(event);
+};
+
 export const handle: Handle = sequence(supabase, authGuard);
