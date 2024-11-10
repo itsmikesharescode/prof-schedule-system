@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { EllipsisVertical, Pencil, Trash2 } from 'lucide-svelte';
+  import { CircleCheck, EllipsisVertical, Pencil, Trash2, UserPen } from 'lucide-svelte';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
   import type { Infer, SuperValidated } from 'sveltekit-superforms';
   import type { UpdateProfessorSchema } from './UpdateProfessor/schema';
@@ -25,14 +25,26 @@
     <DropdownMenu.Group>
       <DropdownMenu.GroupHeading>Actions</DropdownMenu.GroupHeading>
       <DropdownMenu.Separator />
-      <DropdownMenu.Item onclick={() => (showUpdate = true)}>
-        <Pencil class="size-4" />
-        Update
-      </DropdownMenu.Item>
       <DropdownMenu.Item onclick={() => (showDelete = true)}>
         <Trash2 class="size-4" />
         Delete
       </DropdownMenu.Item>
+      <DropdownMenu.Sub>
+        <DropdownMenu.SubTrigger>
+          <Pencil class="size-4" />
+          <span>Update</span>
+        </DropdownMenu.SubTrigger>
+        <DropdownMenu.SubContent>
+          <DropdownMenu.Item>
+            <CircleCheck class="size-4" />
+            <span>Status</span>
+          </DropdownMenu.Item>
+          <DropdownMenu.Item onclick={() => (showUpdate = true)}>
+            <UserPen class="size-4" />
+            <span>Account Information</span>
+          </DropdownMenu.Item>
+        </DropdownMenu.SubContent>
+      </DropdownMenu.Sub>
     </DropdownMenu.Group>
   </DropdownMenu.Content>
 </DropdownMenu.Root>

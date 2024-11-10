@@ -18,7 +18,7 @@
       <Table.Row>
         <Table.Head class="w-[50px]"></Table.Head>
         <Table.Head class="w-[100px]">Full Name</Table.Head>
-        <Table.Head>User ID</Table.Head>
+        <Table.Head>Professor ID</Table.Head>
         <Table.Head>Email</Table.Head>
         <Table.Head class="truncate">Position</Table.Head>
         <Table.Head class="truncate">Department</Table.Head>
