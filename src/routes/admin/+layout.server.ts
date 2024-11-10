@@ -1,8 +1,7 @@
 import type { LayoutServerLoad } from './$types';
-import { streamPrograms } from './(db_calls)/streamPrograms';
-
-export const load: LayoutServerLoad = async ({ locals: { supabase }, depends, url }) => {
+import { streamDepartments } from './(db_calls)/auxiliary_calls/streamDepartments';
+export const load: LayoutServerLoad = async ({ locals: { supabase } }) => {
   return {
-    streamPrograms: streamPrograms(supabase, url.searchParams.get('filter'))
+    streamDepartments: streamDepartments(supabase)
   };
 };

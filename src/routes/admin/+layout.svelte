@@ -20,7 +20,7 @@
     {#if !['/admin/reports', '/admin/logs'].includes($page.url.pathname)}
       <div class="pointer-events-auto fixed top-2 z-50">
         <FilterPicker
-          streamPrograms={data.streamPrograms}
+          streamDepartments={data.streamDepartments}
           name="Select filter"
           class="pointer-events-auto top-6 max-w-fit"
           selections={departments}

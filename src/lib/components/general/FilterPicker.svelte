@@ -4,13 +4,9 @@
   import type { ClassNameValue } from 'tailwind-merge';
   import { Label } from '$lib/components/ui/label/index';
   import { page } from '$app/stores';
-  import type { Database } from '$lib/database.types';
   import { Skeleton } from '$lib/components/ui/skeleton/index.js';
-
-  type Program = Database['public']['Tables']['programs_tb']['Row'];
-
   interface Props {
-    streamPrograms: Promise<Program[] | null>;
+    streamDepartments: Promise<{ code: string; description: string }[] | null>;
     selections: {
       label: string;
       value: string;
@@ -43,7 +39,7 @@
         <Select.Item value="All">All</Select.Item>
       </a>
 
-      {#await props.streamPrograms}
+      {#await props.streamDepartments}
         <div class="mt-1 flex flex-col gap-1">
           <Skeleton class="h-[2rem]" />
           <Skeleton class="h-[2rem]" />
