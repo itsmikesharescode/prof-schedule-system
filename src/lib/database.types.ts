@@ -54,25 +54,25 @@ export type Database = {
       }
       programs_tb: {
         Row: {
+          code: string
           created_at: string
           description: string
           head: string
           id: number
-          name: string
         }
         Insert: {
+          code: string
           created_at?: string
           description: string
           head: string
           id?: number
-          name: string
         }
         Update: {
+          code?: string
           created_at?: string
           description?: string
           head?: string
           id?: number
-          name?: string
         }
         Relationships: []
       }

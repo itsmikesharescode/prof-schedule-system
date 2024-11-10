@@ -22,7 +22,7 @@ export const actions: Actions = {
 
     const { error } = await supabase.from('programs_tb').insert([
       {
-        name: form.data.department,
+        code: form.data.department,
         description: form.data.description,
         head: form.data.programHead
       }
