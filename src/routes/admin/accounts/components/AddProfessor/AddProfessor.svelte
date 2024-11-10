@@ -13,6 +13,7 @@
   import { availableTimes, days, departments, interests, titles } from '$lib/metadata';
   import SelectPicker from '$lib/components/general/SelectPicker.svelte';
   import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte';
+  import { auxiliaryState } from '$lib/runes/auxiliaryState.svelte';
 
   interface Props {
     addProfessorForm: SuperValidated<Infer<AddProfessorSchema>>;
@@ -65,7 +66,13 @@
       </AlertDialog.Description>
     </AlertDialog.Header>
     <ScrollArea class="h-[80dvh]">
-      <form method="POST" enctype="multipart/form-data" use:enhance class=" ">
+      <form
+        method="POST"
+        action="?/addProfessorEvent"
+        enctype="multipart/form-data"
+        use:enhance
+        class=" "
+      >
         <div class="grid grid-cols-3 gap-6 px-6 pb-6">
           <!--Personal Details-->
           <div class="">
@@ -234,7 +241,7 @@
                     name="Select department"
                     {props}
                     class=""
-                    selections={departments}
+                    selections={auxiliaryState.formatDepartments()}
                     bind:selected={$formData.department}
                   />
                   <input type="hidden" {...props} bind:value={$formData.department} />
