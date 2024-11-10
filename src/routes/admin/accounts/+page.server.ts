@@ -7,10 +7,8 @@ import { updateProfessorSchema } from './components/UpdateProfessor/schema';
 
 export const load: PageServerLoad = async () => {
   return {
-    addProfessorForm: await superValidate(zod(addProfessorSchema), { id: crypto.randomUUID() }),
-    updateProfessorForm: await superValidate(zod(updateProfessorSchema), {
-      id: crypto.randomUUID()
-    })
+    addProfessorForm: await superValidate(zod(addProfessorSchema)),
+    updateProfessorForm: await superValidate(zod(updateProfessorSchema))
   };
 };
 

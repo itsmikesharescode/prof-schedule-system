@@ -22,7 +22,8 @@
   let { showUpdate = $bindable(), updateProfessorForm }: Props = $props();
 
   const form = superForm(updateProfessorForm, {
-    validators: zodClient(updateProfessorSchema)
+    validators: zodClient(updateProfessorSchema),
+    id: crypto.randomUUID()
   });
 
   const { form: formData, enhance, submitting } = form;

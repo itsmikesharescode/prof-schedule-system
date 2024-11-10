@@ -23,7 +23,8 @@
   let open = $state(false);
 
   const form = superForm(addProfessorForm, {
-    validators: zodClient(addProfessorSchema)
+    validators: zodClient(addProfessorSchema),
+    id: crypto.randomUUID()
   });
 
   const { form: formData, enhance, submitting } = form;
