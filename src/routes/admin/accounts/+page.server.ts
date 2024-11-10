@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, url }) => {
   return {
     addProfessorForm: await superValidate(zod(addProfessorSchema)),
     updateProfessorForm: await superValidate(zod(updateProfessorSchema)),
-    streamProfessors: streamProfessors(supabase, url.searchParams.get('filter') ?? '')
+    streamProfessors: streamProfessors(supabase, url.searchParams.get('filter'))
   };
 };
 
