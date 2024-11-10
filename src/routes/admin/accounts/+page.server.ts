@@ -1,4 +1,4 @@
-import { superValidate } from 'sveltekit-superforms';
+import { superValidate, withFiles } from 'sveltekit-superforms';
 import type { Actions, PageServerLoad } from './$types';
 import { zod } from 'sveltekit-superforms/adapters';
 import { addProfessorSchema } from './components/AddProfessor/schema';
@@ -17,11 +17,43 @@ export const actions: Actions = {
     const form = await superValidate(request, zod(addProfessorSchema));
 
     if (!form.valid) {
-      return fail(400, { form });
+      return fail(400, withFiles({ form }));
     }
 
     const res = await transformImage(form.data.photo, {});
-    console.log(res?.type);
+
+    if (!res) return fail(401, { form, msg: 'There is a problem processing your photo.' });
+    const uuid = crypto.randomUUID();
+    const { data: storageRes, error: uploadErr } = await supabaseAdmin.storage
+      .from('profile_bucket')
+      .upload(uuid, res);
+
+    if (uploadErr) return fail(401, withFiles({ form, msg: uploadErr.message }));
+
+    const { error: insertErr } = await supabaseAdmin.auth.admin.createUser({
+      email: form.data.email,
+      password: form.data.password,
+      email_confirm: true,
+      user_metadata: {
+        email: form.data.email,
+        role: form.data.position,
+        avatar: storageRes.fullPath,
+        firstName: form.data.firstName,
+        middleName: form.data.middleName,
+        lastName: form.data.lastName,
+        department: form.data.department,
+        preferredSchedule: {
+          day: form.data.day,
+          startTime: form.data.startTime,
+          endTime: form.data.endTime,
+          available: form.data.availability
+        },
+        interests: form.data.interests
+      }
+    });
+
+    if (insertErr) return fail(401, withFiles({ form, msg: insertErr.message }));
+    return withFiles({ form, msg: 'Professor added successfully' });
   },
   updateProfessorEvent: async ({ request, locals: { supabaseAdmin } }) => {
     const form = await superValidate(request, zod(updateProfessorSchema));

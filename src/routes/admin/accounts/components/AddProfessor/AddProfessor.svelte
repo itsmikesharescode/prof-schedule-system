@@ -153,7 +153,7 @@
             <Form.Field {form} name="email">
               <Form.Control>
                 {#snippet children({ props })}
-                  <Form.Label>Last Name</Form.Label>
+                  <Form.Label>Email</Form.Label>
                   <Input
                     type="email"
                     {...props}
