@@ -4,7 +4,7 @@
   import type { Infer, SuperValidated } from 'sveltekit-superforms';
   import type { UpdateProfessorSchema } from './UpdateProfessor/schema';
   import UpdateProfessor from './UpdateProfessor/UpdateProfessor.svelte';
-  import DeleteProgram from './DeleteProfessor/DeleteProfessor.svelte';
+  import DeleteProfessor from './DeleteProfessor/DeleteProfessor.svelte';
   import type { Database } from '$lib/database.types';
   interface Props {
     updateProfessorForm: SuperValidated<Infer<UpdateProfessorSchema>>;
@@ -38,4 +38,4 @@
 </DropdownMenu.Root>
 
 <UpdateProfessor {professor} bind:showUpdate {updateProfessorForm} />
-<DeleteProgram bind:showDelete />
+<DeleteProfessor {professor} bind:showDelete />
