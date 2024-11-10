@@ -4,6 +4,7 @@ import { sequence } from '@sveltejs/kit/hooks';
 
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
 import { PRIVATE_SUPABASE_ADMIN_KEY } from '$env/static/private';
+import sharp from 'sharp';
 
 const supabase: Handle = async ({ event, resolve }) => {
   event.locals.supabase = createServerClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
@@ -103,8 +104,43 @@ const authGuard: Handle = async ({ event, resolve }) => {
 };
 
 const auxilary: Handle = async ({ event, resolve }) => {
-  //TODO: implement image resize before uploading to database https://sharp.pixelplumbing.com/
+  event.locals.transformImage = async (file, options) => {
+    const { maxSizeInMB = 1, maxWidth = 1280, maxHeight = 720, quality = 80 } = options;
+
+    const buffer = Buffer.from(await file.arrayBuffer());
+    let processedImage = await sharp(buffer)
+      .resize(maxWidth, maxHeight, {
+        fit: 'inside',
+        withoutEnlargement: true
+      })
+      .avif({
+        quality,
+        effort: 6
+      })
+      .toBuffer();
+
+    // If image is still larger than maxSize, reduce quality until it fits
+    let currentQuality = quality;
+    while (processedImage.length > maxSizeInMB * 1024 * 1024 && currentQuality > 20) {
+      currentQuality -= 10;
+      processedImage = await sharp(buffer)
+        .resize(maxWidth, maxHeight, {
+          fit: 'inside',
+          withoutEnlargement: true
+        })
+        .avif({
+          quality: currentQuality,
+          effort: 9
+        })
+        .toBuffer();
+    }
+
+    return new File([processedImage], file.name.replace(/\.[^/.]+$/, '.avif'), {
+      type: 'image/avif'
+    });
+  };
+
   return resolve(event);
 };
 
-export const handle: Handle = sequence(supabase, authGuard);
+export const handle: Handle = sequence(supabase, authGuard, auxilary);
