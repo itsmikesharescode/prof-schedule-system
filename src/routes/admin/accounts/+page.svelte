@@ -19,7 +19,6 @@
         <Table.Head class="w-[100px]">User ID</Table.Head>
         <Table.Head>Email</Table.Head>
         <Table.Head>Name</Table.Head>
-        <Table.Head class="truncate">Prof ID</Table.Head>
         <Table.Head class="truncate">Position</Table.Head>
         <Table.Head class="truncate">Department</Table.Head>
         <Table.Head class="truncate">Status</Table.Head>
@@ -54,7 +53,6 @@
               {professor.user_meta_data.lastName}, {professor.user_meta_data.firstName}{' '}
               {professor.user_meta_data.middleName}
             </Table.Cell>
-            <Table.Cell class="truncate">{professor.user_meta_data}</Table.Cell>
             <Table.Cell class="truncate">{professor.user_meta_data.role}</Table.Cell>
             <Table.Cell class="truncate">{professor.user_meta_data.department}</Table.Cell>
             <Table.Cell class="truncate">

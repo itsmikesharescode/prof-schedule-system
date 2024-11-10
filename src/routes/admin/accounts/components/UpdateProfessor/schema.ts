@@ -1,4 +1,4 @@
-import { days, departments, titles } from '$lib/metadata';
+import { days, titles } from '$lib/metadata';
 import { z } from 'zod';
 
 export const updateProfessorSchema = z
@@ -19,9 +19,7 @@ export const updateProfessorSchema = z
     confirmPassword: z.string(),
     previousSchool: z.string().min(1, { message: 'Must enter previous school.' }),
     yearsOfTeaching: z.number().min(1, { message: 'Must enter years of teaching.' }),
-    department: z.string().refine((v) => departments.map((t) => t.value).includes(v), {
-      message: 'Must select department.'
-    }),
+    department: z.string().min(1, { message: 'Must select department.' }),
     day: z.string().refine((v) => days.map((t) => t.value).includes(v), {
       message: 'Must select day.'
     }),
