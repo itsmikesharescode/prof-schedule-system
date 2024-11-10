@@ -11,6 +11,7 @@
   import { departments } from '$lib/metadata';
   import type { Result } from '$lib/types';
   import { toast } from 'svelte-sonner';
+  import { auxiliaryState } from '$lib/runes/auxiliaryState.svelte';
 
   interface Props {
     addSubjectForm: SuperValidated<Infer<AddSubjectSchema>>;
@@ -75,7 +76,7 @@
               {...props}
               name="Select department"
               bind:selected={$formData.department}
-              selections={departments}
+              selections={auxiliaryState.formatDepartments()}
             />
             <input type="hidden" name={props.name} bind:value={$formData.department} />
           {/snippet}
