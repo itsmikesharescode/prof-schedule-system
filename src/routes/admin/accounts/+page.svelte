@@ -46,7 +46,11 @@
         {#each professors ?? [] as professor}
           <Table.Row>
             <Table.Cell class="">
-              <TableMenu {professor} updateProfessorForm={data.updateProfessorForm} />
+              <TableMenu
+                {professor}
+                updateProfessorForm={data.updateProfessorForm}
+                updateStatusForm={data.updateStatusForm}
+              />
             </Table.Cell>
             <Table.Cell class="truncate">
               <div class="flex items-center gap-2.5">

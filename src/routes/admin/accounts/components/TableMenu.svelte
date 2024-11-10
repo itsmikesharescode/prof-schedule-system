@@ -6,15 +6,19 @@
   import UpdateProfessor from './UpdateProfessor/UpdateProfessor.svelte';
   import DeleteProfessor from './DeleteProfessor/DeleteProfessor.svelte';
   import type { Database } from '$lib/database.types';
+  import UpdateStatus from './UpdateStatus/UpdateStatus.svelte';
+  import type { UpdateStatusSchema } from './UpdateStatus/schema';
   interface Props {
     updateProfessorForm: SuperValidated<Infer<UpdateProfessorSchema>>;
+    updateStatusForm: SuperValidated<Infer<UpdateStatusSchema>>;
     professor: Database['public']['Tables']['professors_tb']['Row'];
   }
 
-  let { updateProfessorForm, professor }: Props = $props();
+  let { updateProfessorForm, updateStatusForm, professor }: Props = $props();
 
   let showUpdate = $state(false);
   let showDelete = $state(false);
+  let showUpdateStatus = $state(false);
 </script>
 
 <DropdownMenu.Root>
@@ -35,7 +39,7 @@
           <span>Update</span>
         </DropdownMenu.SubTrigger>
         <DropdownMenu.SubContent>
-          <DropdownMenu.Item>
+          <DropdownMenu.Item onclick={() => (showUpdateStatus = true)}>
             <CircleCheck class="size-4" />
             <span>Status</span>
           </DropdownMenu.Item>
@@ -51,3 +55,4 @@
 
 <UpdateProfessor {professor} bind:showUpdate {updateProfessorForm} />
 <DeleteProfessor {professor} bind:showDelete />
+<UpdateStatus {professor} bind:showUpdateStatus {updateStatusForm} />

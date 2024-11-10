@@ -5,10 +5,13 @@ import { addProfessorSchema } from './components/AddProfessor/schema';
 import { fail } from '@sveltejs/kit';
 import { updateProfessorSchema } from './components/UpdateProfessor/schema';
 import { streamProfessors } from '../(db_calls)/streamProfessors';
+import { updateStatusSchema } from './components/UpdateStatus/schema';
+
 export const load: PageServerLoad = async ({ locals: { supabase }, url }) => {
   return {
     addProfessorForm: await superValidate(zod(addProfessorSchema)),
     updateProfessorForm: await superValidate(zod(updateProfessorSchema)),
+    updateStatusForm: await superValidate(zod(updateStatusSchema)),
     streamProfessors: streamProfessors(supabase, url.searchParams.get('filter'))
   };
 };
@@ -109,6 +112,23 @@ export const actions: Actions = {
 
     if (updateUserErr) return fail(401, withFiles({ form, msg: updateUserErr.message }));
     return withFiles({ form, msg: 'Professor updated successfully' });
+  },
+
+  updateStatusEvent: async ({ request, locals: { supabaseAdmin } }) => {
+    const form = await superValidate(request, zod(updateStatusSchema));
+
+    if (!form.valid) {
+      return fail(400, withFiles({ form }));
+    }
+
+    const { error } = await supabaseAdmin.auth.admin.updateUserById(form.data.userId, {
+      user_metadata: {
+        approved: form.data.status === 'Active' ? true : false
+      }
+    });
+
+    if (error) return fail(401, { form, msg: error.message });
+    return { form, msg: 'Status updated successfully' };
   },
 
   deleteProfessorEvent: async ({ request, locals: { supabaseAdmin } }) => {
