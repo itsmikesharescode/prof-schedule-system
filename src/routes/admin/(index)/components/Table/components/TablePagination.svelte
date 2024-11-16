@@ -7,15 +7,43 @@
   import ChevronLeft from 'lucide-svelte/icons/chevron-left';
   import ChevronsRight from 'lucide-svelte/icons/chevrons-right';
   import ChevronsLeft from 'lucide-svelte/icons/chevrons-left';
+  import LoaderCircle from 'lucide-svelte/icons/loader-circle';
   import type { Table } from '@tanstack/table-core';
   import * as Select from '$lib/components/ui/select/index';
   import { Button } from '$lib/components/ui/button/index';
   import type { ProgramPageTable } from '../data/schemas';
   import { page } from '$app/stores';
-  import { fade, fly } from 'svelte/transition';
+  import { fly } from 'svelte/transition';
   import { cubicInOut } from 'svelte/easing';
+  import { toast } from 'svelte-sonner';
+  import { invalidateAll } from '$app/navigation';
 
   let { table }: { table: Table<ProgramPageTable> } = $props();
+
+  const sb = $page.data.supabase;
+  let deleteLoader = $state(false);
+  const handleDeleteSelected = async () => {
+    if (!sb) return;
+
+    deleteLoader = true;
+
+    const { error } = await sb
+      ?.from('programs_tb')
+      .delete()
+      .in(
+        'id',
+        table.getFilteredSelectedRowModel().rows.map((row) => row.original.id)
+      );
+    if (error) {
+      toast.error(error.message);
+      deleteLoader = false;
+      return;
+    }
+
+    await invalidateAll();
+    toast.success('Programs deleted successfully');
+    deleteLoader = false;
+  };
 </script>
 
 <div class="flex items-center justify-between px-2">
@@ -23,13 +51,29 @@
     {table.getFilteredSelectedRowModel().rows.length} of
     {table.getFilteredRowModel().rows.length} row(s) selected.
 
-    <!-- <div class="overflow-hidden">
-      {#if table.getFilteredSelectedRowModel().rows.length}
+    <div class="overflow-hidden">
+      {#if table.getFilteredSelectedRowModel().rows.length > 2}
         <div transition:fly={{ x: -100, duration: 400, easing: cubicInOut }}>
-          <Button variant="destructive" size="sm">Delete Selected</Button>
+          <Button
+            disabled={deleteLoader}
+            variant="destructive"
+            size="sm"
+            onclick={handleDeleteSelected}
+            class="relative"
+          >
+            {#if deleteLoader}
+              <div
+                class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center rounded-lg bg-primary"
+              >
+                <LoaderCircle class="size-4 animate-spin" />
+              </div>
+            {/if}
+
+            Delete Selected
+          </Button>
         </div>
       {/if}
-    </div> -->
+    </div>
   </div>
   <div class="flex items-center space-x-6 lg:space-x-8">
     <div class="flex items-center space-x-2">

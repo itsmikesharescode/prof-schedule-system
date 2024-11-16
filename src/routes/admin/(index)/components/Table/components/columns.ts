@@ -12,7 +12,7 @@ import {
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/render-helpers.js';
 
 export const columns: ColumnDef<ProgramPageTable, unknown>[] = [
-  /* {
+  {
     id: 'select',
     header: ({ table }) =>
       renderComponent(DataTableCheckbox, {
@@ -30,7 +30,7 @@ export const columns: ColumnDef<ProgramPageTable, unknown>[] = [
       }),
     enableSorting: true,
     enableHiding: true
-  }, */
+  },
   {
     accessorKey: 'id',
     header: ({ column }) => {
