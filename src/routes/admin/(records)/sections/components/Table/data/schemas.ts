@@ -1,10 +1,11 @@
 import { z } from 'zod';
 
-export const schoolYearSchema = z.object({
+export const sectionSchema = z.object({
   id: z.number(),
   created_at: z.string(),
-  year: z.string(),
+  class: z.string(),
+  section_code: z.string(),
   department: z.string()
 });
 
-export type SchoolYearPageTable = z.output<typeof schoolYearSchema>;
+export type SectionPageTable = z.output<typeof sectionSchema>;

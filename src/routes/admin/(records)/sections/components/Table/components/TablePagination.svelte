@@ -11,14 +11,14 @@
   import type { Table } from '@tanstack/table-core';
   import * as Select from '$lib/components/ui/select/index';
   import { Button } from '$lib/components/ui/button/index';
-  import type { SchoolYearPageTable } from '../data/schemas';
+  import type { SectionPageTable } from '../data/schemas';
   import { fly } from 'svelte/transition';
   import { cubicInOut } from 'svelte/easing';
   import { page } from '$app/stores';
   import { invalidateAll } from '$app/navigation';
   import { toast } from 'svelte-sonner';
 
-  let { table }: { table: Table<SchoolYearPageTable> } = $props();
+  let { table }: { table: Table<SectionPageTable> } = $props();
 
   const sb = $page.data.supabase;
   let deleteLoader = $state(false);
@@ -28,7 +28,7 @@
     deleteLoader = true;
 
     const { error } = await sb
-      ?.from('programs_tb')
+      ?.from('sections_tb')
       .delete()
       .in(
         'id',
@@ -63,7 +63,7 @@
           >
             {#if deleteLoader}
               <div
-                class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center rounded-lg bg-primary"
+                class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center rounded-lg bg-destructive"
               >
                 <LoaderCircle class="size-4 animate-spin" />
               </div>
