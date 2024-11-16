@@ -36,7 +36,7 @@ export const columns: ColumnDef<SchoolYearPageTable>[] = [
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<SchoolYearPageTable, unknown>, {
         column,
-        title: 'Task'
+        title: 'ID'
       });
     },
     cell: ({ row }) => {
@@ -52,9 +52,49 @@ export const columns: ColumnDef<SchoolYearPageTable>[] = [
     enableSorting: false,
     enableHiding: false
   },
+  {
+    accessorKey: 'year',
+    header: ({ column }) => {
+      return renderComponent(TableColumnHeader<SchoolYearPageTable, unknown>, {
+        column,
+        title: 'School Year'
+      });
+    },
+    cell: ({ row }) => {
+      const schoolYearSnippet = createRawSnippet<[string]>((getSchoolYear) => {
+        return {
+          render: () => `<div class="w-full">${getSchoolYear()}</div>`
+        };
+      });
 
+      return renderSnippet(schoolYearSnippet, row.getValue('year'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+  {
+    accessorKey: 'department',
+    header: ({ column }) => {
+      return renderComponent(TableColumnHeader<SchoolYearPageTable, unknown>, {
+        column,
+        title: 'Department'
+      });
+    },
+    cell: ({ row }) => {
+      const departmentSnippet = createRawSnippet<[string]>((getDepartment) => {
+        return {
+          render: () => `<div class="w-full">${getDepartment()}</div>`
+        };
+      });
+
+      return renderSnippet(departmentSnippet, row.getValue('department'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
   {
     accessorKey: 'created_at',
+    id: 'created_at',
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<SchoolYearPageTable, unknown>, {
         column,
@@ -63,16 +103,16 @@ export const columns: ColumnDef<SchoolYearPageTable>[] = [
     },
     cell: ({ row }) => {
       const createdAtSnippet = createRawSnippet<[string]>((getCreatedAt) => {
-        const createdAt = getCreatedAt();
         return {
-          render: () => `<div class="w-[80px]">${createdAt}</div>`
+          render: () =>
+            `<div class="w-[80px]">${new Date(getCreatedAt()).toLocaleDateString()}</div>`
         };
       });
 
       return renderSnippet(createdAtSnippet, row.getValue('created_at'));
     },
-    enableSorting: false,
-    enableHiding: false
+    enableSorting: true,
+    enableHiding: true
   },
 
   {

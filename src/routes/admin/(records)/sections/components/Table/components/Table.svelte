@@ -23,8 +23,12 @@
   import { createSvelteTable } from '$lib/components/ui/data-table/data-table.svelte';
   import FlexRender from '$lib/components/ui/data-table/flex-render.svelte';
   import * as Table from '$lib/components/ui/table/index';
+  import type { SchoolYearPageTable } from '../data/schemas';
 
-  let { columns, data }: { columns: ColumnDef<TData, TValue>[]; data: TData[] } = $props();
+  let {
+    columns,
+    data
+  }: { columns: ColumnDef<SchoolYearPageTable, unknown>[]; data: SchoolYearPageTable[] } = $props();
 
   let rowSelection = $state<RowSelectionState>({});
   let columnVisibility = $state<VisibilityState>({});
@@ -101,7 +105,8 @@
 
 <div class="space-y-4">
   <DataTableToolbar {table} />
-  <div class="rounded-md border">
+  <DataTablePagination {table} />
+  <div class="">
     <Table.Root>
       <Table.Header>
         {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
@@ -139,5 +144,7 @@
       </Table.Body>
     </Table.Root>
   </div>
-  <DataTablePagination {table} />
+  {#if table.getRowModel().rows.length > 11}
+    <DataTablePagination {table} />
+  {/if}
 </div>

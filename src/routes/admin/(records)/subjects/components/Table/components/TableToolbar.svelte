@@ -9,8 +9,9 @@
   import { TableFacetedFilter, TableViewOptions } from './index';
   import Button from '$lib/components/ui/button/button.svelte';
   import { Input } from '$lib/components/ui/input/index';
+  import type { SchoolYearPageTable } from '../data/schemas';
 
-  let { table }: { table: Table<TData> } = $props();
+  let { table }: { table: Table<SchoolYearPageTable> } = $props();
 
   const isFiltered = $derived(table.getState().columnFilters.length > 0);
   const statusCol = $derived(table.getColumn('status'));
@@ -20,13 +21,13 @@
 <div class="flex items-center justify-between">
   <div class="flex flex-1 items-center space-x-2">
     <Input
-      placeholder="Filter tasks..."
-      value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
+      placeholder="Search department..."
+      value={(table.getColumn('department')?.getFilterValue() as string) ?? ''}
       oninput={(e) => {
-        table.getColumn('title')?.setFilterValue(e.currentTarget.value);
+        table.getColumn('department')?.setFilterValue(e.currentTarget.value);
       }}
       onchange={(e) => {
-        table.getColumn('title')?.setFilterValue(e.currentTarget.value);
+        table.getColumn('department')?.setFilterValue(e.currentTarget.value);
       }}
       class="h-8 w-[150px] lg:w-[250px]"
     />

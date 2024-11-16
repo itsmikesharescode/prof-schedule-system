@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
 export const schoolYearSchema = z.object({
-  id: z.string(),
+  id: z.number(),
   created_at: z.string(),
-  schoolYear: z.string(),
+  year: z.string(),
   department: z.string()
 });
 

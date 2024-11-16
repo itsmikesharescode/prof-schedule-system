@@ -7,8 +7,8 @@
   import type { Table } from '@tanstack/table-core';
   import { buttonVariants } from '$lib/components/ui/button/index';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index';
-
-  let { table }: { table: Table<TData> } = $props();
+  import type { SchoolYearPageTable } from '../data/schemas';
+  let { table }: { table: Table<SchoolYearPageTable> } = $props();
 </script>
 
 <DropdownMenu.Root>
