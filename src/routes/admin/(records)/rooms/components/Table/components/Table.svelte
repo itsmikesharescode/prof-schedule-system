@@ -23,12 +23,10 @@
   import { createSvelteTable } from '$lib/components/ui/data-table/data-table.svelte';
   import FlexRender from '$lib/components/ui/data-table/flex-render.svelte';
   import * as Table from '$lib/components/ui/table/index';
-  import type { SchoolYearPageTable } from '../data/schemas';
+  import type { RoomsPageTable } from '../data/schemas';
 
-  let {
-    columns,
-    data
-  }: { columns: ColumnDef<SchoolYearPageTable, unknown>[]; data: SchoolYearPageTable[] } = $props();
+  let { columns, data }: { columns: ColumnDef<RoomsPageTable, unknown>[]; data: RoomsPageTable[] } =
+    $props();
 
   let rowSelection = $state<RowSelectionState>({});
   let columnVisibility = $state<VisibilityState>({});

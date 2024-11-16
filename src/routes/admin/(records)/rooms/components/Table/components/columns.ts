@@ -1,6 +1,6 @@
 import type { ColumnDef } from '@tanstack/table-core';
 import { createRawSnippet } from 'svelte';
-import type { SchoolYearPageTable } from '../data/schemas.js';
+import type { RoomsPageTable } from '../data/schemas.js';
 import {
   TableCheckbox,
   TableColumnHeader,
@@ -11,7 +11,7 @@ import {
 } from './index.js';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/render-helpers.js';
 
-export const columns: ColumnDef<SchoolYearPageTable>[] = [
+export const columns: ColumnDef<RoomsPageTable>[] = [
   {
     id: 'select',
     header: ({ table }) =>
@@ -34,7 +34,7 @@ export const columns: ColumnDef<SchoolYearPageTable>[] = [
   {
     accessorKey: 'id',
     header: ({ column }) => {
-      return renderComponent(TableColumnHeader<SchoolYearPageTable, unknown>, {
+      return renderComponent(TableColumnHeader<RoomsPageTable, unknown>, {
         column,
         title: 'ID'
       });
@@ -53,21 +53,61 @@ export const columns: ColumnDef<SchoolYearPageTable>[] = [
     enableHiding: false
   },
   {
-    accessorKey: 'year',
+    accessorKey: 'type',
     header: ({ column }) => {
-      return renderComponent(TableColumnHeader<SchoolYearPageTable, unknown>, {
+      return renderComponent(TableColumnHeader<RoomsPageTable, unknown>, {
         column,
-        title: 'School Year'
+        title: 'Type'
       });
     },
     cell: ({ row }) => {
-      const schoolYearSnippet = createRawSnippet<[string]>((getSchoolYear) => {
+      const typeSnippet = createRawSnippet<[string]>((getType) => {
         return {
-          render: () => `<div class="w-full">${getSchoolYear()}</div>`
+          render: () => `<div class="w-full">${getType()}</div>`
         };
       });
 
-      return renderSnippet(schoolYearSnippet, row.getValue('year'));
+      return renderSnippet(typeSnippet, row.getValue('type'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+  {
+    accessorKey: 'number',
+    header: ({ column }) => {
+      return renderComponent(TableColumnHeader<RoomsPageTable, unknown>, {
+        column,
+        title: 'Room Number'
+      });
+    },
+    cell: ({ row }) => {
+      const numberSnippet = createRawSnippet<[string]>((getNumber) => {
+        return {
+          render: () => `<div class="w-full">${getNumber()}</div>`
+        };
+      });
+
+      return renderSnippet(numberSnippet, row.getValue('number'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+  {
+    accessorKey: 'code',
+    header: ({ column }) => {
+      return renderComponent(TableColumnHeader<RoomsPageTable, unknown>, {
+        column,
+        title: 'Room Code'
+      });
+    },
+    cell: ({ row }) => {
+      const codeSnippet = createRawSnippet<[string]>((getCode) => {
+        return {
+          render: () => `<div class="w-full">${getCode()}</div>`
+        };
+      });
+
+      return renderSnippet(codeSnippet, row.getValue('code'));
     },
     enableSorting: true,
     enableHiding: true
@@ -75,7 +115,7 @@ export const columns: ColumnDef<SchoolYearPageTable>[] = [
   {
     accessorKey: 'department',
     header: ({ column }) => {
-      return renderComponent(TableColumnHeader<SchoolYearPageTable, unknown>, {
+      return renderComponent(TableColumnHeader<RoomsPageTable, unknown>, {
         column,
         title: 'Department'
       });
@@ -96,7 +136,7 @@ export const columns: ColumnDef<SchoolYearPageTable>[] = [
     accessorKey: 'created_at',
     id: 'created_at',
     header: ({ column }) => {
-      return renderComponent(TableColumnHeader<SchoolYearPageTable, unknown>, {
+      return renderComponent(TableColumnHeader<RoomsPageTable, unknown>, {
         column,
         title: 'Created At'
       });
@@ -117,6 +157,6 @@ export const columns: ColumnDef<SchoolYearPageTable>[] = [
 
   {
     id: 'actions',
-    cell: ({ row }) => renderComponent(TableRowActions<SchoolYearPageTable>, { row })
+    cell: ({ row }) => renderComponent(TableRowActions<RoomsPageTable>, { row })
   }
 ];
