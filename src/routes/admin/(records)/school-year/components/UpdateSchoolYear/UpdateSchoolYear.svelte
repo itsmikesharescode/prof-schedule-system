@@ -6,20 +6,20 @@
   import * as Form from '$lib/components/ui/form/index.js';
   import { Input } from '$lib/components/ui/input/index.js';
   import { updateSchoolYearSchema, type UpdateSchoolYearSchema } from './schema';
-  import { departments } from '$lib/metadata';
   import SelectPicker from '$lib/components/general/SelectPicker.svelte';
-  import type { Database } from '$lib/database.types';
   import type { Result } from '$lib/types';
   import { toast } from 'svelte-sonner';
   import { LoaderCircle } from 'lucide-svelte';
   import { auxiliaryState } from '$lib/runes/auxiliaryState.svelte';
+  import { useTableState } from '../Table/tableState.svelte';
+
   interface Props {
-    schoolYear: Database['public']['Tables']['school_years_tb']['Row'];
     updateSchoolYearForm: SuperValidated<Infer<UpdateSchoolYearSchema>>;
-    showUpdate: boolean;
   }
 
-  let { showUpdate = $bindable(), updateSchoolYearForm, schoolYear }: Props = $props();
+  let { updateSchoolYearForm }: Props = $props();
+
+  const tableState = useTableState();
 
   const form = superForm(updateSchoolYearForm, {
     validators: zodClient(updateSchoolYearSchema),
@@ -29,7 +29,8 @@
       switch (status) {
         case 200:
           toast.success(data.msg);
-          showUpdate = false;
+          tableState.setShowUpdate(false);
+          tableState.setActiveRow(null);
           break;
 
         case 401:
@@ -42,19 +43,20 @@
   const { form: formData, enhance, submitting } = form;
 
   $effect(() => {
-    if (showUpdate) {
-      $formData.id = schoolYear.id;
-      $formData.department = schoolYear.department;
-      $formData.schoolYear = schoolYear.year;
+    if (tableState.getShowUpdate()) {
+      $formData.id = tableState.getActiveRow()?.id ?? 0;
+      $formData.department = tableState.getActiveRow()?.department ?? '';
+      $formData.schoolYear = tableState.getActiveRow()?.year ?? '';
     }
   });
 </script>
 
-<AlertDialog.Root bind:open={showUpdate}>
+<AlertDialog.Root open={tableState.getShowUpdate()}>
   <AlertDialog.Content class="">
     <button
       onclick={() => {
-        showUpdate = false;
+        tableState.setShowUpdate(false);
+        tableState.setActiveRow(null);
         form.reset();
       }}
       class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"

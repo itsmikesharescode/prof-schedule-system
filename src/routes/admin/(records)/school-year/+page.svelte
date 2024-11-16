@@ -3,8 +3,13 @@
   import { Skeleton } from '$lib/components/ui/skeleton/index';
   import Table from './components/Table/components/Table.svelte';
   import { columns } from './components/Table/components/columns';
+  import UpdateSchoolYear from './components/UpdateSchoolYear/UpdateSchoolYear.svelte';
+  import DeleteSchoolYear from './components/DeleteSchoolYear/DeleteSchoolYear.svelte';
+  import { initTableState } from './components/Table/tableState.svelte';
 
   const { data } = $props();
+
+  initTableState();
 </script>
 
 <div class="sticky top-2 z-30 flex justify-end">
@@ -23,3 +28,6 @@
     <Table data={schoolYears ?? []} {columns} />
   {/await}
 </div>
+
+<UpdateSchoolYear updateSchoolYearForm={data.updateSchoolYearForm} />
+<DeleteSchoolYear />
