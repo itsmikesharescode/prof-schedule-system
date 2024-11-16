@@ -8,6 +8,11 @@ begin
   where user_id = new.id;
   return new;
 
+  update public.roles_tb
+  set role = new.raw_user_meta_data ->> 'role'
+  where user_id = new.id;
+  return new;
+
 end;
 $$ language plpgsql security definer;
 
