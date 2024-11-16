@@ -8,3 +8,4 @@ export { default as TableToolbar } from './TableToolbar.svelte';
 export { default as TablePagination } from './TablePagination.svelte';
 export { default as TableViewOptions } from './TableViewOptions.svelte';
 export { default as TableFacetedFilter } from './TableFacetedFilter.svelte';
+export { default as TableYearLevelsCell } from './TableYearLevelsCell.svelte';

@@ -9,9 +9,9 @@
   import { TableFacetedFilter, TableViewOptions } from './index';
   import Button from '$lib/components/ui/button/button.svelte';
   import { Input } from '$lib/components/ui/input/index';
-  import type { SchoolYearPageTable } from '../data/schemas';
+  import type { YearLevelPageTable } from '../data/schemas';
 
-  let { table }: { table: Table<SchoolYearPageTable> } = $props();
+  let { table }: { table: Table<YearLevelPageTable> } = $props();
 
   const isFiltered = $derived(table.getState().columnFilters.length > 0);
   const statusCol = $derived(table.getColumn('status'));

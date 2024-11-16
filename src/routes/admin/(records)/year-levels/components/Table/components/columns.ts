@@ -1,17 +1,18 @@
 import type { ColumnDef } from '@tanstack/table-core';
 import { createRawSnippet } from 'svelte';
-import type { SchoolYearPageTable } from '../data/schemas.js';
+import type { YearLevelPageTable } from '../data/schemas.js';
 import {
   TableCheckbox,
   TableColumnHeader,
   TablePriorityCell,
   TableRowActions,
   TableStatusCell,
-  TableTitleCell
+  TableTitleCell,
+  TableYearLevelsCell
 } from './index.js';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/render-helpers.js';
 
-export const columns: ColumnDef<SchoolYearPageTable>[] = [
+export const columns: ColumnDef<YearLevelPageTable>[] = [
   {
     id: 'select',
     header: ({ table }) =>
@@ -34,7 +35,7 @@ export const columns: ColumnDef<SchoolYearPageTable>[] = [
   {
     accessorKey: 'id',
     header: ({ column }) => {
-      return renderComponent(TableColumnHeader<SchoolYearPageTable, unknown>, {
+      return renderComponent(TableColumnHeader<YearLevelPageTable, unknown>, {
         column,
         title: 'ID'
       });
@@ -52,30 +53,11 @@ export const columns: ColumnDef<SchoolYearPageTable>[] = [
     enableSorting: false,
     enableHiding: false
   },
-  {
-    accessorKey: 'year',
-    header: ({ column }) => {
-      return renderComponent(TableColumnHeader<SchoolYearPageTable, unknown>, {
-        column,
-        title: 'School Year'
-      });
-    },
-    cell: ({ row }) => {
-      const schoolYearSnippet = createRawSnippet<[string]>((getSchoolYear) => {
-        return {
-          render: () => `<div class="w-full">${getSchoolYear()}</div>`
-        };
-      });
 
-      return renderSnippet(schoolYearSnippet, row.getValue('year'));
-    },
-    enableSorting: true,
-    enableHiding: true
-  },
   {
     accessorKey: 'department',
     header: ({ column }) => {
-      return renderComponent(TableColumnHeader<SchoolYearPageTable, unknown>, {
+      return renderComponent(TableColumnHeader<YearLevelPageTable, unknown>, {
         column,
         title: 'Department'
       });
@@ -92,11 +74,25 @@ export const columns: ColumnDef<SchoolYearPageTable>[] = [
     enableSorting: true,
     enableHiding: true
   },
+
+  {
+    accessorKey: 'levels',
+    id: 'levels',
+    header: ({ column }) => {
+      return renderComponent(TableColumnHeader<YearLevelPageTable, unknown>, {
+        column,
+        title: 'Year Levels'
+      });
+    },
+    cell: ({ row }) => renderComponent(TableYearLevelsCell, { row }),
+    enableSorting: false,
+    enableHiding: true
+  },
   {
     accessorKey: 'created_at',
     id: 'created_at',
     header: ({ column }) => {
-      return renderComponent(TableColumnHeader<SchoolYearPageTable, unknown>, {
+      return renderComponent(TableColumnHeader<YearLevelPageTable, unknown>, {
         column,
         title: 'Created At'
       });
@@ -117,6 +113,6 @@ export const columns: ColumnDef<SchoolYearPageTable>[] = [
 
   {
     id: 'actions',
-    cell: ({ row }) => renderComponent(TableRowActions<SchoolYearPageTable>, { row })
+    cell: ({ row }) => renderComponent(TableRowActions<YearLevelPageTable>, { row })
   }
 ];
