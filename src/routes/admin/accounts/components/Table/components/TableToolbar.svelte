@@ -9,9 +9,9 @@
   import { DataTableFacetedFilter, DataTableViewOptions } from './index.js';
   import Button from '$lib/components/ui/button/button.svelte';
   import { Input } from '$lib/components/ui/input/index';
-  import type { ProgramPageTable } from '../data/schemas';
+  import type { AccountPageTable } from '../data/schemas';
 
-  let { table }: { table: Table<ProgramPageTable> } = $props();
+  let { table }: { table: Table<AccountPageTable> } = $props();
 
   const isFiltered = $derived(table.getState().columnFilters.length > 0);
   const statusCol = $derived(table.getColumn('status'));
@@ -21,13 +21,13 @@
 <div class="flex items-center justify-between">
   <div class="flex flex-1 items-center space-x-2">
     <Input
-      placeholder="Filter tasks..."
-      value={(table.getColumn('code')?.getFilterValue() as string) ?? ''}
+      placeholder="Search by full name"
+      value={(table.getColumn('fullName')?.getFilterValue() as string) ?? ''}
       oninput={(e) => {
-        table.getColumn('code')?.setFilterValue(e.currentTarget.value);
+        table.getColumn('fullName')?.setFilterValue(e.currentTarget.value);
       }}
       onchange={(e) => {
-        table.getColumn('code')?.setFilterValue(e.currentTarget.value);
+        table.getColumn('fullName')?.setFilterValue(e.currentTarget.value);
       }}
       class="h-8 w-[150px] lg:w-[250px]"
     />

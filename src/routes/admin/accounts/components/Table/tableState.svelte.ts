@@ -1,10 +1,10 @@
 import { getContext, setContext } from 'svelte';
-import type { ProgramPageTable } from './data/schemas';
+import type { AccountPageTable } from './data/schemas';
 
 class TableState {
-  #activeRow = $state<ProgramPageTable | null>(null);
+  #activeRow = $state<AccountPageTable | null>(null);
 
-  setActiveRow(row: ProgramPageTable | null) {
+  setActiveRow(row: AccountPageTable | null) {
     this.#activeRow = row;
   }
 

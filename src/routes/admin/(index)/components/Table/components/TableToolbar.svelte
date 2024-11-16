@@ -21,7 +21,7 @@
 <div class="flex items-center justify-between">
   <div class="flex flex-1 items-center space-x-2">
     <Input
-      placeholder="Filter tasks..."
+      placeholder="Find program department.."
       value={(table.getColumn('code')?.getFilterValue() as string) ?? ''}
       oninput={(e) => {
         table.getColumn('code')?.setFilterValue(e.currentTarget.value);
