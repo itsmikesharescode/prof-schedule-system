@@ -35,6 +35,7 @@ export const columns: ColumnDef<AccountPageTable, unknown>[] = [
   },
   {
     accessorKey: 'user_id',
+    id: 'user_id',
     header: ({ column }) => {
       return renderComponent(DataTableColumnHeader<AccountPageTable, unknown>, {
         column,
@@ -56,6 +57,7 @@ export const columns: ColumnDef<AccountPageTable, unknown>[] = [
 
   {
     accessorKey: 'department',
+    id: 'department',
     header: ({ column }) => {
       return renderComponent(DataTableColumnHeader<AccountPageTable, unknown>, {
         column,
@@ -77,7 +79,7 @@ export const columns: ColumnDef<AccountPageTable, unknown>[] = [
 
   {
     accessorKey: 'fullName',
-    id: 'sections',
+    id: 'fullName',
     header: ({ column }) => {
       return renderComponent(DataTableColumnHeader<AccountPageTable, unknown>, {
         column,
@@ -91,6 +93,7 @@ export const columns: ColumnDef<AccountPageTable, unknown>[] = [
 
   {
     accessorKey: 'email',
+    id: 'email',
     header: ({ column }) => {
       return renderComponent(DataTableColumnHeader<AccountPageTable, unknown>, {
         column,
@@ -112,6 +115,7 @@ export const columns: ColumnDef<AccountPageTable, unknown>[] = [
 
   {
     accessorKey: 'role',
+    id: 'role',
     header: ({ column }) => {
       return renderComponent(DataTableColumnHeader<AccountPageTable, unknown>, {
         column,
@@ -133,6 +137,7 @@ export const columns: ColumnDef<AccountPageTable, unknown>[] = [
 
   {
     accessorKey: 'approved',
+    id: 'approved',
     header: ({ column }) => {
       return renderComponent(DataTableColumnHeader<AccountPageTable, unknown>, {
         column,
@@ -161,13 +166,14 @@ export const columns: ColumnDef<AccountPageTable, unknown>[] = [
         title: 'Interests'
       });
     },
-    cell: ({ row }) => renderComponent(TableInterestRow, { row }),
+    cell: ({ row }) => renderComponent(TableInterestRow<AccountPageTable>, { row }),
     enableSorting: false,
     enableHiding: true
   },
 
   {
     accessorKey: 'created_at',
+    id: 'created_at',
     header: ({ column }) => {
       return renderComponent(DataTableColumnHeader<AccountPageTable, unknown>, {
         column,

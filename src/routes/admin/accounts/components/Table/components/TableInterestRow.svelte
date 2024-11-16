@@ -2,7 +2,7 @@
   type TData = unknown;
 </script>
 
-<script lang="ts">
+<script lang="ts" generics="TData">
   import * as Popover from '$lib/components/ui/popover/index.js';
   import type { Row } from '@tanstack/table-core';
   import { type AccountPageTable } from '../data/schemas';
