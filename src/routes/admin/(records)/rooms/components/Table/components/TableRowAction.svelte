@@ -4,12 +4,17 @@
 
 <script lang="ts" generics="TData">
   import Ellipsis from 'lucide-svelte/icons/ellipsis';
+  import FileMinus from 'lucide-svelte/icons/file-minus';
+  import Pen from 'lucide-svelte/icons/pen';
   import type { Row } from '@tanstack/table-core';
+  import { type SchoolYearPageTable } from '../data/schemas';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index';
   import Button from '$lib/components/ui/button/button.svelte';
-  import { type SchoolYearPageTable } from '../data/schemas';
+  import { useTableState } from '../tableState.svelte';
 
   let { row }: { row: Row<SchoolYearPageTable> } = $props();
+
+  const tableState = useTableState();
 </script>
 
 <DropdownMenu.Root>
@@ -22,9 +27,23 @@
     {/snippet}
   </DropdownMenu.Trigger>
   <DropdownMenu.Content class="w-[160px]" align="end">
-    <DropdownMenu.Item>
+    <DropdownMenu.Item
+      onclick={() => {
+        tableState.setActiveRow(row.original);
+        tableState.setShowUpdate(true);
+      }}
+    >
+      <Pen />
+      Update
+    </DropdownMenu.Item>
+    <DropdownMenu.Item
+      onclick={() => {
+        tableState.setActiveRow(row.original);
+        tableState.setShowDelete(true);
+      }}
+    >
+      <FileMinus />
       Delete
-      <DropdownMenu.Shortcut>⌘⌫</DropdownMenu.Shortcut>
     </DropdownMenu.Item>
   </DropdownMenu.Content>
 </DropdownMenu.Root>
