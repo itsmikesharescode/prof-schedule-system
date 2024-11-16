@@ -10,8 +10,11 @@
   import { type ProgramPageTable } from '../data/schemas';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index';
   import Button from '$lib/components/ui/button/button.svelte';
+  import { useTableState } from '../tableState.svelte';
 
   let { row }: { row: Row<ProgramPageTable> } = $props();
+
+  const tableState = useTableState();
 </script>
 
 <DropdownMenu.Root>
@@ -24,11 +27,21 @@
     {/snippet}
   </DropdownMenu.Trigger>
   <DropdownMenu.Content class="w-[160px]" align="end">
-    <DropdownMenu.Item>
+    <DropdownMenu.Item
+      onclick={() => {
+        tableState.setActiveRow(row.original);
+        tableState.setShowUpdate(true);
+      }}
+    >
       <Pen />
       Update
     </DropdownMenu.Item>
-    <DropdownMenu.Item>
+    <DropdownMenu.Item
+      onclick={() => {
+        tableState.setActiveRow(row.original);
+        tableState.setShowDelete(true);
+      }}
+    >
       <FileMinus />
       Delete
     </DropdownMenu.Item>

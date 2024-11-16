@@ -2,18 +2,13 @@
   import { enhance } from '$app/forms';
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index';
   import Button from '$lib/components/ui/button/button.svelte';
-  import type { Database } from '$lib/database.types';
   import type { Result } from '$lib/types';
   import type { SubmitFunction } from '@sveltejs/kit';
   import { LoaderCircle } from 'lucide-svelte';
   import { toast } from 'svelte-sonner';
+  import { useTableState } from '../Table/tableState.svelte';
 
-  interface Props {
-    program: Database['public']['Tables']['programs_tb']['Row'];
-    showDelete: boolean;
-  }
-
-  let { showDelete = $bindable(), program }: Props = $props();
+  const tableState = useTableState();
 
   let deleteLoader = $state(false);
   const deleteProgramEvent: SubmitFunction = () => {
@@ -24,7 +19,7 @@
       switch (status) {
         case 200:
           toast.success(data.msg);
-          showDelete = false;
+          tableState.setShowDelete(false);
           break;
 
         case 401:
@@ -37,7 +32,7 @@
   };
 </script>
 
-<AlertDialog.Root bind:open={showDelete}>
+<AlertDialog.Root open={tableState.getShowDelete()}>
   <AlertDialog.Content>
     <AlertDialog.Header>
       <AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
@@ -46,9 +41,11 @@
       </AlertDialog.Description>
     </AlertDialog.Header>
     <AlertDialog.Footer>
-      <Button size="sm" variant="outline" onclick={() => (showDelete = false)}>Cancel</Button>
+      <Button size="sm" variant="outline" onclick={() => tableState.setShowDelete(false)}>
+        Cancel
+      </Button>
       <form method="POST" action="?/deleteProgramEvent" use:enhance={deleteProgramEvent}>
-        <input name="id" type="hidden" value={program.id} />
+        <input name="id" type="hidden" value={tableState.getActiveRow()?.id ?? 0} />
         <Button type="submit" disabled={deleteLoader} size="sm" class="relative">
           {#if deleteLoader}
             <div

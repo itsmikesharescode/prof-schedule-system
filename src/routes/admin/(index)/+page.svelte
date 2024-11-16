@@ -4,7 +4,12 @@
   import { Skeleton } from '$lib/components/ui/skeleton/index';
   import Table from './components/Table/components/Table.svelte';
   import { columns } from './components/Table/components/columns';
+  import { initTableState } from './components/Table/tableState.svelte';
+  import UpdateProgram from './components/UpdateProgram/UpdateProgram.svelte';
+  import DeleteProgram from './components/DeleteProgram/DeleteProgram.svelte';
   const { data } = $props();
+
+  initTableState();
 </script>
 
 <div class="sticky top-2 z-30 flex justify-end">
@@ -23,3 +28,6 @@
     <Table data={programs ?? []} {columns} />
   {/await}
 </div>
+
+<UpdateProgram updateProgramForm={data.updateProgramForm} />
+<DeleteProgram />
