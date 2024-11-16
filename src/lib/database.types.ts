@@ -169,7 +169,7 @@ export type Database = {
           department: string;
           id: number;
           name: string;
-          unit: string;
+          unit: number;
         };
         Insert: {
           code: string;
@@ -177,7 +177,7 @@ export type Database = {
           department: string;
           id?: number;
           name: string;
-          unit: string;
+          unit: number;
         };
         Update: {
           code?: string;
@@ -185,7 +185,7 @@ export type Database = {
           department?: string;
           id?: number;
           name?: string;
-          unit?: string;
+          unit?: number;
         };
         Relationships: [];
       };

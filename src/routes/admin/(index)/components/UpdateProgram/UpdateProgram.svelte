@@ -9,13 +9,15 @@
   import { toast } from 'svelte-sonner';
   import type { Result } from '$lib/types';
   import type { Database } from '$lib/database.types';
+  import { useTableState } from '../Table/tableState.svelte';
+
   interface Props {
-    program: Database['public']['Tables']['programs_tb']['Row'];
     updateProgramForm: SuperValidated<Infer<UpdateProgramSchema>>;
-    showUpdate: boolean;
   }
 
-  let { showUpdate = $bindable(), updateProgramForm, program }: Props = $props();
+  const { updateProgramForm }: Props = $props();
+
+  const tableState = useTableState();
 
   const form = superForm(updateProgramForm, {
     validators: zodClient(updateProgramSchema),
@@ -25,7 +27,7 @@
       switch (status) {
         case 200:
           form.reset();
-          showUpdate = false;
+          tableState.setShowUpdate(false);
           toast.success(data.msg);
           break;
         case 401:
@@ -38,20 +40,21 @@
   const { form: formData, enhance, submitting } = form;
 
   $effect(() => {
-    if (showUpdate) {
-      $formData.id = program.id;
-      $formData.programHead = program.head;
-      $formData.department = program.code;
-      $formData.description = program.description;
+    if (tableState.getShowUpdate()) {
+      $formData.id = tableState.getActiveRow()?.id ?? 0;
+      $formData.programHead = tableState.getActiveRow()?.head ?? '';
+      $formData.department = tableState.getActiveRow()?.code ?? '';
+      $formData.description = tableState.getActiveRow()?.description ?? '';
     }
   });
 </script>
 
-<AlertDialog.Root bind:open={showUpdate}>
+<AlertDialog.Root open={tableState.getShowUpdate()}>
   <AlertDialog.Content>
     <button
       onclick={() => {
-        showUpdate = false;
+        tableState.setActiveRow(null);
+        tableState.setShowUpdate(false);
         form.reset();
       }}
       class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"

@@ -7,13 +7,9 @@
   import type { SubmitFunction } from '@sveltejs/kit';
   import { LoaderCircle } from 'lucide-svelte';
   import { toast } from 'svelte-sonner';
+  import { useTableState } from '../Table/tableState.svelte';
 
-  interface Props {
-    schoolYear: Database['public']['Tables']['school_years_tb']['Row'];
-    showDelete: boolean;
-  }
-
-  let { showDelete = $bindable(), schoolYear }: Props = $props();
+  const tableState = useTableState();
 
   let deleteLoader = $state(false);
   const deleteSchoolYearEvent: SubmitFunction = () => {
@@ -24,7 +20,8 @@
       switch (status) {
         case 200:
           toast.success(data.msg);
-          showDelete = false;
+          tableState.setShowDelete(false);
+          tableState.setActiveRow(null);
           break;
 
         case 401:
@@ -37,18 +34,30 @@
   };
 </script>
 
-<AlertDialog.Root bind:open={showDelete}>
+<AlertDialog.Root open={tableState.getShowDelete()}>
   <AlertDialog.Content>
     <AlertDialog.Header>
       <AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
       <AlertDialog.Description>
-        This action cannot be undone. This will permanently delete the school year.
+        This action cannot be undone. This will permanently delete the school year and all
+        associated records. Please make sure there are no active enrollments or dependencies before
+        proceeding.
       </AlertDialog.Description>
     </AlertDialog.Header>
     <AlertDialog.Footer>
-      <Button size="sm" variant="outline" onclick={() => (showDelete = false)}>Cancel</Button>
+      <Button
+        size="sm"
+        variant="outline"
+        onclick={() => {
+          tableState.setShowDelete(false);
+          tableState.setActiveRow(null);
+        }}
+      >
+        Cancel
+      </Button>
+
       <form method="POST" action="?/deleteSchoolYearEvent" use:enhance={deleteSchoolYearEvent}>
-        <input name="id" type="hidden" value={schoolYear.id} />
+        <input name="id" type="hidden" value={tableState.getActiveRow()?.id ?? 0} />
         <Button type="submit" disabled={deleteLoader} size="sm" class="relative">
           {#if deleteLoader}
             <div

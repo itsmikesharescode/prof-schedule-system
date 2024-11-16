@@ -1,7 +1,6 @@
 <script lang="ts">
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import { X, Plus, LoaderCircle } from 'lucide-svelte';
+  import { X, LoaderCircle } from 'lucide-svelte';
   import { fileProxy, type Infer, superForm, type SuperValidated } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import * as Form from '$lib/components/ui/form/index.js';
@@ -10,22 +9,22 @@
   import ImagePicker from '$lib/components/general/ImagePicker.svelte';
   import { ScrollArea } from '$lib/components/ui/scroll-area/index';
   import Combobox from '$lib/components/general/Combobox.svelte';
-  import { availableTimes, days, departments, interests, titles } from '$lib/metadata';
+  import { availableTimes, days, interests, titles } from '$lib/metadata';
   import SelectPicker from '$lib/components/general/SelectPicker.svelte';
   import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte';
   import { auxiliaryState } from '$lib/runes/auxiliaryState.svelte';
   import type { Result } from '$lib/types';
   import { toast } from 'svelte-sonner';
-  import type { Database } from '$lib/database.types';
   import { PUBLIC_SUPABASE_STORAGE_URL } from '$env/static/public';
+  import { useTableState } from '../Table/tableState.svelte';
 
   interface Props {
-    professor: Database['public']['Tables']['professors_tb']['Row'];
     updateProfessorForm: SuperValidated<Infer<UpdateProfessorSchema>>;
-    showUpdate: boolean;
   }
 
-  let { showUpdate = $bindable(), updateProfessorForm, professor }: Props = $props();
+  const { updateProfessorForm }: Props = $props();
+
+  const tableState = useTableState();
 
   const form = superForm(updateProfessorForm, {
     validators: zodClient(updateProfessorSchema),
@@ -36,7 +35,7 @@
         case 200:
           form.reset();
           toast.success(data.msg);
-          showUpdate = false;
+          tableState.setShowUpdate(false);
           break;
         case 401:
           toast.error(data.msg);
@@ -58,32 +57,30 @@
   };
 
   $effect(() => {
-    if (showUpdate) {
-      $formData.userId = professor.user_id;
-      $formData.photoPath = professor.user_meta_data.avatar;
-      $formData.position = professor.user_meta_data.role;
-      $formData.title = professor.user_meta_data.title;
-      $formData.firstName = professor.user_meta_data.firstName;
-      $formData.middleName = professor.user_meta_data.middleName;
-      $formData.lastName = professor.user_meta_data.lastName;
-      $formData.email = professor.user_meta_data.email;
-      $formData.previousSchool = professor.user_meta_data.previousSchool;
-      $formData.yearsOfTeaching = professor.user_meta_data.yearsInService;
-      $formData.department = professor.user_meta_data.department;
-      $formData.day = professor.user_meta_data.preferredSchedule.day;
-      $formData.startTime = professor.user_meta_data.preferredSchedule.startTime;
-      $formData.endTime = professor.user_meta_data.preferredSchedule.endTime;
-      $formData.availability = professor.user_meta_data.preferredSchedule.available;
-      $formData.interests = professor.user_meta_data.interests;
+    if (tableState.getShowUpdate()) {
+      $formData.userId = tableState.getActiveRow()?.user_id ?? '';
+      $formData.photoPath = tableState.getActiveRow()?.avatar ?? '';
+      $formData.position = tableState.getActiveRow()?.role ?? '';
+      $formData.title = tableState.getActiveRow()?.title ?? '';
+      $formData.email = tableState.getActiveRow()?.email ?? '';
+      $formData.previousSchool = tableState.getActiveRow()?.previousSchool ?? '';
+      $formData.yearsOfTeaching = tableState.getActiveRow()?.yearsInService ?? 0;
+      $formData.department = tableState.getActiveRow()?.department ?? '';
+      $formData.day = tableState.getActiveRow()?.preferredSchedule.day ?? '';
+      $formData.startTime = tableState.getActiveRow()?.preferredSchedule.startTime ?? '';
+      $formData.endTime = tableState.getActiveRow()?.preferredSchedule.endTime ?? '';
+      $formData.availability = tableState.getActiveRow()?.preferredSchedule.available ?? '';
+      $formData.interests = tableState.getActiveRow()?.interests ?? [];
     }
   });
 </script>
 
-<AlertDialog.Root bind:open={showUpdate}>
+<AlertDialog.Root open={tableState.getShowUpdate()}>
   <AlertDialog.Content class="max-w-7xl p-0">
     <button
       onclick={() => {
-        showUpdate = false;
+        tableState.setShowUpdate(false);
+        tableState.setActiveRow(null);
         form.reset();
       }}
       class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
@@ -106,8 +103,8 @@
         use:enhance
         class=" "
       >
-        <input type="hidden" name="userId" value={professor.user_id} />
-        <input type="hidden" name="photoPath" value={professor.user_meta_data.avatar} />
+        <input type="hidden" name="userId" bind:value={$formData.userId} />
+        <input type="hidden" name="photoPath" bind:value={$formData.photoPath} />
         <div class="grid grid-cols-3 gap-6 px-6 pb-6">
           <!--Personal Details-->
           <div class="">
@@ -119,7 +116,7 @@
                 {#snippet children({ props })}
                   <Form.Label>Photo</Form.Label>
                   <ImagePicker
-                    hasLink={`${PUBLIC_SUPABASE_STORAGE_URL}${professor.user_meta_data.avatar}?${crypto.randomUUID()}`}
+                    hasLink={`${PUBLIC_SUPABASE_STORAGE_URL}${tableState.getActiveRow()?.avatar}?${crypto.randomUUID()}`}
                     bind:imageLink={$formData.photo}
                   />
                   <input class="hidden" type="file" {...props} bind:files={$file} />

@@ -1,26 +1,25 @@
 <script lang="ts">
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import { X, Plus, LoaderCircle } from 'lucide-svelte';
+  import { X, LoaderCircle } from 'lucide-svelte';
   import { type Infer, superForm, type SuperValidated } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import * as Form from '$lib/components/ui/form/index.js';
   import { Input } from '$lib/components/ui/input/index.js';
   import { updateSectionSchema, type UpdateSectionSchema } from './schema';
   import SelectPicker from '$lib/components/general/SelectPicker.svelte';
-  import { classPeriods, departments } from '$lib/metadata';
+  import { classPeriods } from '$lib/metadata';
   import type { Result } from '$lib/types';
   import { toast } from 'svelte-sonner';
-  import type { Database } from '$lib/database.types';
   import { auxiliaryState } from '$lib/runes/auxiliaryState.svelte';
+  import { useTableState } from '../Table/tableState.svelte';
 
   interface Props {
-    section: Database['public']['Tables']['sections_tb']['Row'];
     updateSectionForm: SuperValidated<Infer<UpdateSectionSchema>>;
-    showUpdate: boolean;
   }
 
-  let { showUpdate = $bindable(), updateSectionForm, section }: Props = $props();
+  let { updateSectionForm }: Props = $props();
+
+  const tableState = useTableState();
 
   const form = superForm(updateSectionForm, {
     validators: zodClient(updateSectionSchema),
@@ -30,7 +29,8 @@
       switch (status) {
         case 200:
           form.reset();
-          showUpdate = false;
+          tableState.setShowUpdate(false);
+          tableState.setActiveRow(null);
           toast.success(data.msg);
           break;
         case 401:
@@ -43,20 +43,21 @@
   const { form: formData, enhance, submitting } = form;
 
   $effect(() => {
-    if (showUpdate) {
-      $formData.id = section.id;
-      $formData.department = section.department;
-      $formData.class = section.class;
-      $formData.sectionCode = section.section_code;
+    if (tableState.getShowUpdate()) {
+      $formData.id = tableState.getActiveRow()?.id ?? 0;
+      $formData.department = tableState.getActiveRow()?.department ?? '';
+      $formData.class = tableState.getActiveRow()?.class ?? '';
+      $formData.sectionCode = tableState.getActiveRow()?.section_code ?? '';
     }
   });
 </script>
 
-<AlertDialog.Root bind:open={showUpdate}>
+<AlertDialog.Root open={tableState.getShowUpdate()}>
   <AlertDialog.Content class="">
     <button
       onclick={() => {
-        showUpdate = false;
+        tableState.setShowUpdate(false);
+        tableState.setActiveRow(null);
         form.reset();
       }}
       class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"

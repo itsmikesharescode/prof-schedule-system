@@ -1,14 +1,13 @@
 <script lang="ts">
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
   import Button from '$lib/components/ui/button/button.svelte';
-  import { X, Plus, LoaderCircle } from 'lucide-svelte';
+  import { X, LoaderCircle } from 'lucide-svelte';
   import { type Infer, superForm, type SuperValidated } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import * as Form from '$lib/components/ui/form/index.js';
   import { Input } from '$lib/components/ui/input/index.js';
   import { updateYearLevelSchema, type UpdateYearLevelSchema } from './schema';
   import SelectPicker from '$lib/components/general/SelectPicker.svelte';
-  import { departments } from '$lib/metadata';
   import type { Result } from '$lib/types';
   import { toast } from 'svelte-sonner';
   import Label from '$lib/components/ui/label/label.svelte';
@@ -16,16 +15,15 @@
   import { cubicInOut } from 'svelte/easing';
   import { flip } from 'svelte/animate';
   import { fly } from 'svelte/transition';
-  import type { Database } from '$lib/database.types';
   import { auxiliaryState } from '$lib/runes/auxiliaryState.svelte';
+  import { useTableState } from '../Table/tableState.svelte';
 
   interface Props {
-    yearLevel: Database['public']['Tables']['year_levels_tb']['Row'];
     updateYearLevelForm: SuperValidated<Infer<UpdateYearLevelSchema>>;
-    showUpdate: boolean;
   }
 
-  let { showUpdate = $bindable(), yearLevel, updateYearLevelForm }: Props = $props();
+  let { updateYearLevelForm }: Props = $props();
+  const tableState = useTableState();
 
   const form = superForm(updateYearLevelForm, {
     validators: zodClient(updateYearLevelSchema),
@@ -37,7 +35,8 @@
         case 200:
           reset();
           toast.success(data.msg);
-          showUpdate = false;
+          tableState.setShowUpdate(false);
+          tableState.setActiveRow(null);
           break;
         case 400:
           if (form.data.yearLevels && form.data.department && !form.valid)
@@ -73,25 +72,26 @@
   };
 
   $effect(() => {
-    if (yearLevels.length && showUpdate) {
+    if (yearLevels.length && tableState.getShowUpdate()) {
       $formData.yearLevels = yearLevels;
     }
   });
 
   $effect(() => {
-    if (showUpdate) {
-      yearLevels = yearLevel.levels as typeof yearLevels;
-      $formData.id = yearLevel.id;
-      $formData.department = yearLevel.department;
+    if (tableState.getShowUpdate()) {
+      yearLevels = tableState.getActiveRow()?.levels as typeof yearLevels;
+      $formData.id = tableState.getActiveRow()?.id;
+      $formData.department = tableState.getActiveRow()?.department;
     }
   });
 </script>
 
-<AlertDialog.Root bind:open={showUpdate}>
+<AlertDialog.Root open={tableState.getShowUpdate()}>
   <AlertDialog.Content class="max-w-[700px] p-0">
     <button
       onclick={() => {
-        showUpdate = false;
+        tableState.setShowUpdate(false);
+        tableState.setActiveRow(null);
         reset();
       }}
       class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"

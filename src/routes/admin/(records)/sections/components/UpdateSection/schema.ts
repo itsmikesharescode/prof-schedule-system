@@ -7,9 +7,7 @@ export const updateSectionSchema = z.object({
     message: 'Must select a valid class period'
   }),
   sectionCode: z.string().min(1, { message: 'Section code is required' }),
-  department: z.string().refine((v) => departments.find((d) => d.value === v), {
-    message: 'Department is required'
-  })
+  department: z.string().min(1, { message: 'Department is required' })
 });
 
 export type UpdateSectionSchema = typeof updateSectionSchema;

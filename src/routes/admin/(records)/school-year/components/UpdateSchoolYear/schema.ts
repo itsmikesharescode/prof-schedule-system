@@ -17,7 +17,7 @@ export const updateSchoolYearSchema = z.object({
         message: 'End year must be exactly one year after start year'
       }
     ),
-  department: z.string().refine((v) => departments.find((d) => d.value === v), {
+  department: z.string().min(1, {
     message: 'Department is required'
   })
 });

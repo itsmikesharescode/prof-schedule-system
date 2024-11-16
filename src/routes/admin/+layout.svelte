@@ -17,7 +17,7 @@
       <Sidebar.Trigger title="Open sidebar" />
     </div>
 
-    {#if !['/admin/reports', '/admin/logs'].includes($page.url.pathname)}
+    <!-- {#if !['/admin/reports', '/admin/logs'].includes($page.url.pathname)}
       <div class="pointer-events-auto fixed bottom-3 z-50">
         <FilterPicker
           streamDepartments={data.streamDepartments}
@@ -26,7 +26,7 @@
           selections={departments}
         />
       </div>
-    {/if}
+    {/if} -->
     {@render children()}
   </main>
 </Sidebar.Provider>
