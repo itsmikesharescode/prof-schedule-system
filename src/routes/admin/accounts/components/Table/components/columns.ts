@@ -7,7 +7,9 @@ import {
   DataTablePriorityCell,
   DataTableRowActions,
   DataTableStatusCell,
-  DataTableTitleCell
+  DataTableTitleCell,
+  TableFullnameRow,
+  TableInterestRow
 } from './index.js';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/render-helpers.js';
 
@@ -32,29 +34,28 @@ export const columns: ColumnDef<AccountPageTable, unknown>[] = [
     enableHiding: true
   },
   {
-    accessorKey: 'id',
+    accessorKey: 'user_id',
     header: ({ column }) => {
       return renderComponent(DataTableColumnHeader<AccountPageTable, unknown>, {
         column,
-        title: 'ID'
+        title: 'User ID'
       });
     },
     cell: ({ row }) => {
-      const idSnippet = createRawSnippet<[string]>((getId) => {
-        const id = getId();
+      const idSnippet = createRawSnippet<[string]>((getUserID) => {
         return {
-          render: () => `<div class="w-[80px]">${id}</div>`
+          render: () => `<div class="w-full">${getUserID()}</div>`
         };
       });
 
-      return renderSnippet(idSnippet, row.getValue('id'));
+      return renderSnippet(idSnippet, row.getValue('user_id'));
     },
     enableSorting: true,
     enableHiding: true
   },
 
   {
-    accessorKey: 'code',
+    accessorKey: 'department',
     header: ({ column }) => {
       return renderComponent(DataTableColumnHeader<AccountPageTable, unknown>, {
         column,
@@ -62,57 +63,106 @@ export const columns: ColumnDef<AccountPageTable, unknown>[] = [
       });
     },
     cell: ({ row }) => {
-      const codeSnippet = createRawSnippet<[string]>((getCode) => {
+      const departmentSnippet = createRawSnippet<[string]>((getDepartment) => {
         return {
-          render: () => `<div class="w-[80px]">${getCode()}</div>`
+          render: () => `<div class="w-full">${getDepartment()}</div>`
         };
       });
 
-      return renderSnippet(codeSnippet, row.getValue('code'));
+      return renderSnippet(departmentSnippet, row.getValue('department'));
     },
     enableSorting: true,
     enableHiding: true
   },
 
   {
-    accessorKey: 'description',
+    accessorKey: 'fullName',
+    id: 'sections',
     header: ({ column }) => {
       return renderComponent(DataTableColumnHeader<AccountPageTable, unknown>, {
         column,
-        title: 'Description'
+        title: 'Full Name'
+      });
+    },
+    cell: ({ row }) => renderComponent(TableFullnameRow<AccountPageTable>, { row }),
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
+    accessorKey: 'email',
+    header: ({ column }) => {
+      return renderComponent(DataTableColumnHeader<AccountPageTable, unknown>, {
+        column,
+        title: 'Email'
       });
     },
     cell: ({ row }) => {
-      const descriptionSnippet = createRawSnippet<[string]>((getDescription) => {
+      const emailSnippet = createRawSnippet<[string]>((getEmail) => {
         return {
-          render: () => `<div class="w-full">${getDescription()}</div>`
+          render: () => `<div class="w-full">${getEmail()}</div>`
         };
       });
 
-      return renderSnippet(descriptionSnippet, row.getValue('description'));
+      return renderSnippet(emailSnippet, row.getValue('email'));
     },
     enableSorting: true,
     enableHiding: true
   },
 
   {
-    accessorKey: 'head',
+    accessorKey: 'role',
     header: ({ column }) => {
       return renderComponent(DataTableColumnHeader<AccountPageTable, unknown>, {
         column,
-        title: 'Program Head'
+        title: 'Role'
       });
     },
     cell: ({ row }) => {
-      const headSnippet = createRawSnippet<[string]>((getHead) => {
+      const roleSnippet = createRawSnippet<[string]>((getRole) => {
         return {
-          render: () => `<div class="w-full">${getHead()}</div>`
+          render: () => `<div class="w-full">${getRole()}</div>`
         };
       });
 
-      return renderSnippet(headSnippet, row.getValue('head'));
+      return renderSnippet(roleSnippet, row.getValue('role'));
     },
     enableSorting: true,
+    enableHiding: true
+  },
+
+  {
+    accessorKey: 'approved',
+    header: ({ column }) => {
+      return renderComponent(DataTableColumnHeader<AccountPageTable, unknown>, {
+        column,
+        title: 'Status'
+      });
+    },
+    cell: ({ row }) => {
+      const statusSnippet = createRawSnippet<[boolean]>((getStatus) => {
+        return {
+          render: () => `<div class="w-full">${getStatus() ? 'Active' : 'Inactive'}</div>`
+        };
+      });
+
+      return renderSnippet(statusSnippet, row.getValue('approved'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
+    accessorKey: 'interests',
+    id: 'interests',
+    header: ({ column }) => {
+      return renderComponent(DataTableColumnHeader<AccountPageTable, unknown>, {
+        column,
+        title: 'Interests'
+      });
+    },
+    cell: ({ row }) => renderComponent(TableInterestRow, { row }),
+    enableSorting: false,
     enableHiding: true
   },
 

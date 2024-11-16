@@ -8,3 +8,5 @@ export { default as DataTableToolbar } from './TableToolbar.svelte';
 export { default as DataTablePagination } from './TablePagination.svelte';
 export { default as DataTableViewOptions } from './TableViewOptions.svelte';
 export { default as DataTableFacetedFilter } from './TableFacetedFilter.svelte';
+export { default as TableFullnameRow } from './TableFullnameRow.svelte';
+export { default as TableInterestRow } from './TableInterestRow.svelte';

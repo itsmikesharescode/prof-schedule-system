@@ -1,10 +1,11 @@
 <script lang="ts">
-  import * as Table from '$lib/components/ui/table/index.js';
   import TableMenu from './components/TableMenu.svelte';
   import AddProfessor from './components/AddProfessor/AddProfessor.svelte';
   import { Skeleton } from '$lib/components/ui/skeleton/index';
   import { PUBLIC_SUPABASE_STORAGE_URL } from '$env/static/public';
   import * as Avatar from '$lib/components/ui/avatar/index.js';
+  import Table from './components/Table/components/Table.svelte';
+  import { columns } from './components/Table/components/columns';
   const { data } = $props();
 </script>
 
@@ -13,75 +14,88 @@
     <AddProfessor addProfessorForm={data.addProfessorForm} />
   </div>
 
-  <Table.Root>
-    <Table.Header>
-      <Table.Row>
-        <Table.Head class="w-[50px]"></Table.Head>
-        <Table.Head class="w-[100px]">Full Name</Table.Head>
-        <Table.Head>Professor ID</Table.Head>
-        <Table.Head>Email</Table.Head>
-        <Table.Head class="truncate">Position</Table.Head>
-        <Table.Head class="truncate">Department</Table.Head>
-        <Table.Head class="truncate">Status</Table.Head>
-      </Table.Row>
-    </Table.Header>
-    <Table.Body>
-      <!--Display if streaming data-->
-      {#await data.streamProfessors}
-        {#each Array(5) as _}
-          <Table.Row>
-            <Table.Cell class="">
-              <Skeleton class="h-[20px] rounded-full" />
-            </Table.Cell>
-            <Table.Cell class="font-medium"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
-            <Table.Cell><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
-            <Table.Cell><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
-            <Table.Cell class="text-right"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
-            <Table.Cell class="text-right"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
-            <Table.Cell class="text-right"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
-            <Table.Cell class="text-right"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
-          </Table.Row>
-        {/each}
-      {:then professors}
-        {#each professors ?? [] as professor}
-          <Table.Row>
-            <Table.Cell class="">
-              <TableMenu
-                {professor}
-                updateProfessorForm={data.updateProfessorForm}
-                updateStatusForm={data.updateStatusForm}
-              />
-            </Table.Cell>
-            <Table.Cell class="truncate">
-              <div class="flex items-center gap-2.5">
-                <Avatar.Root>
-                  <Avatar.Image
-                    src={`${PUBLIC_SUPABASE_STORAGE_URL}${professor.user_meta_data.avatar}`}
-                    alt="profile"
-                  />
-                  <Avatar.Fallback
-                    >{professor.user_meta_data.firstName[0].toUpperCase()}</Avatar.Fallback
-                  >
-                </Avatar.Root>
-                <div class="">
-                  {professor.user_meta_data.title}
-                  {' '}
-                  {professor.user_meta_data.lastName}, {professor.user_meta_data.firstName}{' '}
-                  {professor.user_meta_data.middleName}
-                </div>
-              </div>
-            </Table.Cell>
-            <Table.Cell class="truncate font-medium">{professor.user_id}</Table.Cell>
-            <Table.Cell class="truncate">{professor.user_meta_data.email}</Table.Cell>
-
-            <Table.Cell class="truncate">{professor.user_meta_data.role}</Table.Cell>
-            <Table.Cell class="truncate">{professor.user_meta_data.department}</Table.Cell>
-            <Table.Cell class="truncate">
-              {professor.user_meta_data.approved ? 'Active' : 'Inactive'}
-            </Table.Cell>
-          </Table.Row>
-        {/each}
-      {/await}
-    </Table.Body>
-  </Table.Root>
+  {#await data.streamProfessors}
+    loading
+  {:then professors}
+    <Table
+      data={professors?.map((prof) => ({
+        created_at: prof.created_at,
+        user_id: prof.user_id,
+        fullName: `${prof.user_meta_data.lastName}, ${prof.user_meta_data.firstName} ${prof.user_meta_data.middleName}`,
+        ...prof.user_meta_data
+      })) ?? []}
+      {columns}
+    />
+  {/await}
 </div>
+
+<!-- <Table.Root>
+  <Table.Header>
+    <Table.Row>
+      <Table.Head class="w-[50px]"></Table.Head>
+      <Table.Head class="w-[100px]">Full Name</Table.Head>
+      <Table.Head>Professor ID</Table.Head>
+      <Table.Head>Email</Table.Head>
+      <Table.Head class="truncate">Position</Table.Head>
+      <Table.Head class="truncate">Department</Table.Head>
+      <Table.Head class="truncate">Status</Table.Head>
+    </Table.Row>
+  </Table.Header>
+  <Table.Body>
+    {#await data.streamProfessors}
+      {#each Array(5) as _}
+        <Table.Row>
+          <Table.Cell class="">
+            <Skeleton class="h-[20px] rounded-full" />
+          </Table.Cell>
+          <Table.Cell class="font-medium"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
+          <Table.Cell><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
+          <Table.Cell><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
+          <Table.Cell class="text-right"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
+          <Table.Cell class="text-right"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
+          <Table.Cell class="text-right"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
+          <Table.Cell class="text-right"><Skeleton class="h-[20px] rounded-full" /></Table.Cell>
+        </Table.Row>
+      {/each}
+    {:then professors}
+      {#each professors ?? [] as professor}
+        <Table.Row>
+          <Table.Cell class="">
+            <TableMenu
+              {professor}
+              updateProfessorForm={data.updateProfessorForm}
+              updateStatusForm={data.updateStatusForm}
+            />
+          </Table.Cell>
+          <Table.Cell class="truncate">
+            <div class="flex items-center gap-2.5">
+              <Avatar.Root>
+                <Avatar.Image
+                  src={`${PUBLIC_SUPABASE_STORAGE_URL}${professor.user_meta_data.avatar}`}
+                  alt="profile"
+                />
+                <Avatar.Fallback
+                  >{professor.user_meta_data.firstName[0].toUpperCase()}</Avatar.Fallback
+                >
+              </Avatar.Root>
+              <div class="">
+                {professor.user_meta_data.title}
+                {' '}
+                {professor.user_meta_data.lastName}, {professor.user_meta_data.firstName}{' '}
+                {professor.user_meta_data.middleName}
+              </div>
+            </div>
+          </Table.Cell>
+          <Table.Cell class="truncate font-medium">{professor.user_id}</Table.Cell>
+          <Table.Cell class="truncate">{professor.user_meta_data.email}</Table.Cell>
+
+          <Table.Cell class="truncate">{professor.user_meta_data.role}</Table.Cell>
+          <Table.Cell class="truncate">{professor.user_meta_data.department}</Table.Cell>
+          <Table.Cell class="truncate">
+            {professor.user_meta_data.approved ? 'Active' : 'Inactive'}
+          </Table.Cell>
+        </Table.Row>
+      {/each}
+    {/await}
+  </Table.Body>
+</Table.Root> -->
