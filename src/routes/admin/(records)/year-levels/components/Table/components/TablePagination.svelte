@@ -28,7 +28,7 @@
     deleteLoader = true;
 
     const { error } = await sb
-      ?.from('programs_tb')
+      ?.from('year_levels_tb')
       .delete()
       .in(
         'id',
@@ -41,7 +41,7 @@
     }
 
     await invalidateAll();
-    toast.success('School years deleted successfully');
+    toast.success('Year levels deleted successfully');
     deleteLoader = false;
   };
 </script>
@@ -63,7 +63,7 @@
           >
             {#if deleteLoader}
               <div
-                class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center rounded-lg bg-primary"
+                class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center rounded-lg bg-destructive"
               >
                 <LoaderCircle class="size-4 animate-spin" />
               </div>
