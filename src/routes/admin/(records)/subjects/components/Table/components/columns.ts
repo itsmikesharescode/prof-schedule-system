@@ -1,6 +1,6 @@
 import type { ColumnDef } from '@tanstack/table-core';
 import { createRawSnippet } from 'svelte';
-import type { SchoolYearPageTable } from '../data/schemas.js';
+import type { SubjectsPageTable } from '../data/schemas.js';
 import {
   TableCheckbox,
   TableColumnHeader,
@@ -11,7 +11,7 @@ import {
 } from './index.js';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/render-helpers.js';
 
-export const columns: ColumnDef<SchoolYearPageTable>[] = [
+export const columns: ColumnDef<SubjectsPageTable>[] = [
   {
     id: 'select',
     header: ({ table }) =>
@@ -34,7 +34,7 @@ export const columns: ColumnDef<SchoolYearPageTable>[] = [
   {
     accessorKey: 'id',
     header: ({ column }) => {
-      return renderComponent(TableColumnHeader<SchoolYearPageTable, unknown>, {
+      return renderComponent(TableColumnHeader<SubjectsPageTable, unknown>, {
         column,
         title: 'ID'
       });
@@ -53,21 +53,61 @@ export const columns: ColumnDef<SchoolYearPageTable>[] = [
     enableHiding: false
   },
   {
-    accessorKey: 'year',
+    accessorKey: 'name',
     header: ({ column }) => {
-      return renderComponent(TableColumnHeader<SchoolYearPageTable, unknown>, {
+      return renderComponent(TableColumnHeader<SubjectsPageTable, unknown>, {
         column,
-        title: 'School Year'
+        title: 'Subject Name'
       });
     },
     cell: ({ row }) => {
-      const schoolYearSnippet = createRawSnippet<[string]>((getSchoolYear) => {
+      const subjectNameSnippet = createRawSnippet<[string]>((getSubjectName) => {
         return {
-          render: () => `<div class="w-full">${getSchoolYear()}</div>`
+          render: () => `<div class="w-full">${getSubjectName()}</div>`
         };
       });
 
-      return renderSnippet(schoolYearSnippet, row.getValue('year'));
+      return renderSnippet(subjectNameSnippet, row.getValue('name'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+  {
+    accessorKey: 'code',
+    header: ({ column }) => {
+      return renderComponent(TableColumnHeader<SubjectsPageTable, unknown>, {
+        column,
+        title: 'Subject Code'
+      });
+    },
+    cell: ({ row }) => {
+      const subjectCodeSnippet = createRawSnippet<[string]>((getSubjectCode) => {
+        return {
+          render: () => `<div class="w-full">${getSubjectCode()}</div>`
+        };
+      });
+
+      return renderSnippet(subjectCodeSnippet, row.getValue('code'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+  {
+    accessorKey: 'unit',
+    header: ({ column }) => {
+      return renderComponent(TableColumnHeader<SubjectsPageTable, unknown>, {
+        column,
+        title: 'Unit'
+      });
+    },
+    cell: ({ row }) => {
+      const subjectUnitSnippet = createRawSnippet<[number]>((getSubjectUnit) => {
+        return {
+          render: () => `<div class="w-full">${getSubjectUnit()}</div>`
+        };
+      });
+
+      return renderSnippet(subjectUnitSnippet, row.getValue('unit'));
     },
     enableSorting: true,
     enableHiding: true
@@ -75,19 +115,19 @@ export const columns: ColumnDef<SchoolYearPageTable>[] = [
   {
     accessorKey: 'department',
     header: ({ column }) => {
-      return renderComponent(TableColumnHeader<SchoolYearPageTable, unknown>, {
+      return renderComponent(TableColumnHeader<SubjectsPageTable, unknown>, {
         column,
         title: 'Department'
       });
     },
     cell: ({ row }) => {
-      const departmentSnippet = createRawSnippet<[string]>((getDepartment) => {
+      const subjectDepartmentSnippet = createRawSnippet<[string]>((getSubjectDepartment) => {
         return {
-          render: () => `<div class="w-full">${getDepartment()}</div>`
+          render: () => `<div class="w-full">${getSubjectDepartment()}</div>`
         };
       });
 
-      return renderSnippet(departmentSnippet, row.getValue('department'));
+      return renderSnippet(subjectDepartmentSnippet, row.getValue('department'));
     },
     enableSorting: true,
     enableHiding: true
@@ -96,7 +136,7 @@ export const columns: ColumnDef<SchoolYearPageTable>[] = [
     accessorKey: 'created_at',
     id: 'created_at',
     header: ({ column }) => {
-      return renderComponent(TableColumnHeader<SchoolYearPageTable, unknown>, {
+      return renderComponent(TableColumnHeader<SubjectsPageTable, unknown>, {
         column,
         title: 'Created At'
       });
@@ -117,6 +157,6 @@ export const columns: ColumnDef<SchoolYearPageTable>[] = [
 
   {
     id: 'actions',
-    cell: ({ row }) => renderComponent(TableRowActions<SchoolYearPageTable>, { row })
+    cell: ({ row }) => renderComponent(TableRowActions<SubjectsPageTable>, { row })
   }
 ];

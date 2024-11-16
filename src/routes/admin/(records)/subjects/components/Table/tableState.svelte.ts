@@ -1,10 +1,10 @@
 import { getContext, setContext } from 'svelte';
-import type { SchoolYearPageTable } from './data/schemas';
+import type { SubjectsPageTable } from './data/schemas';
 
 class TableState {
-  #activeRow = $state<SchoolYearPageTable | null>(null);
+  #activeRow = $state<SubjectsPageTable | null>(null);
 
-  setActiveRow(row: SchoolYearPageTable | null) {
+  setActiveRow(row: SubjectsPageTable | null) {
     this.#activeRow = row;
   }
 
