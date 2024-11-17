@@ -41,10 +41,14 @@ export const actions: Actions = {
     console.log(form.data);
   },
 
-  deleteScheduleEvent: async ({ request }) => {
+  deleteScheduleEvent: async ({ request, locals: { supabase } }) => {
     const formData = await request.formData();
     const id = formData.get('id') as string;
 
-    console.log(id);
+    const { error } = await supabase.from('class_schedules_tb').delete().eq('id', Number(id));
+
+    if (error) return fail(401, { msg: error.message });
+
+    return { msg: 'Schedule deleted successfully' };
   }
 };

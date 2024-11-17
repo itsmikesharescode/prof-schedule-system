@@ -5,6 +5,7 @@
 
   import AddSchedule from './components/AddSchedule/AddSchedule.svelte';
   import { initTableState } from './components/Table/tableState.svelte';
+  import DeleteSchedule from './components/DeleteSchedule/DeleteSchedule.svelte';
 
   const { data } = $props();
 
@@ -27,3 +28,5 @@
     <Table data={classSchedules ?? []} {columns} />
   {/await}
 </div>
+
+<DeleteSchedule />
