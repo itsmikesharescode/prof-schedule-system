@@ -10,7 +10,6 @@
   import type { Result } from '$lib/types';
   import { toast } from 'svelte-sonner';
   import SelectPicker from '$lib/components/general/SelectPicker.svelte';
-  import { departments } from '$lib/metadata';
   import { auxiliaryState } from '$lib/runes/auxiliaryState.svelte';
 
   interface Props {

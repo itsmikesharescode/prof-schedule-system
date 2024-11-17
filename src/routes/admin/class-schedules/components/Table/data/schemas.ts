@@ -1,11 +1,13 @@
 import { z } from 'zod';
 
-export const addScheduleSchema = z.object({
-  schoolYear: z.string().min(1, { message: 'School year is required.' }),
-  semester: z.string().min(1, { message: 'Semester is required.' }),
-  yearLevel: z.string().min(1, { message: 'Year level is required.' }),
-  section: z.string().min(1, { message: 'Section is required.' }),
-  department: z.string().min(1, { message: 'Department is required.' }),
+export const classScheduleSchema = z.object({
+  id: z.number(),
+  created_at: z.string(),
+  department: z.string(),
+  school_year: z.string(),
+  semester: z.string(),
+  year_level: z.string(),
+  section: z.string(),
   subjects: z
     .array(
       z.object({
@@ -20,4 +22,4 @@ export const addScheduleSchema = z.object({
     .min(1, { message: 'At least one subject is required.' })
 });
 
-export type AddScheduleSchema = typeof addScheduleSchema;
+export type ClassSchedulesPageTable = z.output<typeof classScheduleSchema>;

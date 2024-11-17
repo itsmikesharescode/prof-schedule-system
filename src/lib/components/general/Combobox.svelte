@@ -15,9 +15,10 @@
     }[];
     placeholder: string;
     name: string;
+    disabled?: boolean;
   }
 
-  let { selected = $bindable(), selections, placeholder, name }: Props = $props();
+  let { selected = $bindable(), selections, placeholder, name, disabled }: Props = $props();
 
   let open = $state(false);
   let value = $state('');
@@ -43,9 +44,10 @@
 </script>
 
 <Popover.Root bind:open>
-  <Popover.Trigger bind:ref={triggerRef}>
+  <Popover.Trigger {disabled} bind:ref={triggerRef}>
     {#snippet child({ props })}
       <Button
+        {disabled}
         variant="outline"
         class="w-full justify-between"
         {...props}

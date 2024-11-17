@@ -29,3 +29,12 @@ export type YearLevel = {
   id: string;
   yearLevel: string;
 };
+
+export type Subject = {
+  id: string;
+  name: string;
+  startTime: string;
+  endTime: string;
+  day: string;
+  room: string;
+};
