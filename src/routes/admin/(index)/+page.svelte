@@ -1,5 +1,4 @@
 <script lang="ts">
-  import TableMenu from './components/TableMenu.svelte';
   import AddProgram from './components/AddProgram/AddProgram.svelte';
   import { Skeleton } from '$lib/components/ui/skeleton/index';
   import Table from './components/Table/components/Table.svelte';
