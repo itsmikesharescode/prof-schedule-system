@@ -23,11 +23,6 @@ create trigger log_class_schedules_changes
     for each row
     execute function log_table_changes();
 
-create trigger log_professors_changes
-    after insert or update or delete on professors_tb
-    for each row
-    execute function log_table_changes();
-
 create trigger log_programs_changes
     after insert or update or delete on programs_tb
     for each row
@@ -62,7 +57,6 @@ create trigger log_year_levels_changes
 create or replace function drop_triggers_and_function() returns void as $$
 begin
     drop trigger if exists log_class_schedules_changes on class_schedules_tb;
-    drop trigger if exists log_professors_changes on professors_tb;
     drop trigger if exists log_programs_changes on programs_tb;
     drop trigger if exists log_rooms_changes on rooms_tb;
     drop trigger if exists log_school_years_changes on school_years_tb;
