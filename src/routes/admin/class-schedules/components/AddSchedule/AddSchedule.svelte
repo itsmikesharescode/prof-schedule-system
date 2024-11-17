@@ -1,7 +1,9 @@
 <script lang="ts">
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
   import Button from '$lib/components/ui/button/button.svelte';
-  import { X, Plus } from 'lucide-svelte';
+  import LoaderCircle from 'lucide-svelte/icons/loader-circle';
+  import X from 'lucide-svelte/icons/x';
+  import Plus from 'lucide-svelte/icons/plus';
   import { type Infer, superForm, type SuperValidated } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import * as Form from '$lib/components/ui/form/index.js';
@@ -19,6 +21,7 @@
   import { auxiliaryState } from '$lib/runes/auxiliaryState.svelte';
   import { page } from '$app/stores';
   import { Skeleton } from '$lib/components/ui/skeleton/index.js';
+  import type { Result } from '$lib/types';
 
   interface Props {
     addScheduleForm: SuperValidated<Infer<AddScheduleSchema>>;
@@ -31,23 +34,36 @@
   const form = superForm(addScheduleForm, {
     validators: zodClient(addScheduleSchema),
     dataType: 'json',
-    onUpdate: ({ form }) => {
-      if (
-        form.data.schoolYear &&
-        form.data.semester &&
-        form.data.yearLevel &&
-        form.data.section &&
-        !form.valid
-      )
-        return toast.error('Please answer the schedule details.');
+    onUpdate: ({ form, result }) => {
+      const { status, data } = result as Result<{ msg: string }>;
 
-      if (!form.valid) return;
+      switch (status) {
+        case 200:
+          toast.success(data.msg);
+          reset();
+          cleanUp();
+          open = false;
+          break;
 
-      cleanUp();
+        case 400:
+          if (
+            form.data.schoolYear &&
+            form.data.semester &&
+            form.data.yearLevel &&
+            form.data.section &&
+            !form.valid
+          )
+            return toast.error('Please answer the schedule details.');
+          break;
+
+        case 401:
+          toast.error(data.msg);
+          break;
+      }
     }
   });
 
-  const { form: formData, enhance, submitting } = form;
+  const { form: formData, enhance, submitting, reset } = form;
 
   let subjects = $state([
     {
@@ -426,7 +442,17 @@
         </div>
 
         <div class="pointer-events-none sticky bottom-6 left-0 right-0 flex justify-end px-6">
-          <Form.Button size="sm" class="pointer-events-auto">Create</Form.Button>
+          <Form.Button disabled={$submitting} size="sm" class="pointer-events-auto relative">
+            {#if $submitting}
+              <div
+                class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center rounded-lg bg-primary"
+              >
+                <LoaderCircle class="size-4 animate-spin" />
+              </div>
+            {/if}
+
+            Create
+          </Form.Button>
         </div>
       </form>
     </ScrollArea>

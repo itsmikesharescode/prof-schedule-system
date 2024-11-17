@@ -15,12 +15,23 @@ export const load: PageServerLoad = async ({ locals: { supabase }, url }) => {
 };
 
 export const actions: Actions = {
-  addScheduleEvent: async ({ request }) => {
+  addScheduleEvent: async ({ request, locals: { supabase } }) => {
     const form = await superValidate(request, zod(addScheduleSchema));
-    console.log(form.data);
     if (!form.valid) return fail(400, { form });
+    const { error } = await supabase.from('class_schedules_tb').insert([
+      {
+        school_year: form.data.schoolYear,
+        department: form.data.department,
+        section: form.data.section,
+        year_level: form.data.yearLevel,
+        semester: form.data.semester,
+        subjects: form.data.subjects
+      }
+    ]);
 
-    return { form };
+    if (error) return fail(401, { form, msg: error.message });
+
+    return { form, msg: 'Schedule added successfully' };
   },
 
   updateScheduleEvent: async ({ request }) => {
