@@ -16,7 +16,7 @@
   import { fly } from 'svelte/transition';
   import { toast } from 'svelte-sonner';
   import { cubicInOut } from 'svelte/easing';
-
+  import { auxiliaryState } from '$lib/runes/auxiliaryState.svelte';
   interface Props {
     addScheduleForm: SuperValidated<Infer<AddScheduleSchema>>;
   }
@@ -137,14 +137,7 @@
                       name="Select school year"
                       {props}
                       class=""
-                      selections={[
-                        { label: '2026-2027', value: '2026-2027' },
-                        { label: '2025-2026', value: '2025-2026' },
-                        { label: '2024-2025', value: '2024-2025' },
-                        { label: '2023-2024', value: '2023-2024' },
-                        { label: '2022-2023', value: '2022-2023' },
-                        { label: '2021-2022', value: '2021-2022' }
-                      ]}
+                      selections={auxiliaryState.formatSchoolYears()}
                       bind:selected={$formData.schoolYear}
                     />
                     <input type="hidden" {...props} bind:value={$formData.schoolYear} />
@@ -184,11 +177,7 @@
                       name="Select semester"
                       {props}
                       class=""
-                      selections={[
-                        { label: 'First Department', value: 'First Department' },
-                        { label: 'Second Department', value: 'Second Department' },
-                        { label: 'Third Department', value: 'Third Department' }
-                      ]}
+                      selections={auxiliaryState.formatDepartments()}
                       bind:selected={$formData.department}
                     />
                     <input type="hidden" {...props} bind:value={$formData.semester} />

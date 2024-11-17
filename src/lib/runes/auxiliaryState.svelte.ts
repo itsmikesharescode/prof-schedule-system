@@ -54,6 +54,12 @@ class AuxiliaryState {
 
   formatSchoolYears() {
     const proxy = this.getSchoolYears();
+
+    if (proxy) {
+      return proxy.map((v) => ({ value: v.year, label: `${v.year} - ${v.department}` }));
+    }
+
+    return [];
   }
 
   #sections = $state<Section[] | null>(null);
