@@ -1,5 +1,4 @@
-import type { UserMetaData, YearLevel, Subject } from '$lib/types';
-
+import type { UserMetaData, YearLevel, Subject } from './types';
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type Database = {
@@ -60,6 +59,30 @@ export type Database = {
           semester?: string;
           subjects?: Subject[];
           year_level?: string;
+        };
+        Relationships: [];
+      };
+      logs_tb: {
+        Row: {
+          created_at: string;
+          id: number;
+          location_name: string;
+          type: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: number;
+          location_name: string;
+          type: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: number;
+          location_name?: string;
+          type?: string;
+          user_id?: string;
         };
         Relationships: [];
       };
@@ -248,6 +271,10 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      drop_triggers_and_function: {
+        Args: Record<PropertyKey, never>;
+        Returns: undefined;
+      };
       is_admin: {
         Args: Record<PropertyKey, never>;
         Returns: boolean;
