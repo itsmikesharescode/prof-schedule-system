@@ -4,8 +4,11 @@
   import { columns } from './components/Table/components/columns';
 
   import AddSchedule from './components/AddSchedule/AddSchedule.svelte';
+  import { initTableState } from './components/Table/tableState.svelte';
 
   const { data } = $props();
+
+  initTableState();
 </script>
 
 <div class="sticky top-2 z-30 flex justify-end">

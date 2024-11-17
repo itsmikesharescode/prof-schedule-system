@@ -1,4 +1,4 @@
-import type { UserMetaData, YearLevel } from './types';
+import type { UserMetaData, YearLevel, Subject } from '$lib/types';
 
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
@@ -30,6 +30,39 @@ export type Database = {
   };
   public: {
     Tables: {
+      class_schedules_tb: {
+        Row: {
+          created_at: string;
+          department: string;
+          id: number;
+          school_year: string;
+          section: string;
+          semester: string;
+          subjects: Subject[];
+          year_level: string;
+        };
+        Insert: {
+          created_at?: string;
+          department: string;
+          id?: number;
+          school_year: string;
+          section: string;
+          semester: string;
+          subjects: Subject[];
+          year_level: string;
+        };
+        Update: {
+          created_at?: string;
+          department?: string;
+          id?: number;
+          school_year?: string;
+          section?: string;
+          semester?: string;
+          subjects?: Subject[];
+          year_level?: string;
+        };
+        Relationships: [];
+      };
       professors_tb: {
         Row: {
           created_at: string;
