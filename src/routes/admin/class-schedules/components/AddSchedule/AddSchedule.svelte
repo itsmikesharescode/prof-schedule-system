@@ -20,7 +20,6 @@
   import { cubicInOut } from 'svelte/easing';
   import { auxiliaryState } from '$lib/runes/auxiliaryState.svelte';
   import { page } from '$app/stores';
-  import { Skeleton } from '$lib/components/ui/skeleton/index.js';
   import type { Result } from '$lib/types';
 
   interface Props {
@@ -100,10 +99,11 @@
 
   const sb = $page.data.supabase;
 
-  let schoolYears = $state<Awaited<ReturnType<typeof getSchoolYears>>>(null);
-  let yearLevels = $state<Awaited<ReturnType<typeof getYearLevel>>>(null);
-  let sections = $state<Awaited<ReturnType<typeof getSections>>>(null);
-  let rooms = $state<Awaited<ReturnType<typeof getRooms>>>(null);
+  let schoolYearsDropdown = $state<Awaited<ReturnType<typeof getSchoolYears>>>(null);
+  let yearLevelsDropdown = $state<Awaited<ReturnType<typeof getYearLevel>>>(null);
+  let sectionsDropdown = $state<Awaited<ReturnType<typeof getSections>>>(null);
+  let roomsDropdown = $state<Awaited<ReturnType<typeof getRooms>>>(null);
+  let subjectsDropdown = $state<Awaited<ReturnType<typeof getSubjects>>>(null);
 
   const getSchoolYears = async (supa: typeof sb, department: string) => {
     if (!sb) return;
@@ -157,13 +157,28 @@
     return data;
   };
 
+  const getSubjects = async (supa: typeof sb, department: string) => {
+    if (!supa) return;
+    const { data, error } = await supa
+      .from('subjects_tb')
+      .select('*')
+      .eq('department', department)
+      .order('created_at', { ascending: true });
+
+    if (error) return null;
+
+    return data;
+  };
+
   const handleDepartmentChange = async () => {
-    [schoolYears, yearLevels, sections, rooms] = await Promise.all([
-      getSchoolYears($page.data.supabase, $formData.department),
-      getYearLevel($page.data.supabase, $formData.department),
-      getSections($page.data.supabase, $formData.department),
-      getRooms($page.data.supabase, $formData.department)
-    ]);
+    [schoolYearsDropdown, yearLevelsDropdown, sectionsDropdown, roomsDropdown, subjectsDropdown] =
+      await Promise.all([
+        getSchoolYears($page.data.supabase, $formData.department),
+        getYearLevel($page.data.supabase, $formData.department),
+        getSections($page.data.supabase, $formData.department),
+        getRooms($page.data.supabase, $formData.department),
+        getSubjects($page.data.supabase, $formData.department)
+      ]);
   };
 
   const cleanUp = () => {
@@ -178,10 +193,11 @@
       }
     ];
 
-    schoolYears = null;
-    yearLevels = null;
-    sections = null;
-    rooms = null;
+    schoolYearsDropdown = null;
+    yearLevelsDropdown = null;
+    sectionsDropdown = null;
+    roomsDropdown = null;
+    subjectsDropdown = null;
   };
 </script>
 
@@ -267,11 +283,11 @@
                   {#snippet children({ props })}
                     <Form.Label>School Year</Form.Label>
                     <SelectPicker
-                      disabled={!schoolYears?.length}
+                      disabled={!schoolYearsDropdown?.length}
                       name="Select school year"
                       {props}
                       class=""
-                      selections={schoolYears?.map((level) => ({
+                      selections={schoolYearsDropdown?.map((level) => ({
                         label: level.year,
                         value: level.year
                       })) ?? []}
@@ -289,11 +305,11 @@
                   {#snippet children({ props })}
                     <Form.Label>Select Year Level</Form.Label>
                     <SelectPicker
-                      disabled={!yearLevels?.levels.length}
+                      disabled={!yearLevelsDropdown?.levels.length}
                       name="Select year level"
                       {props}
                       class=""
-                      selections={yearLevels?.levels.map((level) => ({
+                      selections={yearLevelsDropdown?.levels.map((level) => ({
                         label: level.yearLevel,
                         value: level.yearLevel
                       })) ?? []}
@@ -311,11 +327,11 @@
                   {#snippet children({ props })}
                     <Form.Label>Select Section</Form.Label>
                     <SelectPicker
-                      disabled={!sections?.length}
+                      disabled={!sectionsDropdown?.length}
                       name="Select section"
                       {props}
                       class=""
-                      selections={sections?.map((section) => ({
+                      selections={sectionsDropdown?.map((section) => ({
                         label: section.section_code,
                         value: section.section_code
                       })) ?? []}
@@ -368,11 +384,14 @@
                 >
                   <div class="flex w-full max-w-sm flex-col gap-1.5">
                     <Label for="name">Subject Name</Label>
-                    <Input
-                      type="name"
-                      id="name"
-                      placeholder="Enter subject name"
-                      bind:value={subject.name}
+                    <SelectPicker
+                      disabled={!subjectsDropdown?.length}
+                      name="Select subject"
+                      selections={subjectsDropdown?.map((subject) => ({
+                        label: subject.name,
+                        value: subject.name
+                      })) ?? []}
+                      bind:selected={subject.name}
                     />
                   </div>
 
@@ -410,10 +429,10 @@
                     <Label for="name">Room</Label>
 
                     <Combobox
-                      disabled={!rooms?.length}
+                      disabled={!roomsDropdown?.length}
                       placeholder="Select room"
                       name="Select room"
-                      selections={rooms?.map((room) => ({
+                      selections={roomsDropdown?.map((room) => ({
                         label: room.code,
                         value: room.code
                       })) ?? []}
