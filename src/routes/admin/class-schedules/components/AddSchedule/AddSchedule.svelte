@@ -82,19 +82,12 @@
     }
   });
 
-  const cleanUp = () => {
-    subjects = [
-      {
-        id: crypto.randomUUID(),
-        name: '',
-        startTime: '',
-        endTime: '',
-        day: '',
-        room: ''
-      }
-    ];
-  };
   const sb = $page.data.supabase;
+
+  let schoolYears = $state<Awaited<ReturnType<typeof getSchoolYears>>>(null);
+  let yearLevels = $state<Awaited<ReturnType<typeof getYearLevel>>>(null);
+  let sections = $state<Awaited<ReturnType<typeof getSections>>>(null);
+  let rooms = $state<Awaited<ReturnType<typeof getRooms>>>(null);
 
   const getSchoolYears = async (supa: typeof sb, department: string) => {
     if (!sb) return;
@@ -124,11 +117,55 @@
 
   const getSections = async (supa: typeof sb, department: string) => {
     if (!supa) return;
-    const { data, error } = await supa.from('sections_tb').select('*').eq('department', department);
+    const { data, error } = await supa
+      .from('sections_tb')
+      .select('*')
+      .eq('department', department)
+      .order('created_at', { ascending: true });
 
     if (error) return null;
 
     return data;
+  };
+
+  const getRooms = async (supa: typeof sb, department: string) => {
+    if (!supa) return;
+    const { data, error } = await supa
+      .from('rooms_tb')
+      .select('*')
+      .eq('department', department)
+      .order('created_at', { ascending: true });
+
+    if (error) return null;
+
+    return data;
+  };
+
+  const handleDepartmentChange = async () => {
+    [schoolYears, yearLevels, sections, rooms] = await Promise.all([
+      getSchoolYears($page.data.supabase, $formData.department),
+      getYearLevel($page.data.supabase, $formData.department),
+      getSections($page.data.supabase, $formData.department),
+      getRooms($page.data.supabase, $formData.department)
+    ]);
+  };
+
+  const cleanUp = () => {
+    subjects = [
+      {
+        id: crypto.randomUUID(),
+        name: '',
+        startTime: '',
+        endTime: '',
+        day: '',
+        room: ''
+      }
+    ];
+
+    schoolYears = null;
+    yearLevels = null;
+    sections = null;
+    rooms = null;
   };
 </script>
 
@@ -174,6 +211,7 @@
                     <Form.Label>Select Department</Form.Label>
                     <SelectPicker
                       name="Select semester"
+                      onValueChange={handleDepartmentChange}
                       {props}
                       class=""
                       selections={auxiliaryState.formatDepartments()}
@@ -212,22 +250,18 @@
                 <Form.Control>
                   {#snippet children({ props })}
                     <Form.Label>School Year</Form.Label>
-                    {#await getSchoolYears($page.data.supabase, $formData.department)}
-                      <Skeleton class="h-[40px] w-full rounded-lg" />
-                    {:then schoolYears}
-                      <SelectPicker
-                        disabled={!schoolYears?.length}
-                        name="Select school year"
-                        {props}
-                        class=""
-                        selections={schoolYears?.map((level) => ({
-                          label: level.year,
-                          value: level.year
-                        })) ?? []}
-                        bind:selected={$formData.schoolYear}
-                      />
-                      <input type="hidden" {...props} bind:value={$formData.schoolYear} />
-                    {/await}
+                    <SelectPicker
+                      disabled={!schoolYears?.length}
+                      name="Select school year"
+                      {props}
+                      class=""
+                      selections={schoolYears?.map((level) => ({
+                        label: level.year,
+                        value: level.year
+                      })) ?? []}
+                      bind:selected={$formData.schoolYear}
+                    />
+                    <input type="hidden" {...props} bind:value={$formData.schoolYear} />
                   {/snippet}
                 </Form.Control>
                 <Form.Description />
@@ -238,22 +272,18 @@
                 <Form.Control>
                   {#snippet children({ props })}
                     <Form.Label>Select Year Level</Form.Label>
-                    {#await getYearLevel($page.data.supabase, $formData.department)}
-                      <Skeleton class="h-[40px] w-full rounded-lg" />
-                    {:then yearLevel}
-                      <SelectPicker
-                        disabled={!yearLevel?.levels.length}
-                        name="Select year level"
-                        {props}
-                        class=""
-                        selections={yearLevel?.levels.map((level) => ({
-                          label: level.yearLevel,
-                          value: level.yearLevel
-                        })) ?? []}
-                        bind:selected={$formData.yearLevel}
-                      />
-                      <input type="hidden" {...props} bind:value={$formData.yearLevel} />
-                    {/await}
+                    <SelectPicker
+                      disabled={!yearLevels?.levels.length}
+                      name="Select year level"
+                      {props}
+                      class=""
+                      selections={yearLevels?.levels.map((level) => ({
+                        label: level.yearLevel,
+                        value: level.yearLevel
+                      })) ?? []}
+                      bind:selected={$formData.yearLevel}
+                    />
+                    <input type="hidden" {...props} bind:value={$formData.yearLevel} />
                   {/snippet}
                 </Form.Control>
                 <Form.Description />
@@ -264,22 +294,18 @@
                 <Form.Control>
                   {#snippet children({ props })}
                     <Form.Label>Select Section</Form.Label>
-                    {#await getSections($page.data.supabase, $formData.department)}
-                      <Skeleton class="h-[40px] w-full rounded-lg" />
-                    {:then sections}
-                      <SelectPicker
-                        disabled={!sections?.length}
-                        name="Select section"
-                        {props}
-                        class=""
-                        selections={sections?.map((section) => ({
-                          label: section.section_code,
-                          value: section.section_code
-                        })) ?? []}
-                        bind:selected={$formData.section}
-                      />
-                      <input type="hidden" {...props} bind:value={$formData.section} />
-                    {/await}
+                    <SelectPicker
+                      disabled={!sections?.length}
+                      name="Select section"
+                      {props}
+                      class=""
+                      selections={sections?.map((section) => ({
+                        label: section.section_code,
+                        value: section.section_code
+                      })) ?? []}
+                      bind:selected={$formData.section}
+                    />
+                    <input type="hidden" {...props} bind:value={$formData.section} />
                   {/snippet}
                 </Form.Control>
                 <Form.Description />
@@ -366,15 +392,15 @@
 
                   <div class="flex w-full max-w-sm flex-col gap-1.5">
                     <Label for="name">Room</Label>
+
                     <Combobox
+                      disabled={!rooms?.length}
                       placeholder="Select room"
                       name="Select room"
-                      selections={[
-                        { label: 'Room 1', value: 'Room 1' },
-                        { label: 'Room 2', value: 'Room 2' },
-                        { label: 'Room 3', value: 'Room 3' },
-                        { label: 'Room 4', value: 'Room 4' }
-                      ]}
+                      selections={rooms?.map((room) => ({
+                        label: room.code,
+                        value: room.code
+                      })) ?? []}
                       bind:selected={subject.room}
                     />
                   </div>
