@@ -17,6 +17,9 @@
   import { toast } from 'svelte-sonner';
   import { cubicInOut } from 'svelte/easing';
   import { auxiliaryState } from '$lib/runes/auxiliaryState.svelte';
+  import { page } from '$app/stores';
+  import { Skeleton } from '$lib/components/ui/skeleton/index.js';
+
   interface Props {
     addScheduleForm: SuperValidated<Infer<AddScheduleSchema>>;
   }
@@ -91,6 +94,42 @@
       }
     ];
   };
+  const sb = $page.data.supabase;
+
+  const getSchoolYears = async (supa: typeof sb, department: string) => {
+    if (!sb) return;
+    const { data, error } = await sb
+      .from('school_years_tb')
+      .select('*')
+      .eq('department', department)
+      .order('created_at', { ascending: true });
+
+    if (error) return null;
+
+    return data;
+  };
+
+  const getYearLevel = async (supa: typeof sb, department: string) => {
+    if (!supa) return;
+    const { data, error } = await supa
+      .from('year_levels_tb')
+      .select('*')
+      .eq('department', department)
+      .single();
+
+    if (error) return null;
+
+    return data;
+  };
+
+  const getSections = async (supa: typeof sb, department: string) => {
+    if (!supa) return;
+    const { data, error } = await supa.from('sections_tb').select('*').eq('department', department);
+
+    if (error) return null;
+
+    return data;
+  };
 </script>
 
 <Button size="sm" onclick={() => (open = true)}>
@@ -129,18 +168,18 @@
                 <span class="font-semibold text-muted-foreground underline">Records</span>
               </div>
 
-              <Form.Field {form} name="schoolYear">
+              <Form.Field {form} name="department">
                 <Form.Control>
                   {#snippet children({ props })}
-                    <Form.Label>School Year</Form.Label>
+                    <Form.Label>Select Department</Form.Label>
                     <SelectPicker
-                      name="Select school year"
+                      name="Select semester"
                       {props}
                       class=""
-                      selections={auxiliaryState.formatSchoolYears()}
-                      bind:selected={$formData.schoolYear}
+                      selections={auxiliaryState.formatDepartments()}
+                      bind:selected={$formData.department}
                     />
-                    <input type="hidden" {...props} bind:value={$formData.schoolYear} />
+                    <input type="hidden" {...props} bind:value={$formData.semester} />
                   {/snippet}
                 </Form.Control>
                 <Form.Description />
@@ -169,18 +208,26 @@
                 <Form.FieldErrors />
               </Form.Field>
 
-              <Form.Field {form} name="department">
+              <Form.Field {form} name="schoolYear">
                 <Form.Control>
                   {#snippet children({ props })}
-                    <Form.Label>Select Department</Form.Label>
-                    <SelectPicker
-                      name="Select semester"
-                      {props}
-                      class=""
-                      selections={auxiliaryState.formatDepartments()}
-                      bind:selected={$formData.department}
-                    />
-                    <input type="hidden" {...props} bind:value={$formData.semester} />
+                    <Form.Label>School Year</Form.Label>
+                    {#await getSchoolYears($page.data.supabase, $formData.department)}
+                      <Skeleton class="h-[40px] w-full rounded-lg" />
+                    {:then schoolYears}
+                      <SelectPicker
+                        disabled={!schoolYears?.length}
+                        name="Select school year"
+                        {props}
+                        class=""
+                        selections={schoolYears?.map((level) => ({
+                          label: level.year,
+                          value: level.year
+                        })) ?? []}
+                        bind:selected={$formData.schoolYear}
+                      />
+                      <input type="hidden" {...props} bind:value={$formData.schoolYear} />
+                    {/await}
                   {/snippet}
                 </Form.Control>
                 <Form.Description />
@@ -191,19 +238,22 @@
                 <Form.Control>
                   {#snippet children({ props })}
                     <Form.Label>Select Year Level</Form.Label>
-                    <SelectPicker
-                      name="Select year level"
-                      {props}
-                      class=""
-                      selections={[
-                        { label: 'First Year', value: 'First Year' },
-                        { label: 'Second Year', value: 'Second Year' },
-                        { label: 'Third Year', value: 'Third Year' },
-                        { label: 'Fourth Year', value: 'Fourth Year' }
-                      ]}
-                      bind:selected={$formData.yearLevel}
-                    />
-                    <input type="hidden" {...props} bind:value={$formData.yearLevel} />
+                    {#await getYearLevel($page.data.supabase, $formData.department)}
+                      <Skeleton class="h-[40px] w-full rounded-lg" />
+                    {:then yearLevel}
+                      <SelectPicker
+                        disabled={!yearLevel?.levels.length}
+                        name="Select year level"
+                        {props}
+                        class=""
+                        selections={yearLevel?.levels.map((level) => ({
+                          label: level.yearLevel,
+                          value: level.yearLevel
+                        })) ?? []}
+                        bind:selected={$formData.yearLevel}
+                      />
+                      <input type="hidden" {...props} bind:value={$formData.yearLevel} />
+                    {/await}
                   {/snippet}
                 </Form.Control>
                 <Form.Description />
@@ -214,19 +264,22 @@
                 <Form.Control>
                   {#snippet children({ props })}
                     <Form.Label>Select Section</Form.Label>
-                    <SelectPicker
-                      name="Select section"
-                      {props}
-                      class=""
-                      selections={[
-                        { label: 'Section A', value: 'Section A' },
-                        { label: 'Section B', value: 'Section B' },
-                        { label: 'Section C', value: 'Section C' },
-                        { label: 'Section D', value: 'Section D' }
-                      ]}
-                      bind:selected={$formData.section}
-                    />
-                    <input type="hidden" {...props} bind:value={$formData.section} />
+                    {#await getSections($page.data.supabase, $formData.department)}
+                      <Skeleton class="h-[40px] w-full rounded-lg" />
+                    {:then sections}
+                      <SelectPicker
+                        disabled={!sections?.length}
+                        name="Select section"
+                        {props}
+                        class=""
+                        selections={sections?.map((section) => ({
+                          label: section.section_code,
+                          value: section.section_code
+                        })) ?? []}
+                        bind:selected={$formData.section}
+                      />
+                      <input type="hidden" {...props} bind:value={$formData.section} />
+                    {/await}
                   {/snippet}
                 </Form.Control>
                 <Form.Description />

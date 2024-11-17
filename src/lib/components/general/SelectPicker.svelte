@@ -20,12 +20,14 @@
     selected: string;
     class?: ClassNameValue;
     name: string;
+    onValueChange?: (value: string) => void;
+    disabled?: boolean;
   }
 
   let { selected = $bindable(), ...props }: Props = $props();
 </script>
 
-<Select.Root type="single" bind:value={selected}>
+<Select.Root {...props} type="single" bind:value={selected}>
   <Select.Trigger class={cn('', props.class)}>
     {selected ? selected : props.name}
   </Select.Trigger>
