@@ -57,9 +57,9 @@ export const actions: Actions = {
 
   deleteRoomEvent: async ({ request, locals: { supabase } }) => {
     const formData = await request.formData();
-    const id = formData.get('id');
+    const id = formData.get('id') as string;
 
-    const { error } = await supabase.from('rooms_tb').delete().eq('id', id);
+    const { error } = await supabase.from('rooms_tb').delete().eq('id', Number(id));
     if (error) return fail(401, { msg: error.message });
     return { msg: 'Deleted successfully' };
   }

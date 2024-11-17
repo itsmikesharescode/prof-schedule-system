@@ -5,9 +5,7 @@ export const logsSchema = z.object({
   created_at: z.string(),
   type: z.string(),
   location_name: z.string(),
-  user_id: z.string(),
-  fullname: z.string(),
-  position: z.string()
+  user_id: z.string()
 });
 
 export type LogsPageTable = z.output<typeof logsSchema>;

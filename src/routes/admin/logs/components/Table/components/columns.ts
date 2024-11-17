@@ -53,46 +53,7 @@ export const columns: ColumnDef<LogsPageTable>[] = [
     enableSorting: true,
     enableHiding: true
   },
-  {
-    accessorKey: 'fullname',
-    header: ({ column }) => {
-      return renderComponent(TableColumnHeader<LogsPageTable, unknown>, {
-        column,
-        title: 'Fullname'
-      });
-    },
-    cell: ({ row }) => {
-      const fullnameSnippet = createRawSnippet<[string]>((getFullname) => {
-        return {
-          render: () => `<div class="w-full">${getFullname()}</div>`
-        };
-      });
 
-      return renderSnippet(fullnameSnippet, row.getValue('fullname'));
-    },
-    enableSorting: true,
-    enableHiding: true
-  },
-  {
-    accessorKey: 'position',
-    header: ({ column }) => {
-      return renderComponent(TableColumnHeader<LogsPageTable, unknown>, {
-        column,
-        title: 'Position'
-      });
-    },
-    cell: ({ row }) => {
-      const positionSnippet = createRawSnippet<[string]>((getPosition) => {
-        return {
-          render: () => `<div class="w-full">${getPosition()}</div>`
-        };
-      });
-
-      return renderSnippet(positionSnippet, row.getValue('position'));
-    },
-    enableSorting: true,
-    enableHiding: true
-  },
   {
     accessorKey: 'type',
     header: ({ column }) => {
@@ -147,7 +108,7 @@ export const columns: ColumnDef<LogsPageTable>[] = [
       const createdAtSnippet = createRawSnippet<[string]>((getCreatedAt) => {
         return {
           render: () =>
-            `<div class="w-[80px]">${new Date(getCreatedAt()).toLocaleDateString()}</div>`
+            `<div class="w-[180px]">${new Date(getCreatedAt()).toLocaleDateString()} @ ${new Date(getCreatedAt()).toLocaleTimeString()}</div>`
         };
       });
 
