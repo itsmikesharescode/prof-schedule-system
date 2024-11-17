@@ -1,10 +1,10 @@
 import type { Database } from '$lib/database.types';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
-export const streamDepartments = async (supabase: SupabaseClient<Database>) => {
+export const streamYearLevels = async (supabase: SupabaseClient<Database>) => {
   if (!supabase) return null;
   const { data, error } = await supabase
-    .from('programs_tb')
+    .from('year_levels_tb')
     .select('*')
     .order('created_at', { ascending: true });
 

@@ -26,7 +26,6 @@
   });
 
   const auxilarySetter = async () => {
-    //TODO: if there is better solution maybe replace this we need to promise all in the client for better navigation
     let tempData = await data.streamDepartments;
     auxiliaryState.setDepartments(tempData);
   };
