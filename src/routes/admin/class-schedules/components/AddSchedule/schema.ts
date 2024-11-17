@@ -5,6 +5,7 @@ export const addScheduleSchema = z.object({
   semester: z.string().min(1, { message: 'Semester is required.' }),
   yearLevel: z.string().min(1, { message: 'Year level is required.' }),
   section: z.string().min(1, { message: 'Section is required.' }),
+  department: z.string().min(1, { message: 'Department is required.' }),
   subjects: z
     .array(
       z.object({

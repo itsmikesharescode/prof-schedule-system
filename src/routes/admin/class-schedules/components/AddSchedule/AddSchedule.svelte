@@ -40,16 +40,7 @@
 
       if (!form.valid) return;
 
-      subjects = [
-        {
-          id: crypto.randomUUID(),
-          name: '',
-          startTime: '',
-          endTime: '',
-          day: '',
-          room: ''
-        }
-      ];
+      cleanUp();
     }
   });
 
@@ -68,7 +59,7 @@
 
   let lastSubjectCard = $state<HTMLElement>();
 
-  function addSubject() {
+  const addSubject = () => {
     subjects.push({
       id: crypto.randomUUID(),
       name: '',
@@ -80,13 +71,26 @@
     setTimeout(() => {
       lastSubjectCard?.scrollIntoView({ behavior: 'smooth' });
     }, 0);
-  }
+  };
 
   $effect(() => {
     if (subjects.length) {
       $formData.subjects = subjects;
     }
   });
+
+  const cleanUp = () => {
+    subjects = [
+      {
+        id: crypto.randomUUID(),
+        name: '',
+        startTime: '',
+        endTime: '',
+        day: '',
+        room: ''
+      }
+    ];
+  };
 </script>
 
 <Button size="sm" onclick={() => (open = true)}>
@@ -100,16 +104,7 @@
       onclick={() => {
         open = false;
         form.reset();
-        subjects = [
-          {
-            id: crypto.randomUUID(),
-            name: '',
-            startTime: '',
-            endTime: '',
-            day: '',
-            room: ''
-          }
-        ];
+        cleanUp();
       }}
       class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
     >
@@ -173,6 +168,28 @@
                         { label: 'Third Semester', value: 'Third Semester' }
                       ]}
                       bind:selected={$formData.semester}
+                    />
+                    <input type="hidden" {...props} bind:value={$formData.semester} />
+                  {/snippet}
+                </Form.Control>
+                <Form.Description />
+                <Form.FieldErrors />
+              </Form.Field>
+
+              <Form.Field {form} name="department">
+                <Form.Control>
+                  {#snippet children({ props })}
+                    <Form.Label>Select Department</Form.Label>
+                    <SelectPicker
+                      name="Select semester"
+                      {props}
+                      class=""
+                      selections={[
+                        { label: 'First Department', value: 'First Department' },
+                        { label: 'Second Department', value: 'Second Department' },
+                        { label: 'Third Department', value: 'Third Department' }
+                      ]}
+                      bind:selected={$formData.department}
                     />
                     <input type="hidden" {...props} bind:value={$formData.semester} />
                   {/snippet}
