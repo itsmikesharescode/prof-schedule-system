@@ -165,7 +165,7 @@ export const columns: ColumnDef<ClassSchedulesPageTable>[] = [
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<ClassSchedulesPageTable, unknown>, {
         column,
-        title: 'Semester'
+        title: 'Subjects'
       });
     },
     cell: ({ row }) => renderComponent(TableSubjectsCell, { row }),

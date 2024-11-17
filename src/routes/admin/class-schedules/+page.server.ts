@@ -4,13 +4,13 @@ import { superValidate } from 'sveltekit-superforms';
 import { addScheduleSchema } from './components/AddSchedule/schema';
 import { zod } from 'sveltekit-superforms/adapters';
 import { updateScheduleSchema } from './components/UpdateSchedule/schema';
+import { streamClassSchedules } from '../(db_calls)/streamClassSchedules';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals: { supabase }, url }) => {
   return {
-    addScheduleForm: await superValidate(zod(addScheduleSchema), { id: crypto.randomUUID() }),
-    updateScheduleForm: await superValidate(zod(updateScheduleSchema), {
-      id: crypto.randomUUID()
-    })
+    addScheduleForm: await superValidate(zod(addScheduleSchema)),
+    updateScheduleForm: await superValidate(zod(updateScheduleSchema)),
+    streamClassSchedules: streamClassSchedules(supabase, url.searchParams.get('filter'))
   };
 };
 
