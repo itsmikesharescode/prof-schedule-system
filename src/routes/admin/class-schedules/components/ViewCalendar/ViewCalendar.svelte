@@ -1,14 +1,28 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import Schedules from '$lib/components/general/Schedules.svelte';
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
   import { useTableState } from '../Table/tableState.svelte';
   import X from 'lucide-svelte/icons/x';
-
+  import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
   const tableState = useTableState();
+  let showSchedules = $state(false);
+
+  $effect(() => {
+    if (tableState.getShowViewCalendar()) {
+      setTimeout(() => {
+        showSchedules = true;
+      }, 300);
+    }
+
+    return () => {
+      showSchedules = false;
+    };
+  });
 </script>
 
 <AlertDialog.Root open={tableState.getShowViewCalendar()}>
-  <AlertDialog.Content class="max-h-[80dvh] max-w-[1400px] overflow-auto">
+  <AlertDialog.Content class="max-w-[1400px]">
     <button
       onclick={() => {
         tableState.setActiveRow(null);
@@ -23,6 +37,10 @@
       <AlertDialog.Title>Viewing Calendar</AlertDialog.Title>
     </AlertDialog.Header>
 
-    <Schedules subjects={tableState.getActiveRow()?.subjects ?? []} />
+    <ScrollArea class="h-[80dvh]">
+      {#if showSchedules}
+        <Schedules subjects={tableState.getActiveRow()?.subjects ?? []} />
+      {/if}
+    </ScrollArea>
   </AlertDialog.Content>
 </AlertDialog.Root>
