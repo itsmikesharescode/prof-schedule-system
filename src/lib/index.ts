@@ -39,26 +39,21 @@ export const findConflicts = (subjects: any[]) => {
       const subject1 = subjects[i];
       const subject2 = subjects[j];
 
-      // Check each schedule combination
-      for (const schedule1 of subject1.schedules) {
-        for (const schedule2 of subject2.schedules) {
-          if (schedule1.day === schedule2.day) {
-            if (
-              checkTimeOverlap(
-                schedule1.startTime,
-                schedule1.endTime,
-                schedule2.startTime,
-                schedule2.endTime
-              )
-            ) {
-              conflicts.push({
-                subject1: subject1.name,
-                subject2: subject2.name,
-                day: schedule1.day,
-                time: `${schedule1.startTime} - ${schedule1.endTime}`
-              });
-            }
-          }
+      if (subject1.day === subject2.day) {
+        if (
+          checkTimeOverlap(
+            subject1.startTime,
+            subject1.endTime,
+            subject2.startTime,
+            subject2.endTime
+          )
+        ) {
+          conflicts.push({
+            subject1: subject1.name,
+            subject2: subject2.name,
+            day: subject1.day,
+            time: `${subject1.startTime} - ${subject1.endTime}`
+          });
         }
       }
     }

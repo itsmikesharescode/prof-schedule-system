@@ -7,7 +7,7 @@
   import { initTableState } from './components/Table/tableState.svelte';
   import DeleteSchedule from './components/DeleteSchedule/DeleteSchedule.svelte';
   import UpdateSchedule from './components/UpdateSchedule/UpdateSchedule.svelte';
-
+  import ViewCalendar from './components/ViewCalendar/ViewCalendar.svelte';
   const { data } = $props();
 
   initTableState();
@@ -32,3 +32,4 @@
 
 <DeleteSchedule />
 <UpdateSchedule updateScheduleForm={data.updateScheduleForm} />
+<ViewCalendar />

@@ -12,6 +12,16 @@ class TableState {
     return this.#activeRow;
   }
 
+  #showViewCalendar = $state(false);
+
+  setShowViewCalendar(show: boolean) {
+    this.#showViewCalendar = show;
+  }
+
+  getShowViewCalendar() {
+    return this.#showViewCalendar;
+  }
+
   #showUpdate = $state(false);
 
   setShowUpdate(show: boolean) {

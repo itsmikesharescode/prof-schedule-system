@@ -6,8 +6,17 @@
   import dayGridPlugin from '@fullcalendar/daygrid'; // For month/week grid view
   import timeGridPlugin from '@fullcalendar/timegrid'; // For detailed time grid view
 
+  interface Subject {
+    id: string;
+    day: string;
+    name: string;
+    room: string;
+    endTime: string;
+    startTime: string;
+  }
+
   interface Props {
-    subjects: any[];
+    subjects: Subject[];
   }
 
   let { subjects }: Props = $props();
@@ -17,9 +26,8 @@
   let calendarEl: HTMLElement;
 
   // Function to transform subject schedules into FullCalendar event format
-  const transformSchedulesToEvents = (subjects: any[]) => {
+  const transformSchedulesToEvents = (subjects: Subject[]) => {
     const events = [];
-    // Map days to their corresponding numeric values (0-6)
     const daysMap: Record<string, number> = {
       Sunday: 0,
       Monday: 1,
@@ -35,34 +43,31 @@
       conflicts.flatMap((conflict) => [conflict.subject1, conflict.subject2])
     );
 
-    // Iterate through each subject and its schedules
+    // Iterate through each subject entry
     for (const subject of subjects) {
-      for (const schedule of subject.schedules) {
-        // Calculate the next occurrence of the scheduled day
-        const date = new Date();
-        const targetDay = daysMap[schedule.day];
-        const currentDay = date.getDay();
-        date.setDate(date.getDate() + ((targetDay + 7 - currentDay) % 7));
+      // Calculate the next occurrence of the scheduled day
+      const date = new Date();
+      const targetDay = daysMap[subject.day];
+      const currentDay = date.getDay();
+      date.setDate(date.getDate() + ((targetDay + 7 - currentDay) % 7));
 
-        // Check if this subject has any conflicts
-        const isConflicting = conflictingSubjects.has(subject.name);
+      // Check if this subject has any conflicts
+      const isConflicting = conflictingSubjects.has(subject.name);
 
-        // Create event object with styling based on conflict status
-        events.push({
-          title: subject.name,
-          startTime: convertTo24Hour(schedule.startTime),
-          endTime: convertTo24Hour(schedule.endTime),
-          daysOfWeek: [targetDay],
-          // Apply different styling for conflicting events
-          backgroundColor: isConflicting ? '#FFE5E5' : generatePastelColor(subject.id),
-          borderColor: isConflicting ? '#FF0000' : generatePastelColor(subject.id),
-          textColor: isConflicting ? '#FF0000' : '#000000',
-          extendedProps: {
-            department: subject.name.split('-')[0].trim(),
-            isConflicting
-          }
-        });
-      }
+      // Create event object with styling based on conflict status
+      events.push({
+        title: `${subject.name} (${subject.room})`,
+        startTime: convertTo24Hour(subject.startTime),
+        endTime: convertTo24Hour(subject.endTime),
+        daysOfWeek: [targetDay],
+        backgroundColor: isConflicting ? '#FFE5E5' : generatePastelColor(subject.id),
+        borderColor: isConflicting ? '#FF0000' : generatePastelColor(subject.id),
+        textColor: isConflicting ? '#FF0000' : '#000000',
+        extendedProps: {
+          room: subject.room,
+          isConflicting
+        }
+      });
     }
     return events;
   };
