@@ -1,3 +1,5 @@
+
+-- just run this after initialization
 -- first, create a function to handle the logging
 create or replace function log_table_changes()
 returns trigger as $$

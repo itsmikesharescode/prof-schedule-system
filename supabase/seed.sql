@@ -61,7 +61,34 @@ CREATE EXTENSION IF NOT EXISTS "pgjwt" WITH SCHEMA "extensions";
 CREATE EXTENSION IF NOT EXISTS "supabase_vault" WITH SCHEMA "vault";
 
 
+
+
+
+
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA "extensions";
+
+
+
+
+
+
+CREATE OR REPLACE FUNCTION "public"."drop_triggers_and_function"() RETURNS "void"
+    LANGUAGE "plpgsql"
+    AS $$
+begin
+    drop trigger if exists log_class_schedules_changes on class_schedules_tb;
+    drop trigger if exists log_programs_changes on programs_tb;
+    drop trigger if exists log_rooms_changes on rooms_tb;
+    drop trigger if exists log_school_years_changes on school_years_tb;
+    drop trigger if exists log_sections_changes on sections_tb;
+    drop trigger if exists log_subjects_changes on subjects_tb;
+    drop trigger if exists log_year_levels_changes on year_levels_tb;
+    drop function if exists log_table_changes();
+end;
+$$;
+
+
+ALTER FUNCTION "public"."drop_triggers_and_function"() OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."is_admin"() RETURNS boolean
@@ -106,7 +133,27 @@ $$;
 ALTER FUNCTION "public"."is_program_head"() OWNER TO "postgres";
 
 
+CREATE OR REPLACE FUNCTION "public"."log_table_changes"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$
+begin
+    insert into logs_tb (user_id, created_at, type, location_name)
+    values (
+        coalesce(auth.uid(), '00000000-0000-0000-0000-000000000000'::uuid),
+        now(),
+        case
+            when tg_op = 'INSERT' then 'inserted'
+            when tg_op = 'UPDATE' then 'updated'
+            when tg_op = 'DELETE' then 'deleted'
+        end,
+        tg_table_name::text
+    );
+    return new;
+end;
+$$;
 
+
+ALTER FUNCTION "public"."log_table_changes"() OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."on_auth_user_created"() RETURNS "trigger"
@@ -480,6 +527,34 @@ ALTER TABLE ONLY "public"."year_levels_tb"
 
 
 
+CREATE OR REPLACE TRIGGER "log_class_schedules_tb_changes" AFTER INSERT OR DELETE OR UPDATE ON "public"."class_schedules_tb" FOR EACH ROW EXECUTE FUNCTION "public"."log_table_changes"();
+
+
+
+CREATE OR REPLACE TRIGGER "log_programs_tb_changes" AFTER INSERT OR DELETE OR UPDATE ON "public"."programs_tb" FOR EACH ROW EXECUTE FUNCTION "public"."log_table_changes"();
+
+
+
+CREATE OR REPLACE TRIGGER "log_rooms_tb_changes" AFTER INSERT OR DELETE OR UPDATE ON "public"."rooms_tb" FOR EACH ROW EXECUTE FUNCTION "public"."log_table_changes"();
+
+
+
+CREATE OR REPLACE TRIGGER "log_school_years_tb_changes" AFTER INSERT OR DELETE OR UPDATE ON "public"."school_years_tb" FOR EACH ROW EXECUTE FUNCTION "public"."log_table_changes"();
+
+
+
+CREATE OR REPLACE TRIGGER "log_sections_tb_changes" AFTER INSERT OR DELETE OR UPDATE ON "public"."sections_tb" FOR EACH ROW EXECUTE FUNCTION "public"."log_table_changes"();
+
+
+
+CREATE OR REPLACE TRIGGER "log_subjects_tb_changes" AFTER INSERT OR DELETE OR UPDATE ON "public"."subjects_tb" FOR EACH ROW EXECUTE FUNCTION "public"."log_table_changes"();
+
+
+
+CREATE OR REPLACE TRIGGER "log_year_levels_tb_changes" AFTER INSERT OR DELETE OR UPDATE ON "public"."year_levels_tb" FOR EACH ROW EXECUTE FUNCTION "public"."log_table_changes"();
+
+
+
 ALTER TABLE ONLY "public"."logs_tb"
     ADD CONSTRAINT "logs_tb_user_id_fkey1" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE CASCADE;
 
@@ -787,6 +862,14 @@ GRANT ALL ON FUNCTION "public"."is_professor"() TO "service_role";
 GRANT ALL ON FUNCTION "public"."is_program_head"() TO "anon";
 GRANT ALL ON FUNCTION "public"."is_program_head"() TO "authenticated";
 GRANT ALL ON FUNCTION "public"."is_program_head"() TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."log_table_changes"() TO "anon";
+GRANT ALL ON FUNCTION "public"."log_table_changes"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."log_table_changes"() TO "service_role";
+
+
 
 GRANT ALL ON FUNCTION "public"."on_auth_user_created"() TO "anon";
 GRANT ALL ON FUNCTION "public"."on_auth_user_created"() TO "authenticated";
