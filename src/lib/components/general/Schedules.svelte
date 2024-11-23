@@ -195,22 +195,4 @@
     --fc-list-event-hover-bg-color: hsl(var(--accent));
     --fc-page-bg-color: hsl(var(--background));
   }
-
-  :global(.fc .fc-button) {
-    @apply rounded-md px-4 py-2 text-sm font-medium transition-colors;
-  }
-
-  :global(.fc .fc-button-primary:not(:disabled):active),
-  :global(.fc .fc-button-primary:not(:disabled).fc-button-active) {
-    @apply bg-accent text-accent-foreground;
-  }
-
-  :global(.fc-theme-standard td),
-  :global(.fc-theme-standard th) {
-    @apply border border-border;
-  }
-
-  :global(.fc .fc-scrollgrid) {
-    @apply rounded-md border border-border;
-  }
 </style>
