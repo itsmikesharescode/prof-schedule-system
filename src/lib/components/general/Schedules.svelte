@@ -21,6 +21,8 @@
 
   let { subjects }: Props = $props();
 
+  console.log(subjects);
+
   // Calendar instance and DOM element references
   let calendar: Calendar;
   let calendarEl: HTMLElement;
@@ -38,25 +40,38 @@
       Saturday: 6
     };
 
-    // Create a Set of subjects that have scheduling conflicts
-    const conflictingSubjects = new Set(
-      conflicts.flatMap((conflict) => [conflict.subject1, conflict.subject2])
-    );
+    // Helper function to check if two time ranges overlap
+    const isTimeOverlap = (subject1: Subject, subject2: Subject) => {
+      const start1 = convertTo24Hour(subject1.startTime);
+      const end1 = convertTo24Hour(subject1.endTime);
+      const start2 = convertTo24Hour(subject2.startTime);
+      const end2 = convertTo24Hour(subject2.endTime);
+      return start1 < end2 && start2 < end1;
+    };
 
-    // Iterate through each subject entry
+    // Helper function to check if a subject has conflicts
+    const hasConflictingSchedule = (currentSubject: Subject) => {
+      return subjects.some(
+        (otherSubject) =>
+          currentSubject.id !== otherSubject.id && // Don't compare with self
+          currentSubject.day === otherSubject.day && // Same day
+          isTimeOverlap(currentSubject, otherSubject) // Overlapping time
+      );
+    };
+
     for (const subject of subjects) {
-      // Check if this subject has any conflicts
-      const isConflicting = conflictingSubjects.has(subject.name);
+      const isConflicting = hasConflictingSchedule(subject);
 
-      // Create recurring event
       events.push({
         title: `${subject.name} (${subject.room})`,
-        startTime: convertTo24Hour(subject.startTime), // Just use the time
-        endTime: convertTo24Hour(subject.endTime), // Just use the time
-        daysOfWeek: [daysMap[subject.day]], // Array with the day number
-        backgroundColor: isConflicting ? '#FFE5E5' : generatePastelColor(subject.id),
-        borderColor: isConflicting ? '#FF0000' : generatePastelColor(subject.id),
-        textColor: isConflicting ? '#FF0000' : '#000000',
+        startTime: convertTo24Hour(subject.startTime),
+        endTime: convertTo24Hour(subject.endTime),
+        daysOfWeek: [daysMap[subject.day]],
+        backgroundColor: isConflicting
+          ? 'hsl(var(--destructive))'
+          : generatePastelColor(subject.id),
+        borderColor: isConflicting ? 'hsl(var(--destructive))' : generatePastelColor(subject.id),
+        textColor: isConflicting ? 'hsl(var(--destructive-foreground))' : '#000000',
         extendedProps: {
           room: subject.room,
           isConflicting
