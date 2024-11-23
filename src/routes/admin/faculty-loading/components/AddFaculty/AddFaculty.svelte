@@ -7,10 +7,9 @@
   import * as Form from '$lib/components/ui/form/index.js';
   import { Input } from '$lib/components/ui/input/index.js';
   import { addFacultySchema, type AddFacultySchema } from './schema';
-  import ImagePicker from '$lib/components/general/ImagePicker.svelte';
   import { ScrollArea } from '$lib/components/ui/scroll-area/index';
   import Combobox from '$lib/components/general/Combobox.svelte';
-  import { availableTimes, days, departments, interests, titles } from '$lib/metadata';
+  import { availableTimes, days } from '$lib/metadata';
   import SelectPicker from '$lib/components/general/SelectPicker.svelte';
   import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte';
 
@@ -55,6 +54,17 @@
     </AlertDialog.Header>
     <ScrollArea class="h-[80dvh]">
       <form method="POST" enctype="multipart/form-data" use:enhance class=" ">
+        <Form.Field {form} name="username">
+          <Form.Control>
+            {#snippet children({ props })}
+              <Form.Label>Username</Form.Label>
+              <Input {...props} bind:value={$formData.username} />
+            {/snippet}
+          </Form.Control>
+          <Form.Description>This is your public display name.</Form.Description>
+          <Form.FieldErrors />
+        </Form.Field>
+
         <div class="pointer-events-none sticky bottom-6 left-0 right-0 flex justify-end px-6">
           <Form.Button size="sm" class="pointer-events-auto">Create</Form.Button>
         </div>
