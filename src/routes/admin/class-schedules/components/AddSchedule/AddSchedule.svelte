@@ -7,7 +7,6 @@
   import { type Infer, superForm, type SuperValidated } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import * as Form from '$lib/components/ui/form/index.js';
-  import { Input } from '$lib/components/ui/input/index.js';
   import { addScheduleSchema, type AddScheduleSchema } from './schema';
   import { ScrollArea } from '$lib/components/ui/scroll-area/index';
   import Combobox from '$lib/components/general/Combobox.svelte';
@@ -21,6 +20,13 @@
   import { auxiliaryState } from '$lib/runes/auxiliaryState.svelte';
   import { page } from '$app/stores';
   import type { Result } from '$lib/types';
+  import {
+    getSchoolYears,
+    getRooms,
+    getSections,
+    getSubjects,
+    getYearLevel
+  } from '../../(db_calls)/getDropDowns';
 
   interface Props {
     addScheduleForm: SuperValidated<Infer<AddScheduleSchema>>;
@@ -76,99 +82,50 @@
   ]);
 
   let lastSubjectCard = $state<HTMLElement>();
-
-  const addSubject = () => {
-    subjects.push({
-      id: crypto.randomUUID(),
-      name: '',
-      startTime: '',
-      endTime: '',
-      day: '',
-      room: ''
-    });
-    setTimeout(() => {
-      lastSubjectCard?.scrollIntoView({ behavior: 'smooth' });
-    }, 0);
-  };
-
-  $effect(() => {
-    if (subjects.length) {
-      $formData.subjects = subjects;
-    }
-  });
-
-  const sb = $page.data.supabase;
-
   let schoolYearsDropdown = $state<Awaited<ReturnType<typeof getSchoolYears>>>(null);
   let yearLevelsDropdown = $state<Awaited<ReturnType<typeof getYearLevel>>>(null);
   let sectionsDropdown = $state<Awaited<ReturnType<typeof getSections>>>(null);
   let roomsDropdown = $state<Awaited<ReturnType<typeof getRooms>>>(null);
   let subjectsDropdown = $state<Awaited<ReturnType<typeof getSubjects>>>(null);
 
-  const getSchoolYears = async (supa: typeof sb, department: string) => {
-    if (!sb) return;
-    const { data, error } = await sb
-      .from('school_years_tb')
-      .select('*')
-      .eq('department', department)
-      .order('created_at', { ascending: true });
+  const addFactory = () => {
+    const addSubject = () => {
+      subjects.push({
+        id: crypto.randomUUID(),
+        name: '',
+        startTime: '',
+        endTime: '',
+        day: '',
+        room: ''
+      });
+      setTimeout(() => {
+        lastSubjectCard?.scrollIntoView({ behavior: 'smooth' });
+      }, 0);
+    };
 
-    if (error) return null;
+    const cleanUp = () => {
+      subjects = [
+        {
+          id: crypto.randomUUID(),
+          name: '',
+          startTime: '',
+          endTime: '',
+          day: '',
+          room: ''
+        }
+      ];
 
-    return data;
+      schoolYearsDropdown = null;
+      yearLevelsDropdown = null;
+      sectionsDropdown = null;
+      roomsDropdown = null;
+      subjectsDropdown = null;
+    };
+
+    return { cleanUp, addSubject };
   };
 
-  const getYearLevel = async (supa: typeof sb, department: string) => {
-    if (!supa) return;
-    const { data, error } = await supa
-      .from('year_levels_tb')
-      .select('*')
-      .eq('department', department)
-      .single();
-
-    if (error) return null;
-
-    return data;
-  };
-
-  const getSections = async (supa: typeof sb, department: string) => {
-    if (!supa) return;
-    const { data, error } = await supa
-      .from('sections_tb')
-      .select('*')
-      .eq('department', department)
-      .order('created_at', { ascending: true });
-
-    if (error) return null;
-
-    return data;
-  };
-
-  const getRooms = async (supa: typeof sb, department: string) => {
-    if (!supa) return;
-    const { data, error } = await supa
-      .from('rooms_tb')
-      .select('*')
-      .eq('department', department)
-      .order('created_at', { ascending: true });
-
-    if (error) return null;
-
-    return data;
-  };
-
-  const getSubjects = async (supa: typeof sb, department: string) => {
-    if (!supa) return;
-    const { data, error } = await supa
-      .from('subjects_tb')
-      .select('*')
-      .eq('department', department)
-      .order('created_at', { ascending: true });
-
-    if (error) return null;
-
-    return data;
-  };
+  const { cleanUp, addSubject } = addFactory();
 
   const handleDepartmentChange = async () => {
     [schoolYearsDropdown, yearLevelsDropdown, sectionsDropdown, roomsDropdown, subjectsDropdown] =
@@ -181,24 +138,11 @@
       ]);
   };
 
-  const cleanUp = () => {
-    subjects = [
-      {
-        id: crypto.randomUUID(),
-        name: '',
-        startTime: '',
-        endTime: '',
-        day: '',
-        room: ''
-      }
-    ];
-
-    schoolYearsDropdown = null;
-    yearLevelsDropdown = null;
-    sectionsDropdown = null;
-    roomsDropdown = null;
-    subjectsDropdown = null;
-  };
+  $effect(() => {
+    if (open) {
+      $formData.subjects = subjects;
+    }
+  });
 </script>
 
 <Button size="sm" onclick={() => (open = true)}>

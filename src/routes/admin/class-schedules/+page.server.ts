@@ -34,11 +34,26 @@ export const actions: Actions = {
     return { form, msg: 'Schedule added successfully' };
   },
 
-  updateScheduleEvent: async ({ request }) => {
+  updateScheduleEvent: async ({ request, locals: { supabase } }) => {
     const form = await superValidate(request, zod(updateScheduleSchema));
 
     if (!form.valid) return fail(400, { form });
-    console.log(form.data);
+
+    const { error } = await supabase
+      .from('class_schedules_tb')
+      .update({
+        school_year: form.data.schoolYear,
+        department: form.data.department,
+        section: form.data.section,
+        year_level: form.data.yearLevel,
+        semester: form.data.semester,
+        subjects: form.data.subjects
+      })
+      .eq('id', form.data.id);
+
+    if (error) return fail(401, { form, msg: error.message });
+
+    return { form, msg: 'Schedule updated successfully' };
   },
 
   deleteScheduleEvent: async ({ request, locals: { supabase } }) => {
