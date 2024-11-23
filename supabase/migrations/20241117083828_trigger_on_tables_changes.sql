@@ -17,41 +17,39 @@ begin
 end;
 $$ language plpgsql security definer;
 
--- create triggers for each table
-create trigger log_class_schedules_changes
-    after insert or update or delete on class_schedules_tb
-    for each row
-    execute function log_table_changes();
+-- Create a function to add triggers safely
+create or replace function create_log_triggers() returns void as $$
+declare
+    tables text[] := array[
+        'class_schedules_tb',
+        'programs_tb',
+        'rooms_tb',
+        'school_years_tb',
+        'sections_tb',
+        'subjects_tb',
+        'year_levels_tb'
+    ];
+    t text;
+begin
+    foreach t in array tables
+    loop
+        if exists (select 1 from information_schema.tables where table_name = t) then
+            execute format(
+                'create trigger log_%I_changes 
+                after insert or update or delete on %I 
+                for each row execute function log_table_changes()',
+                t, t
+            );
+        end if;
+    end loop;
+end;
+$$ language plpgsql;
 
-create trigger log_programs_changes
-    after insert or update or delete on programs_tb
-    for each row
-    execute function log_table_changes();
+-- Execute the function to create triggers
+select create_log_triggers();
 
-create trigger log_rooms_changes
-    after insert or update or delete on rooms_tb
-    for each row
-    execute function log_table_changes();
-
-create trigger log_school_years_changes
-    after insert or update or delete on school_years_tb
-    for each row
-    execute function log_table_changes();
-
-create trigger log_sections_changes
-    after insert or update or delete on sections_tb
-    for each row
-    execute function log_table_changes();
-
-create trigger log_subjects_changes
-    after insert or update or delete on subjects_tb
-    for each row
-    execute function log_table_changes();
-
-create trigger log_year_levels_changes
-    after insert or update or delete on year_levels_tb
-    for each row
-    execute function log_table_changes();
+-- Drop the helper function as it's no longer needed
+drop function create_log_triggers();
 
 -- add rollback functionality
 create or replace function drop_triggers_and_function() returns void as $$
