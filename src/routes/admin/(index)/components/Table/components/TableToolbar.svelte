@@ -11,10 +11,7 @@
   import type { ProgramPageTable } from '../data/schemas';
 
   let { table }: { table: Table<ProgramPageTable> } = $props();
-
   const isFiltered = $derived(table.getState().columnFilters.length > 0);
-  const statusCol = $derived(table.getColumn('status'));
-  const priorityCol = $derived(table.getColumn('priority'));
 </script>
 
 <div class="flex items-center justify-between">
