@@ -114,7 +114,7 @@
                 {#if !header.isPlaceholder}
                   <FlexRender
                     content={header.column.columnDef.header as any}
-                    context={header.getContext()}
+                    context={header.getContext() as any}
                   />
                 {/if}
               </Table.Head>
@@ -129,7 +129,7 @@
               <Table.Cell>
                 <FlexRender
                   content={cell.column.columnDef.cell as any}
-                  context={cell.getContext()}
+                  context={cell.getContext() as any}
                 />
               </Table.Cell>
             {/each}

@@ -6,7 +6,7 @@
   import X from 'lucide-svelte/icons/x';
   import type { Table } from '@tanstack/table-core';
   import { priorities, statuses } from '../data/data';
-  import { TableFacetedFilter, TableViewOptions } from './index';
+  import { TableViewOptions } from './index';
   import Button from '$lib/components/ui/button/button.svelte';
   import { Input } from '$lib/components/ui/input/index';
   import type { LogsPageTable } from '../data/schemas';
@@ -31,13 +31,6 @@
       }}
       class="h-8 w-[150px] lg:w-[250px]"
     />
-
-    {#if statusCol}
-      <TableFacetedFilter column={statusCol} title="Status" options={statuses} />
-    {/if}
-    {#if priorityCol}
-      <TableFacetedFilter column={priorityCol} title="Priority" options={priorities} />
-    {/if}
 
     {#if isFiltered}
       <Button variant="ghost" onclick={() => table.resetColumnFilters()} class="h-8 px-2 lg:px-3">

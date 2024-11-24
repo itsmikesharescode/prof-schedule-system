@@ -1,14 +1,7 @@
 import type { ColumnDef } from '@tanstack/table-core';
 import { createRawSnippet } from 'svelte';
 import type { LogsPageTable } from '../data/schemas.js';
-import {
-  TableCheckbox,
-  TableColumnHeader,
-  TablePriorityCell,
-  TableRowActions,
-  TableStatusCell,
-  TableTitleCell
-} from './index.js';
+import { TableColumnHeader } from './index.js';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/render-helpers.js';
 
 export const columns: ColumnDef<LogsPageTable>[] = [
