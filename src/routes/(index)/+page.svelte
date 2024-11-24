@@ -7,7 +7,7 @@
 
 <Nav loginForm={data.loginForm} registerForm={data.registerForm} />
 
-<main class="min-h-screen">
+<main class="">
   <div class="container mt-5 flex flex-col gap-5 p-3">
     <WhyProfSched />
   </div>

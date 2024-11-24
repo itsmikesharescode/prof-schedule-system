@@ -20,14 +20,13 @@
 
   let { table }: { table: Table<ProgramPageTable> } = $props();
 
-  const sb = $page.data.supabase;
   let deleteLoader = $state(false);
   const handleDeleteSelected = async () => {
-    if (!sb) return;
+    if (!$page.data.supabase) return;
 
     deleteLoader = true;
 
-    const { error } = await sb
+    const { error } = await $page.data.supabase
       ?.from('programs_tb')
       .delete()
       .in(

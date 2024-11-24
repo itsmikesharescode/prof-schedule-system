@@ -1,14 +1,7 @@
 import type { ColumnDef } from '@tanstack/table-core';
 import { createRawSnippet } from 'svelte';
 import type { ProgramPageTable } from '../data/schemas';
-import {
-  DataTableCheckbox,
-  DataTableColumnHeader,
-  DataTablePriorityCell,
-  DataTableRowActions,
-  DataTableStatusCell,
-  DataTableTitleCell
-} from './index.js';
+import { DataTableCheckbox, DataTableColumnHeader, DataTableRowActions } from './index.js';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/render-helpers.js';
 
 export const columns: ColumnDef<ProgramPageTable, unknown>[] = [
