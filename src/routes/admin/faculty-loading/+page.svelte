@@ -8,10 +8,29 @@
   const { data } = $props();
 
   initTableState();
+
+  let professors = $state<Awaited<typeof data.getProfessors>>(null);
+  let schedules = $state<Awaited<typeof data.getClassSchedules>>(null);
+
+  const fetchData = async () => {
+    const [profs, scheds] = await Promise.all([data.getProfessors, data.getClassSchedules]);
+
+    professors = profs;
+    schedules = scheds;
+  };
+
+  $effect(() => {
+    fetchData();
+
+    return () => {
+      professors = null;
+      schedules = null;
+    };
+  });
 </script>
 
 <div class="sticky top-2 z-30 flex justify-end">
-  <AddFaculty addFacultyForm={data.addFacultyForm} />
+  <AddFaculty addFacultyForm={data.addFacultyForm} {professors} {schedules} />
 </div>
 
 <div class="mt-6">

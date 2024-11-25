@@ -28,7 +28,7 @@
     deleteLoader = true;
 
     const { error } = await sb
-      ?.from('class_schedules_tb')
+      ?.from('faculties_tb')
       .delete()
       .in(
         'id',

@@ -6,7 +6,6 @@
   import Ellipsis from 'lucide-svelte/icons/ellipsis';
   import FileMinus from 'lucide-svelte/icons/file-minus';
   import Pen from 'lucide-svelte/icons/pen';
-  import Calendar from 'lucide-svelte/icons/calendar';
   import type { Row } from '@tanstack/table-core';
   import { type FacultyLoadingPageTable } from '../data/schemas';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index';
