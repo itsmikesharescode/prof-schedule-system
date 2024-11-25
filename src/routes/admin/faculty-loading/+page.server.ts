@@ -24,7 +24,18 @@ export const actions: Actions = {
       return fail(400, { form });
     }
 
-    console.log(form.data);
+    const { error } = await supabase.from('faculties_tb').insert([
+      {
+        professor_id: form.data.user_id,
+        schedule_id: Number(form.data.schedule_id)
+      }
+    ]);
+
+    if (error) {
+      return fail(401, { form, msg: error.message });
+    }
+
+    return { form, msg: 'Faculty added successfully' };
   },
   updateFaculty: async ({ request, locals: { supabase } }) => {
     const form = await superValidate(request, zod(updateFacultySchema));

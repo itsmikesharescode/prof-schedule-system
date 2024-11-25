@@ -10,6 +10,9 @@
   import CustomComboBox from '../CustomComboBox.svelte';
   import type { streamProfessors } from '../../../(db_calls)/streamProfessors';
   import type { streamClassSchedules } from '../../../(db_calls)/streamClassSchedules';
+  import LoaderCircle from 'lucide-svelte/icons/loader-circle';
+  import type { Result } from '$lib/types';
+  import { toast } from 'svelte-sonner';
 
   interface Props {
     addFacultyForm: SuperValidated<Infer<AddFacultySchema>>;
@@ -22,7 +25,21 @@
   let open = $state(false);
 
   const form = superForm(addFacultyForm, {
-    validators: zodClient(addFacultySchema)
+    validators: zodClient(addFacultySchema),
+    id: crypto.randomUUID(),
+    onUpdate: ({ result }) => {
+      const { status, data } = result as Result<{ msg: string }>;
+      switch (status) {
+        case 200:
+          form.reset();
+          open = false;
+          toast.success(data.msg);
+          break;
+        case 401:
+          toast.error(data.msg);
+          break;
+      }
+    }
   });
 
   const { form: formData, enhance, submitting } = form;
@@ -96,7 +113,16 @@
         </div>
 
         <div class="pointer-events-none sticky bottom-6 left-0 right-0 flex justify-end">
-          <Form.Button size="sm" class="pointer-events-auto">Create</Form.Button>
+          <Form.Button disabled={$submitting} size="sm" class="pointer-events-auto relative">
+            {#if $submitting}
+              <div
+                class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center rounded-lg bg-primary"
+              >
+                <LoaderCircle class="size-4 animate-spin" />
+              </div>
+            {/if}
+            Create
+          </Form.Button>
         </div>
       </form>
     </ScrollArea>
