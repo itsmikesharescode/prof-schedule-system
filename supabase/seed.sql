@@ -239,11 +239,7 @@ CREATE TABLE IF NOT EXISTS "public"."faculties_tb" (
     "id" bigint NOT NULL,
     "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
     "professor_id" "uuid" NOT NULL,
-    "semester" character varying NOT NULL,
-    "year_level" character varying NOT NULL,
-    "section" character varying NOT NULL,
-    "subject" "jsonb" NOT NULL,
-    "department" character varying NOT NULL
+    "schedule_id" bigint NOT NULL
 );
 
 
@@ -592,6 +588,11 @@ CREATE OR REPLACE TRIGGER "log_year_levels_tb_changes" AFTER INSERT OR DELETE OR
 
 ALTER TABLE ONLY "public"."faculties_tb"
     ADD CONSTRAINT "faculties_tb_professor_id_fkey" FOREIGN KEY ("professor_id") REFERENCES "public"."professors_tb"("user_id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."faculties_tb"
+    ADD CONSTRAINT "faculties_tb_schedule_id_fkey" FOREIGN KEY ("schedule_id") REFERENCES "public"."class_schedules_tb"("id") ON DELETE CASCADE;
 
 
 
