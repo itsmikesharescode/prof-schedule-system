@@ -1,4 +1,5 @@
 import type { UserMetaData, YearLevel, Subject } from './types';
+
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type Database = {
@@ -61,6 +62,42 @@ export type Database = {
           year_level?: string;
         };
         Relationships: [];
+      };
+      faculties_tb: {
+        Row: {
+          created_at: string;
+          id: number;
+          professor_id: string;
+          schedule_id: number;
+        };
+        Insert: {
+          created_at?: string;
+          id?: number;
+          professor_id: string;
+          schedule_id: number;
+        };
+        Update: {
+          created_at?: string;
+          id?: number;
+          professor_id?: string;
+          schedule_id?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'faculties_tb_professor_id_fkey';
+            columns: ['professor_id'];
+            isOneToOne: false;
+            referencedRelation: 'professors_tb';
+            referencedColumns: ['user_id'];
+          },
+          {
+            foreignKeyName: 'faculties_tb_schedule_id_fkey';
+            columns: ['schedule_id'];
+            isOneToOne: false;
+            referencedRelation: 'class_schedules_tb';
+            referencedColumns: ['id'];
+          }
+        ];
       };
       logs_tb: {
         Row: {

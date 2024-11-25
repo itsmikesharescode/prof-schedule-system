@@ -5,22 +5,20 @@
 <script lang="ts" generics="TData">
   import X from 'lucide-svelte/icons/x';
   import type { Table } from '@tanstack/table-core';
-  import { DataTableViewOptions } from './index.js';
+  import { TableViewOptions } from './index';
   import Button from '$lib/components/ui/button/button.svelte';
   import { Input } from '$lib/components/ui/input/index';
-  import type { AccountPageTable } from '../data/schemas';
+  import type { FacultyLoadingPageTable } from '../data/schemas';
 
-  let { table }: { table: Table<AccountPageTable> } = $props();
+  let { table }: { table: Table<FacultyLoadingPageTable> } = $props();
 
   const isFiltered = $derived(table.getState().columnFilters.length > 0);
-  const statusCol = $derived(table.getColumn('status'));
-  const priorityCol = $derived(table.getColumn('priority'));
 </script>
 
 <div class="flex items-center justify-between">
   <div class="flex flex-1 items-center space-x-2">
     <Input
-      placeholder="Search by full name"
+      placeholder="Search full name..."
       value={(table.getColumn('fullName')?.getFilterValue() as string) ?? ''}
       oninput={(e) => {
         table.getColumn('fullName')?.setFilterValue(e.currentTarget.value);
@@ -38,5 +36,5 @@
       </Button>
     {/if}
   </div>
-  <DataTableViewOptions {table} />
+  <TableViewOptions {table} />
 </div>

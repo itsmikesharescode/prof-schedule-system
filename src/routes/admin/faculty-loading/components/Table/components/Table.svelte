@@ -23,12 +23,13 @@
   import { createSvelteTable } from '$lib/components/ui/data-table/data-table.svelte';
   import FlexRender from '$lib/components/ui/data-table/flex-render.svelte';
   import * as Table from '$lib/components/ui/table/index';
-  import type { ProgramPageTable } from '../data/schemas';
+  import type { FacultyLoadingPageTable } from '../data/schemas';
 
   let {
     columns,
     data
-  }: { columns: ColumnDef<ProgramPageTable, unknown>[]; data: ProgramPageTable[] } = $props();
+  }: { columns: ColumnDef<FacultyLoadingPageTable, unknown>[]; data: FacultyLoadingPageTable[] } =
+    $props();
 
   let rowSelection = $state<RowSelectionState>({});
   let columnVisibility = $state<VisibilityState>({});
@@ -105,9 +106,7 @@
 
 <div class="space-y-4">
   <DataTableToolbar {table} />
-
   <DataTablePagination {table} />
-
   <div class="">
     <Table.Root>
       <Table.Header>
@@ -146,7 +145,6 @@
       </Table.Body>
     </Table.Root>
   </div>
-
   {#if table.getRowModel().rows.length > 11}
     <DataTablePagination {table} />
   {/if}

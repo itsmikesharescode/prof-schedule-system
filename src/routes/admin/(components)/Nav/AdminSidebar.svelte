@@ -81,7 +81,6 @@
 
 <Sidebar.Root>
   <Sidebar.Content class="">
-    <Sidebar.Trigger title="Close sidebar" class="absolute right-2 z-50" />
     <Sidebar.Group>
       <Sidebar.GroupLabel>Administrator</Sidebar.GroupLabel>
       <Sidebar.GroupContent>

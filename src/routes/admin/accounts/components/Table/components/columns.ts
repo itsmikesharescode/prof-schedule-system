@@ -2,12 +2,8 @@ import type { ColumnDef } from '@tanstack/table-core';
 import { createRawSnippet } from 'svelte';
 import type { AccountPageTable } from '../data/schemas';
 import {
-  DataTableCheckbox,
   DataTableColumnHeader,
-  DataTablePriorityCell,
   DataTableRowActions,
-  DataTableStatusCell,
-  DataTableTitleCell,
   TableFullnameRow,
   TableInterestRow
 } from './index.js';

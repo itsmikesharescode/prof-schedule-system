@@ -2,28 +2,44 @@
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
   import Button from '$lib/components/ui/button/button.svelte';
   import { X, Plus } from 'lucide-svelte';
-  import { fileProxy, type Infer, superForm, type SuperValidated } from 'sveltekit-superforms';
+  import { type Infer, superForm, type SuperValidated } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import * as Form from '$lib/components/ui/form/index.js';
-  import { Input } from '$lib/components/ui/input/index.js';
   import { addFacultySchema, type AddFacultySchema } from './schema';
-  import ImagePicker from '$lib/components/general/ImagePicker.svelte';
   import { ScrollArea } from '$lib/components/ui/scroll-area/index';
-  import Combobox from '$lib/components/general/Combobox.svelte';
-  import { availableTimes, days, departments, interests, titles } from '$lib/metadata';
-  import SelectPicker from '$lib/components/general/SelectPicker.svelte';
-  import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte';
+  import CustomComboBox from '../CustomComboBox.svelte';
+  import type { streamProfessors } from '../../../(db_calls)/streamProfessors';
+  import type { streamClassSchedules } from '../../../(db_calls)/streamClassSchedules';
+  import LoaderCircle from 'lucide-svelte/icons/loader-circle';
+  import type { Result } from '$lib/types';
+  import { toast } from 'svelte-sonner';
 
   interface Props {
     addFacultyForm: SuperValidated<Infer<AddFacultySchema>>;
+    professors: Awaited<ReturnType<typeof streamProfessors>>;
+    schedules: Awaited<ReturnType<typeof streamClassSchedules>>;
   }
 
-  let { addFacultyForm }: Props = $props();
+  let { addFacultyForm, professors, schedules }: Props = $props();
 
   let open = $state(false);
 
   const form = superForm(addFacultyForm, {
-    validators: zodClient(addFacultySchema)
+    validators: zodClient(addFacultySchema),
+    id: crypto.randomUUID(),
+    onUpdate: ({ result }) => {
+      const { status, data } = result as Result<{ msg: string }>;
+      switch (status) {
+        case 200:
+          form.reset();
+          open = false;
+          toast.success(data.msg);
+          break;
+        case 401:
+          toast.error(data.msg);
+          break;
+      }
+    }
   });
 
   const { form: formData, enhance, submitting } = form;
@@ -35,7 +51,7 @@
 </Button>
 
 <AlertDialog.Root bind:open>
-  <AlertDialog.Content class="max-w-7xl p-0">
+  <AlertDialog.Content class="p-0">
     <button
       onclick={() => {
         open = false;
@@ -53,10 +69,60 @@
         Fill the fields below to assign a new faculty.
       </AlertDialog.Description>
     </AlertDialog.Header>
-    <ScrollArea class="h-[80dvh]">
-      <form method="POST" enctype="multipart/form-data" use:enhance class=" ">
-        <div class="pointer-events-none sticky bottom-6 left-0 right-0 flex justify-end px-6">
-          <Form.Button size="sm" class="pointer-events-auto">Create</Form.Button>
+    <ScrollArea class="max-h-[30dvh]">
+      <form method="POST" action="?/addFacultyEvent" use:enhance class="px-6">
+        <div class="flex flex-col gap-2.5 pb-10">
+          <Form.Field {form} name="user_id">
+            <Form.Control>
+              {#snippet children({ props })}
+                <Form.Label>Professor Name</Form.Label>
+                <CustomComboBox
+                  {...props}
+                  name="Select Professor"
+                  placeholder="Search for a professor"
+                  selections={professors?.map((prof) => ({
+                    label: `${prof.user_meta_data.firstName} ${prof.user_meta_data.middleName} ${prof.user_meta_data.lastName}`,
+                    value: prof.user_id,
+                    photoLink: prof.user_meta_data.avatar
+                  })) ?? []}
+                  bind:selected={$formData.user_id}
+                />
+                <input type="hidden" name={props.name} bind:value={$formData.user_id} />
+              {/snippet}
+            </Form.Control>
+          </Form.Field>
+
+          <Form.Field {form} name="schedule_id">
+            <Form.Control>
+              {#snippet children({ props })}
+                <Form.Label>Schedule Section</Form.Label>
+                <CustomComboBox
+                  {...props}
+                  name="Select Schedule"
+                  placeholder="Search for a schedule"
+                  selections={schedules?.map((sched) => ({
+                    label: sched.section,
+                    value: sched.id.toString()
+                  })) ?? []}
+                  bind:selected={$formData.schedule_id}
+                />
+                <input type="hidden" name={props.name} bind:value={$formData.schedule_id} />
+              {/snippet}
+            </Form.Control>
+          </Form.Field>
+        </div>
+
+        <div class="pointer-events-none sticky bottom-6 left-0 right-0 flex justify-end">
+          <Form.Button disabled={$submitting} size="sm" class="pointer-events-auto relative">
+            {#if $submitting}
+              <div
+                class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center rounded-lg bg-primary"
+              >
+                <LoaderCircle class="size-4 animate-spin" />
+              </div>
+            {/if}
+            Create
+          </Form.Button>
         </div>
       </form>
     </ScrollArea>

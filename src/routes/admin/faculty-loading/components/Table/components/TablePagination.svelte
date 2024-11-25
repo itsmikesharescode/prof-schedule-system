@@ -11,23 +11,24 @@
   import type { Table } from '@tanstack/table-core';
   import * as Select from '$lib/components/ui/select/index';
   import { Button } from '$lib/components/ui/button/index';
-  import type { ProgramPageTable } from '../data/schemas';
-  import { page } from '$app/stores';
+  import type { FacultyLoadingPageTable } from '../data/schemas';
   import { fly } from 'svelte/transition';
   import { cubicInOut } from 'svelte/easing';
-  import { toast } from 'svelte-sonner';
+  import { page } from '$app/stores';
   import { invalidateAll } from '$app/navigation';
+  import { toast } from 'svelte-sonner';
 
-  let { table }: { table: Table<ProgramPageTable> } = $props();
+  let { table }: { table: Table<FacultyLoadingPageTable> } = $props();
 
+  const sb = $page.data.supabase;
   let deleteLoader = $state(false);
   const handleDeleteSelected = async () => {
-    if (!$page.data.supabase) return;
+    if (!sb) return;
 
     deleteLoader = true;
 
-    const { error } = await $page.data.supabase
-      ?.from('programs_tb')
+    const { error } = await sb
+      ?.from('faculties_tb')
       .delete()
       .in(
         'id',
@@ -40,7 +41,7 @@
     }
 
     await invalidateAll();
-    toast.success('Programs deleted successfully');
+    toast.success('Faculties deleted successfully');
     deleteLoader = false;
   };
 </script>
@@ -74,6 +75,7 @@
       {/if}
     </div>
   </div>
+
   <div class="flex items-center space-x-6 lg:space-x-8">
     <div class="flex items-center space-x-2">
       <p class="text-sm font-medium">Rows per page</p>
