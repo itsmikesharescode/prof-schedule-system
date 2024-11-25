@@ -41,7 +41,7 @@
     }
 
     await invalidateAll();
-    toast.success('Year levels deleted successfully');
+    toast.success('Faculties deleted successfully');
     deleteLoader = false;
   };
 </script>
