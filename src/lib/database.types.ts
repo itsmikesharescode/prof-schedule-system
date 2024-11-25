@@ -66,33 +66,21 @@ export type Database = {
       faculties_tb: {
         Row: {
           created_at: string;
-          department: string;
           id: number;
           professor_id: string;
-          section: string;
-          semester: string;
-          subject: Json;
-          year_level: string;
+          schedule_id: number;
         };
         Insert: {
           created_at?: string;
-          department: string;
           id?: number;
           professor_id: string;
-          section: string;
-          semester: string;
-          subject: Json;
-          year_level: string;
+          schedule_id: number;
         };
         Update: {
           created_at?: string;
-          department?: string;
           id?: number;
           professor_id?: string;
-          section?: string;
-          semester?: string;
-          subject?: Json;
-          year_level?: string;
+          schedule_id?: number;
         };
         Relationships: [
           {
@@ -101,6 +89,13 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: 'professors_tb';
             referencedColumns: ['user_id'];
+          },
+          {
+            foreignKeyName: 'faculties_tb_schedule_id_fkey';
+            columns: ['schedule_id'];
+            isOneToOne: false;
+            referencedRelation: 'class_schedules_tb';
+            referencedColumns: ['id'];
           }
         ];
       };
