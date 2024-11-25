@@ -1,7 +1,7 @@
 import type { ColumnDef } from '@tanstack/table-core';
 import { createRawSnippet } from 'svelte';
 import type { FacultyLoadingPageTable } from '../data/schemas.js';
-import { TableCheckbox, TableColumnHeader, TableRowActions } from './index.js';
+import { TableCheckbox, TableColumnHeader, TableRowActions, TableFullnameRow } from './index.js';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/render-helpers.js';
 
 export const columns: ColumnDef<FacultyLoadingPageTable>[] = [
@@ -24,25 +24,40 @@ export const columns: ColumnDef<FacultyLoadingPageTable>[] = [
     enableSorting: false,
     enableHiding: false
   },
+
   {
-    accessorKey: 'professor_id',
+    accessorKey: 'fullName',
+    id: 'fullName',
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<FacultyLoadingPageTable, unknown>, {
         column,
-        title: 'Professor ID'
+        title: 'Full Name'
+      });
+    },
+    cell: ({ row }) => renderComponent(TableFullnameRow<FacultyLoadingPageTable>, { row }),
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
+    accessorKey: 'department',
+    header: ({ column }) => {
+      return renderComponent(TableColumnHeader<FacultyLoadingPageTable, unknown>, {
+        column,
+        title: 'Department'
       });
     },
     cell: ({ row }) => {
-      const idSnippet = createRawSnippet<[string]>((getProfID) => {
+      const departmentSnippet = createRawSnippet<[string]>((getDepartment) => {
         return {
-          render: () => `<div class="w-[80px]">${getProfID()}</div>`
+          render: () => `<div class="w-full">${getDepartment()}</div>`
         };
       });
 
-      return renderSnippet(idSnippet, row.getValue('professor_id'));
+      return renderSnippet(departmentSnippet, row.getValue('department'));
     },
-    enableSorting: false,
-    enableHiding: false
+    enableSorting: true,
+    enableHiding: true
   },
 
   {
@@ -61,27 +76,6 @@ export const columns: ColumnDef<FacultyLoadingPageTable>[] = [
       });
 
       return renderSnippet(schoolYearSnippet, row.getValue('school_year'));
-    },
-    enableSorting: true,
-    enableHiding: true
-  },
-
-  {
-    accessorKey: 'semester',
-    header: ({ column }) => {
-      return renderComponent(TableColumnHeader<FacultyLoadingPageTable, unknown>, {
-        column,
-        title: 'Semester'
-      });
-    },
-    cell: ({ row }) => {
-      const semesterSnippet = createRawSnippet<[string]>((getSemester) => {
-        return {
-          render: () => `<div class="w-full">${getSemester()}</div>`
-        };
-      });
-
-      return renderSnippet(semesterSnippet, row.getValue('semester'));
     },
     enableSorting: true,
     enableHiding: true
@@ -109,6 +103,27 @@ export const columns: ColumnDef<FacultyLoadingPageTable>[] = [
   },
 
   {
+    accessorKey: 'semester',
+    header: ({ column }) => {
+      return renderComponent(TableColumnHeader<FacultyLoadingPageTable, unknown>, {
+        column,
+        title: 'Semester'
+      });
+    },
+    cell: ({ row }) => {
+      const semesterSnippet = createRawSnippet<[string]>((getSemester) => {
+        return {
+          render: () => `<div class="w-full">${getSemester()}</div>`
+        };
+      });
+
+      return renderSnippet(semesterSnippet, row.getValue('semester'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
     accessorKey: 'section',
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<FacultyLoadingPageTable, unknown>, {
@@ -124,48 +139,6 @@ export const columns: ColumnDef<FacultyLoadingPageTable>[] = [
       });
 
       return renderSnippet(sectionSnippet, row.getValue('section'));
-    },
-    enableSorting: true,
-    enableHiding: true
-  },
-
-  {
-    accessorKey: 'department',
-    header: ({ column }) => {
-      return renderComponent(TableColumnHeader<FacultyLoadingPageTable, unknown>, {
-        column,
-        title: 'Department'
-      });
-    },
-    cell: ({ row }) => {
-      const departmentSnippet = createRawSnippet<[string]>((getDepartment) => {
-        return {
-          render: () => `<div class="w-full">${getDepartment()}</div>`
-        };
-      });
-
-      return renderSnippet(departmentSnippet, row.getValue('department'));
-    },
-    enableSorting: true,
-    enableHiding: true
-  },
-
-  {
-    accessorKey: 'subject',
-    header: ({ column }) => {
-      return renderComponent(TableColumnHeader<FacultyLoadingPageTable, unknown>, {
-        column,
-        title: 'Subject'
-      });
-    },
-    cell: ({ row }) => {
-      const subjectSnippet = createRawSnippet<[string]>((getSubject) => {
-        return {
-          render: () => `<div class="w-full">${getSubject()}</div>`
-        };
-      });
-
-      return renderSnippet(subjectSnippet, row.getValue('subject'));
     },
     enableSorting: true,
     enableHiding: true

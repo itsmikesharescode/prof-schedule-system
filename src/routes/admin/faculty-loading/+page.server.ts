@@ -6,11 +6,13 @@ import { fail } from '@sveltejs/kit';
 import { updateFacultySchema } from './components/UpdateFaculty/schema';
 import { streamClassSchedules } from '../(db_calls)/streamClassSchedules';
 import { streamProfessors } from '../(db_calls)/streamProfessors';
+import { streamFaculties } from '../(db_calls)/streamFaculties';
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   return {
     addFacultyForm: await superValidate(zod(addFacultySchema), { id: crypto.randomUUID() }),
     updateFacultyForm: await superValidate(zod(updateFacultySchema), { id: crypto.randomUUID() }),
+    getFaculties: await streamFaculties(supabase, null),
     getClassSchedules: await streamClassSchedules(supabase, null),
     getProfessors: await streamProfessors(supabase, null)
   };
