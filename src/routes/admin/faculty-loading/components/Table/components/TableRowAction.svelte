@@ -37,7 +37,7 @@
       <Calendar />
       View Calendar
     </DropdownMenu.Item>
-    <DropdownMenu.Item
+    <!-- <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
         tableState.setShowUpdate(true);
@@ -45,7 +45,7 @@
     >
       <Pen />
       Update
-    </DropdownMenu.Item>
+    </DropdownMenu.Item> -->
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);

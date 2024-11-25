@@ -1,37 +1,63 @@
 <script lang="ts">
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import { X, Plus } from 'lucide-svelte';
+  import X from 'lucide-svelte/icons/x';
   import { type Infer, superForm, type SuperValidated } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import * as Form from '$lib/components/ui/form/index.js';
-  import { Input } from '$lib/components/ui/input/index.js';
-  import { updateProgramSchema, type UpdateProgramSchema } from './schema';
+  import { updateFacultySchema, type UpdateFacultySchema } from './schema';
+  import { ScrollArea } from '$lib/components/ui/scroll-area/index';
+  import CustomComboBox from '../CustomComboBox.svelte';
+  import type { streamProfessors } from '../../../(db_calls)/streamProfessors';
+  import type { streamClassSchedules } from '../../../(db_calls)/streamClassSchedules';
+  import LoaderCircle from 'lucide-svelte/icons/loader-circle';
+  import type { Result } from '$lib/types';
+  import { toast } from 'svelte-sonner';
+  import { useTableState } from '../Table/tableState.svelte';
+
   interface Props {
-    updateProgramForm: SuperValidated<Infer<UpdateProgramSchema>>;
-    showUpdate: boolean;
+    updateFacultyForm: SuperValidated<Infer<UpdateFacultySchema>>;
+    professors: Awaited<ReturnType<typeof streamProfessors>>;
+    schedules: Awaited<ReturnType<typeof streamClassSchedules>>;
   }
 
-  let { showUpdate = $bindable(), updateProgramForm }: Props = $props();
+  let { updateFacultyForm, professors, schedules }: Props = $props();
 
-  const form = superForm(updateProgramForm, {
-    validators: zodClient(updateProgramSchema)
+  const tableState = useTableState();
+
+  const form = superForm(updateFacultyForm, {
+    validators: zodClient(updateFacultySchema),
+    id: crypto.randomUUID(),
+    onUpdate: ({ result }) => {
+      const { status, data } = result as Result<{ msg: string }>;
+      switch (status) {
+        case 200:
+          form.reset();
+          tableState.setShowUpdate(false);
+          tableState.setActiveRow(null);
+          toast.success(data.msg);
+          break;
+        case 401:
+          toast.error(data.msg);
+          break;
+      }
+    }
   });
 
   const { form: formData, enhance, submitting } = form;
 
   $effect(() => {
-    if (showUpdate) {
-      //populate the id of target
+    if (tableState.getShowUpdate()) {
+      $formData.id = tableState.getActiveRow()?.id ?? 0;
     }
   });
 </script>
 
-<AlertDialog.Root bind:open={showUpdate}>
-  <AlertDialog.Content>
+<AlertDialog.Root open={tableState.getShowUpdate()}>
+  <AlertDialog.Content class="p-0">
     <button
       onclick={() => {
-        showUpdate = false;
+        tableState.setShowUpdate(false);
+        tableState.setActiveRow(null);
         form.reset();
       }}
       class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
@@ -40,61 +66,69 @@
       <span class="sr-only">Close</span>
     </button>
 
-    <AlertDialog.Header>
-      <AlertDialog.Title>Update Program</AlertDialog.Title>
+    <AlertDialog.Header class="px-6 pt-6">
+      <AlertDialog.Title>New Faculty</AlertDialog.Title>
       <AlertDialog.Description>
-        Fill the fields below to update the program.
+        Fill the fields below to assign a new faculty.
       </AlertDialog.Description>
     </AlertDialog.Header>
+    <ScrollArea class="max-h-[30dvh]">
+      <form method="POST" action="?/updateFaculty" use:enhance class="px-6">
+        <input type="hidden" name="id" bind:value={$formData.id} />
+        <div class="flex flex-col gap-2.5 pb-10">
+          <Form.Field {form} name="user_id">
+            <Form.Control>
+              {#snippet children({ props })}
+                <Form.Label>Professor Name</Form.Label>
+                <CustomComboBox
+                  {...props}
+                  name="Select Professor"
+                  placeholder="Search for a professor"
+                  selections={professors?.map((prof) => ({
+                    label: `${prof.user_meta_data.firstName} ${prof.user_meta_data.middleName} ${prof.user_meta_data.lastName}`,
+                    value: prof.user_id,
+                    photoLink: prof.user_meta_data.avatar
+                  })) ?? []}
+                  bind:selected={$formData.user_id}
+                />
+                <input type="hidden" name={props.name} bind:value={$formData.user_id} />
+              {/snippet}
+            </Form.Control>
+          </Form.Field>
 
-    <form method="POST" use:enhance>
-      <Form.Field {form} name="programHead">
-        <Form.Control>
-          {#snippet children({ props })}
-            <Form.Label>Program Head</Form.Label>
-            <Input
-              {...props}
-              bind:value={$formData.programHead}
-              placeholder="Enter program head name"
-            />
-          {/snippet}
-        </Form.Control>
-        <Form.Description />
-        <Form.FieldErrors />
-      </Form.Field>
+          <Form.Field {form} name="schedule_id">
+            <Form.Control>
+              {#snippet children({ props })}
+                <Form.Label>Schedule Section</Form.Label>
+                <CustomComboBox
+                  {...props}
+                  name="Select Schedule"
+                  placeholder="Search for a schedule"
+                  selections={schedules?.map((sched) => ({
+                    label: sched.section,
+                    value: sched.id.toString()
+                  })) ?? []}
+                  bind:selected={$formData.schedule_id}
+                />
+                <input type="hidden" name={props.name} bind:value={$formData.schedule_id} />
+              {/snippet}
+            </Form.Control>
+          </Form.Field>
+        </div>
 
-      <Form.Field {form} name="department">
-        <Form.Control>
-          {#snippet children({ props })}
-            <Form.Label>Department Code</Form.Label>
-            <Input
-              {...props}
-              bind:value={$formData.department}
-              placeholder="Enter department code"
-            />
-          {/snippet}
-        </Form.Control>
-        <Form.Description />
-        <Form.FieldErrors />
-      </Form.Field>
-
-      <Form.Field {form} name="description">
-        <Form.Control>
-          {#snippet children({ props })}
-            <Form.Label>Description</Form.Label>
-            <Input
-              {...props}
-              bind:value={$formData.description}
-              placeholder="Enter program description"
-            />
-          {/snippet}
-        </Form.Control>
-        <Form.Description />
-        <Form.FieldErrors />
-      </Form.Field>
-      <AlertDialog.Footer>
-        <Form.Button size="sm">Update</Form.Button>
-      </AlertDialog.Footer>
-    </form>
+        <div class="pointer-events-none sticky bottom-6 left-0 right-0 flex justify-end">
+          <Form.Button disabled={$submitting} size="sm" class="pointer-events-auto relative">
+            {#if $submitting}
+              <div
+                class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center rounded-lg bg-primary"
+              >
+                <LoaderCircle class="size-4 animate-spin" />
+              </div>
+            {/if}
+            Update
+          </Form.Button>
+        </div>
+      </form>
+    </ScrollArea>
   </AlertDialog.Content>
 </AlertDialog.Root>

@@ -19,7 +19,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 };
 
 export const actions: Actions = {
-  addFaculty: async ({ request, locals: { supabase } }) => {
+  addFacultyEvent: async ({ request, locals: { supabase } }) => {
     const form = await superValidate(request, zod(addFacultySchema));
 
     if (!form.valid) {
@@ -39,11 +39,22 @@ export const actions: Actions = {
 
     return { form, msg: 'Faculty added successfully' };
   },
-  updateFaculty: async ({ request, locals: { supabase } }) => {
+  /* updateFacultyEvent: async ({ request, locals: { supabase } }) => {
     const form = await superValidate(request, zod(updateFacultySchema));
 
     if (!form.valid) {
       return fail(400, { form });
     }
+  }, */
+
+  deleteFacultyEvent: async ({ request, locals: { supabase } }) => {
+    const formData = await request.formData();
+    const id = formData.get('id') as string;
+
+    const { error } = await supabase.from('faculties_tb').delete().eq('id', Number(id));
+
+    if (error) return fail(401, { msg: error.message });
+
+    return { msg: 'Faculty deleted successfully' };
   }
 };

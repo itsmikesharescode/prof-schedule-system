@@ -70,7 +70,7 @@
       </AlertDialog.Description>
     </AlertDialog.Header>
     <ScrollArea class="max-h-[30dvh]">
-      <form method="POST" action="?/addFaculty" use:enhance class="px-6">
+      <form method="POST" action="?/addFacultyEvent" use:enhance class="px-6">
         <div class="flex flex-col gap-2.5 pb-10">
           <Form.Field {form} name="user_id">
             <Form.Control>

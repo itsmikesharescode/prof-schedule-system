@@ -5,6 +5,7 @@
   import AddFaculty from './components/AddFaculty/AddFaculty.svelte';
   import { initTableState } from './components/Table/tableState.svelte';
   import ViewCalendar from './components/ViewCalendar/ViewCalendar.svelte';
+  import DeleteFaculty from './components/DeleteFaculty/DeleteFaculty.svelte';
 
   const { data } = $props();
 
@@ -62,3 +63,4 @@
 </div>
 
 <ViewCalendar />
+<DeleteFaculty />
