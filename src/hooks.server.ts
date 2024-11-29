@@ -77,6 +77,10 @@ const authGuard: Handle = async ({ event, resolve }) => {
     redirect(303, '/?msg="no-session"');
   }
 
+  if (!user && path.startsWith('/chamber')) {
+    redirect(303, '/?msg="no-session"');
+  }
+
   //auth checks
   if (user && path.startsWith('/admin')) {
     const { role } = user.user_metadata;
@@ -91,6 +95,17 @@ const authGuard: Handle = async ({ event, resolve }) => {
   if (user && path.startsWith('/professor')) {
     const { role } = user.user_metadata;
     if (role !== 'professor') redirect(303, '/');
+
+    const { approved } = user.user_metadata;
+    if (!approved) redirect(303, '/chamber');
+  }
+
+  if (user && path.startsWith('/chamber')) {
+    const { role } = user.user_metadata;
+    if (role === 'admin') redirect(303, '/');
+
+    const { approved } = user.user_metadata;
+    if (approved) redirect(303, '/professor');
   }
 
   if (user && path === '/') {
