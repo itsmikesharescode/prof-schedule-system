@@ -42,12 +42,12 @@
       title: 'Class Schedules',
       url: '/admin/class-schedules',
       icon: CalendarCheck
-    },
-    {
+    }
+    /* {
       title: 'Reports',
       url: '/admin/reports',
       icon: ChartColumn
-    }
+    } */
   ];
 
   const records_map = [
