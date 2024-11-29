@@ -1,7 +1,5 @@
 <script lang="ts">
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index';
-  import Button from '$lib/components/ui/button/button.svelte';
-  import type { Database } from '$lib/database.types';
   import { LoaderCircle, X } from 'lucide-svelte';
   import * as Form from '$lib/components/ui/form/index.js';
   import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
@@ -10,25 +8,27 @@
   import SelectPicker from '$lib/components/general/SelectPicker.svelte';
   import type { Result } from '$lib/types';
   import { toast } from 'svelte-sonner';
+  import { useTableState } from '../Table/tableState.svelte';
 
   interface Props {
-    professor: Database['public']['Tables']['professors_tb']['Row'];
-    showUpdateStatus: boolean;
     updateStatusForm: SuperValidated<Infer<UpdateStatusSchema>>;
   }
 
-  let { showUpdateStatus = $bindable(), updateStatusForm, professor }: Props = $props();
+  const { updateStatusForm }: Props = $props();
+
+  const tableState = useTableState();
 
   const form = superForm(updateStatusForm, {
     validators: zodClient(updateStatusSchema),
-    id: crypto.randomUUID(),
+    id: 'updateAccountStatus',
     onUpdate: ({ result }) => {
       const { status, data } = result as Result<{ msg: string }>;
       switch (status) {
         case 200:
           form.reset();
           toast.success(data.msg);
-          showUpdateStatus = false;
+          tableState.setActiveRow(null);
+          tableState.setShowUpdateStatus(false);
           break;
         case 401:
           toast.error(data.msg);
@@ -40,19 +40,20 @@
   const { form: formData, enhance, submitting } = form;
 
   $effect(() => {
-    if (showUpdateStatus) {
-      $formData.status = professor.user_meta_data.approved ? 'Active' : 'In-Active';
-      $formData.userId = professor.user_id;
+    if (tableState.getShowUpdateStatus()) {
+      $formData.status = tableState.getActiveRow()?.approved ? 'Active' : 'In-Active';
+      $formData.userId = tableState.getActiveRow()?.user_id || '';
     }
   });
 </script>
 
-<AlertDialog.Root bind:open={showUpdateStatus}>
+<AlertDialog.Root open={tableState.getShowUpdateStatus()}>
   <AlertDialog.Content>
     <button
       onclick={() => {
-        showUpdateStatus = false;
         form.reset();
+        tableState.setActiveRow(null);
+        tableState.setShowUpdateStatus(false);
       }}
       class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
     >
@@ -65,7 +66,7 @@
     </AlertDialog.Header>
 
     <form method="POST" action="?/updateStatusEvent" use:enhance>
-      <input type="hidden" name="userId" bind:value={professor.user_id} />
+      <input type="hidden" name="userId" bind:value={$formData.userId} />
       <Form.Field {form} name="status">
         <Form.Control>
           {#snippet children({ props })}
@@ -94,7 +95,7 @@
               <LoaderCircle class="size-4 animate-spin" />
             </div>
           {/if}
-          Update
+          Update Status
         </Form.Button>
       </AlertDialog.Footer>
     </form>

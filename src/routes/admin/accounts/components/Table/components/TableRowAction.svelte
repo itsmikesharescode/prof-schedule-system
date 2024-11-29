@@ -6,6 +6,7 @@
   import Ellipsis from 'lucide-svelte/icons/ellipsis';
   import FileMinus from 'lucide-svelte/icons/file-minus';
   import Pen from 'lucide-svelte/icons/pen';
+  import Check from 'lucide-svelte/icons/check';
   import type { Row } from '@tanstack/table-core';
   import { type AccountPageTable } from '../data/schemas';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index';
@@ -27,6 +28,15 @@
     {/snippet}
   </DropdownMenu.Trigger>
   <DropdownMenu.Content class="w-[160px]" align="end">
+    <DropdownMenu.Item
+      onclick={() => {
+        tableState.setActiveRow(row.original);
+        tableState.setShowUpdateStatus(true);
+      }}
+    >
+      <Check />
+      Update Status
+    </DropdownMenu.Item>
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);

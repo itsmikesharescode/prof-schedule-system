@@ -12,6 +12,16 @@ class TableState {
     return this.#activeRow;
   }
 
+  #showUpdateStatus = $state(false);
+
+  setShowUpdateStatus(show: boolean) {
+    this.#showUpdateStatus = show;
+  }
+
+  getShowUpdateStatus() {
+    return this.#showUpdateStatus;
+  }
+
   #showUpdate = $state(false);
 
   setShowUpdate(show: boolean) {
