@@ -34,19 +34,24 @@ export const actions: Actions = {
     return fail(401, { form, msg: 'Something went wrong' });
   },
 
-  registerEvent: async ({ request, locals: { supabase } }) => {
+  registerEvent: async ({ request, locals: { supabase, transformImage } }) => {
     const form = await superValidate(request, zod(registerSchema));
 
     if (!form.valid) {
       return fail(400, withFiles({ form }));
     }
+    const res = await transformImage(form.data.photo, {});
 
-    const { data: uploadRes, error: uploadError } = await supabase.storage
-      .from('user_photos')
-      .upload(crypto.randomUUID(), form.data.photo);
+    if (!res) return fail(401, { form, msg: 'There is a problem processing your photo.' });
 
-    if (uploadError) {
-      return withFiles({ form, msg: uploadError.message });
+    const uuid = crypto.randomUUID();
+
+    const { data: storageRes, error: uploadErr } = await supabase.storage
+      .from('profile_bucket')
+      .upload(uuid, res);
+
+    if (uploadErr) {
+      return withFiles({ form, msg: uploadErr.message });
     }
 
     const {
@@ -59,7 +64,7 @@ export const actions: Actions = {
         data: {
           approve: false,
           role: 'professor',
-          photo: uploadRes.fullPath,
+          photo: storageRes.fullPath,
           email: form.data.email,
           title: form.data.title,
           firstName: form.data.firstName,

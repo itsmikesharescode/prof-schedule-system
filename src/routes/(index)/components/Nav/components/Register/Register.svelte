@@ -15,6 +15,7 @@
   import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte';
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
+  import { toast } from 'svelte-sonner';
 
   interface Props {
     registerForm: SuperValidated<Infer<RegisterSchema>>;
@@ -25,7 +26,19 @@
   let open = $state(false);
 
   const form = superForm(registerForm, {
-    validators: zodClient(registerSchema)
+    validators: zodClient(registerSchema),
+    id: 'registerEvent',
+    onUpdate({ result }) {
+      const { status, data } = result;
+      switch (status) {
+        case 200:
+          toast.success(data.msg);
+          break;
+        case 401:
+          toast.error(data.msg);
+          break;
+      }
+    }
   });
 
   const { form: formData, enhance, submitting } = form;
@@ -72,13 +85,7 @@
       </AlertDialog.Description>
     </AlertDialog.Header>
     <ScrollArea class="h-[80dvh]">
-      <form
-        method="POST"
-        action="?/registerEvent"
-        enctype="multipart/form-data"
-        use:enhance
-        class=" "
-      >
+      <form method="POST" action="?/registerEvent" enctype="multipart/form-data" use:enhance>
         <div class="grid grid-cols-3 gap-6 px-6 pb-6">
           <!--Personal Details-->
           <div class="">
@@ -369,13 +376,7 @@
         </div>
 
         <div class="pointer-events-none sticky bottom-6 left-0 right-0 flex justify-end px-6">
-          <Form.Button
-            onclick={() => {
-              console.log($formData);
-            }}
-            size="sm"
-            class="pointer-events-auto relative"
-          >
+          <Form.Button disabled={$submitting} size="sm" class="pointer-events-auto relative">
             {#if $submitting}
               <div
                 class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center rounded-lg bg-primary"
