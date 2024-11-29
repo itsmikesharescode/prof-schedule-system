@@ -3,17 +3,13 @@
   import AdminSidebar from './(components)/Nav/AdminSidebar.svelte';
 
   const { children, data } = $props();
-
-  let open = $state(true);
 </script>
 
-<Sidebar.Provider bind:open>
+<Sidebar.Provider>
   <AdminSidebar />
-  <main class="w-full p-2">
-    <div>
-      <Sidebar.Trigger title={open ? 'Close sidebar' : 'Open sidebar'} />
-    </div>
 
+  <section class="w-full min-w-0 p-4">
+    <Sidebar.Trigger />
     {@render children()}
-  </main>
+  </section>
 </Sidebar.Provider>
