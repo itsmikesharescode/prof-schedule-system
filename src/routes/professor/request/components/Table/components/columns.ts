@@ -6,6 +6,26 @@ import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/re
 
 export const columns: ColumnDef<RequestPageTable>[] = [
   {
+    accessorKey: 'status',
+    header: ({ column }) => {
+      return renderComponent(TableColumnHeader<RequestPageTable, unknown>, {
+        column,
+        title: 'Status'
+      });
+    },
+    cell: ({ row }) => {
+      const statusSnippet = createRawSnippet<[string]>((getStatus) => {
+        return {
+          render: () => `<div class="w-full">${getStatus()}</div>`
+        };
+      });
+
+      return renderSnippet(statusSnippet, row.getValue('status'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+  {
     accessorKey: 'department',
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<RequestPageTable, unknown>, {
