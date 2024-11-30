@@ -11,6 +11,26 @@ class TableState {
   getActiveRow() {
     return this.#activeRow;
   }
+
+  #showUpdate = $state(false);
+
+  setShowUpdate(show: boolean) {
+    this.#showUpdate = show;
+  }
+
+  getShowUpdate() {
+    return this.#showUpdate;
+  }
+
+  #showDelete = $state(false);
+
+  setShowDelete(show: boolean) {
+    this.#showDelete = show;
+  }
+
+  getShowDelete() {
+    return this.#showDelete;
+  }
 }
 
 const TableKey = Symbol('TableState');
