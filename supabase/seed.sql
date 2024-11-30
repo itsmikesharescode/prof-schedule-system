@@ -335,7 +335,8 @@ CREATE TABLE IF NOT EXISTS "public"."requests_tb" (
     "professor_id" "uuid" NOT NULL,
     "schedule" "jsonb" NOT NULL,
     "reason" "text" NOT NULL,
-    "status" character varying DEFAULT 'Pending'::character varying NOT NULL
+    "status" character varying DEFAULT 'Pending'::character varying NOT NULL,
+    "reference_id" character varying NOT NULL
 );
 
 

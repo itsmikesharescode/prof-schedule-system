@@ -5,6 +5,7 @@ import { z } from 'zod';
 export const requestSchema = z.object({
   id: z.number(),
   created_at: z.string(),
+  reference_id: z.string(),
   professor_id: z.string(),
   schedule: z.custom<PreferredSchedule>(),
   reason: z.string(),
