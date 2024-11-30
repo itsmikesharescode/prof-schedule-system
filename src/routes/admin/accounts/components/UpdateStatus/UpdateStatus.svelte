@@ -65,7 +65,7 @@
       <AlertDialog.Description>Update the status of the professor.</AlertDialog.Description>
     </AlertDialog.Header>
 
-    <form method="POST" action="?/updateStatusEvent" use:enhance>
+    <form method="POST" action="?/updateProfessorStatusEvent" use:enhance>
       <input type="hidden" name="userId" bind:value={$formData.userId} />
       <Form.Field {form} name="status">
         <Form.Control>

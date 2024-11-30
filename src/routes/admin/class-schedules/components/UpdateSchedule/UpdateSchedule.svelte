@@ -145,6 +145,11 @@
       subjects = tableState.getActiveRow()?.subjects as typeof subjects;
       $formData.id = tableState.getActiveRow()?.id?.toString() ?? '';
       $formData.subjects = subjects;
+      $formData.department = tableState.getActiveRow()?.department ?? '';
+      $formData.semester = tableState.getActiveRow()?.semester ?? '';
+      $formData.schoolYear = tableState.getActiveRow()?.school_year ?? '';
+      $formData.yearLevel = tableState.getActiveRow()?.year_level ?? '';
+      $formData.section = tableState.getActiveRow()?.section ?? '';
     }
   });
 </script>
