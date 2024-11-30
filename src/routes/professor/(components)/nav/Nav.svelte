@@ -19,7 +19,7 @@
 </script>
 
 <nav class="border-b-2">
-  <section class="container mx-auto flex items-center justify-between p-2">
+  <section class="container flex items-center justify-between p-2">
     <div class="flex items-center gap-5">
       {#each navItems as item}
         <a
