@@ -4,11 +4,13 @@ import { updateProfileSchema } from './components/UpdateProfile/schema';
 import { zod } from 'sveltekit-superforms/adapters';
 import { fail } from '@sveltejs/kit';
 import { updateInformationSchema } from './components/UpdateInformation/schema';
+import { updatePasswordSchema } from './components/UpdatePassword/schema';
 
 export const load: PageServerLoad = async () => {
   return {
     updateProfileForm: await superValidate(zod(updateProfileSchema)),
-    updateInformationForm: await superValidate(zod(updateInformationSchema))
+    updateInformationForm: await superValidate(zod(updateInformationSchema)),
+    updatePasswordForm: await superValidate(zod(updatePasswordSchema))
   };
 };
 
@@ -73,5 +75,21 @@ export const actions: Actions = {
     if (error) return fail(401, withFiles({ form, msg: error.message }));
 
     return withFiles({ form, msg: 'Information updated successfully.' });
+  },
+
+  updatePasswordEvent: async ({ request, locals: { supabase, user } }) => {
+    const form = await superValidate(request, zod(updatePasswordSchema));
+
+    if (!form.valid) {
+      return fail(400, form);
+    }
+
+    const { error } = await supabase.auth.updateUser({
+      password: form.data.password
+    });
+
+    if (error) return fail(401, { form, msg: error.message });
+
+    return { form, msg: 'Password updated successfully.' };
   }
 };
