@@ -18,13 +18,13 @@
 <div class="flex items-center justify-between">
   <div class="flex flex-1 items-center space-x-2">
     <Input
-      placeholder="Search ID..."
-      value={(table.getColumn('id')?.getFilterValue() as string) ?? ''}
+      placeholder="Search by Reference ID..."
+      value={(table.getColumn('reference_id')?.getFilterValue() as string) ?? ''}
       oninput={(e) => {
-        table.getColumn('id')?.setFilterValue(e.currentTarget.value);
+        table.getColumn('reference_id')?.setFilterValue(e.currentTarget.value);
       }}
       onchange={(e) => {
-        table.getColumn('id')?.setFilterValue(e.currentTarget.value);
+        table.getColumn('reference_id')?.setFilterValue(e.currentTarget.value);
       }}
       class="h-8 w-[150px] lg:w-[250px]"
     />

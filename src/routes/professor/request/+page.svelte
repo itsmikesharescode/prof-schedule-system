@@ -26,6 +26,7 @@
       <Table
         data={requests?.map((item) => ({
           id: item.id,
+          reference_id: item.reference_id,
           created_at: item.created_at,
           professor_id: item.professor_id,
           status: item.status,

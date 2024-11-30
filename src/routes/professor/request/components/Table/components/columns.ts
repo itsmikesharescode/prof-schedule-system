@@ -6,21 +6,21 @@ import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/re
 
 export const columns: ColumnDef<RequestPageTable>[] = [
   {
-    accessorKey: 'id',
+    accessorKey: 'reference_id',
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<RequestPageTable, unknown>, {
         column,
-        title: 'ID'
+        title: 'Reference ID'
       });
     },
     cell: ({ row }) => {
-      const idSnippet = createRawSnippet<[string]>((getId) => {
+      const referenceIdSnippet = createRawSnippet<[string]>((getReferenceId) => {
         return {
-          render: () => `<div class="w-full">${getId()}</div>`
+          render: () => `<div class="w-full">${getReferenceId()}</div>`
         };
       });
 
-      return renderSnippet(idSnippet, row.getValue('id'));
+      return renderSnippet(referenceIdSnippet, row.getValue('reference_id'));
     },
     enableSorting: true,
     enableHiding: true
