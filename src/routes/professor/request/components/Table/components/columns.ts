@@ -111,6 +111,27 @@ export const columns: ColumnDef<RequestPageTable>[] = [
   },
 
   {
+    accessorKey: 'reason',
+    header: ({ column }) => {
+      return renderComponent(TableColumnHeader<RequestPageTable, unknown>, {
+        column,
+        title: 'Reason'
+      });
+    },
+    cell: ({ row }) => {
+      const reasonSnippet = createRawSnippet<[string]>((getReason) => {
+        return {
+          render: () => `<div class="w-full">${getReason()}</div>`
+        };
+      });
+
+      return renderSnippet(reasonSnippet, row.getValue('reason'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
     accessorKey: 'created_at',
     id: 'created_at',
     header: ({ column }) => {

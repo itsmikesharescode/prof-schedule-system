@@ -334,7 +334,8 @@ CREATE TABLE IF NOT EXISTS "public"."requests_tb" (
     "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
     "professor_id" "uuid" NOT NULL,
     "schedule" "jsonb" NOT NULL,
-    "reason" "text" NOT NULL
+    "reason" "text" NOT NULL,
+    "status" character varying DEFAULT '"Pending"'::character varying NOT NULL
 );
 
 

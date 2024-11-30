@@ -172,6 +172,7 @@ export type Database = {
           professor_id: string;
           reason: string;
           schedule: PreferredSchedule;
+          status: string;
         };
         Insert: {
           created_at?: string;
@@ -179,6 +180,7 @@ export type Database = {
           professor_id: string;
           reason: string;
           schedule: PreferredSchedule;
+          status?: string;
         };
         Update: {
           created_at?: string;
@@ -186,6 +188,7 @@ export type Database = {
           professor_id?: string;
           reason?: string;
           schedule?: PreferredSchedule;
+          status?: string;
         };
         Relationships: [
           {
