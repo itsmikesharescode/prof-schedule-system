@@ -6,6 +6,27 @@ import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/re
 
 export const columns: ColumnDef<RequestPageTable>[] = [
   {
+    accessorKey: 'id',
+    header: ({ column }) => {
+      return renderComponent(TableColumnHeader<RequestPageTable, unknown>, {
+        column,
+        title: 'ID'
+      });
+    },
+    cell: ({ row }) => {
+      const idSnippet = createRawSnippet<[string]>((getId) => {
+        return {
+          render: () => `<div class="w-full">${getId()}</div>`
+        };
+      });
+
+      return renderSnippet(idSnippet, row.getValue('id'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
     accessorKey: 'status',
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<RequestPageTable, unknown>, {
@@ -26,107 +47,24 @@ export const columns: ColumnDef<RequestPageTable>[] = [
     enableHiding: true
   },
   {
-    accessorKey: 'department',
+    accessorKey: 'date',
+    accessorFn: (row) => `${row.day} ${row.start_time} - ${row.end_time}`,
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<RequestPageTable, unknown>, {
         column,
-        title: 'Department'
+        title: 'Preferred Date'
       });
     },
     cell: ({ row }) => {
-      const departmentSnippet = createRawSnippet<[string]>((getDepartment) => {
+      const dateSnippet = createRawSnippet<[string]>((getDate) => {
         return {
-          render: () => `<div class="w-full">${getDepartment()}</div>`
+          render: () => `<div class="w-full">${getDate()}</div>`
         };
       });
 
-      return renderSnippet(departmentSnippet, row.getValue('department'));
+      return renderSnippet(dateSnippet, row.getValue('date'));
     },
-    enableSorting: true,
-    enableHiding: true
-  },
-
-  {
-    accessorKey: 'school_year',
-    header: ({ column }) => {
-      return renderComponent(TableColumnHeader<RequestPageTable, unknown>, {
-        column,
-        title: 'School Year'
-      });
-    },
-    cell: ({ row }) => {
-      const schoolYearSnippet = createRawSnippet<[string]>((getSchoolYear) => {
-        return {
-          render: () => `<div class="w-full">${getSchoolYear()}</div>`
-        };
-      });
-
-      return renderSnippet(schoolYearSnippet, row.getValue('school_year'));
-    },
-    enableSorting: true,
-    enableHiding: true
-  },
-
-  {
-    accessorKey: 'year_level',
-    header: ({ column }) => {
-      return renderComponent(TableColumnHeader<RequestPageTable, unknown>, {
-        column,
-        title: 'Year Level'
-      });
-    },
-    cell: ({ row }) => {
-      const yearLevelSnippet = createRawSnippet<[string]>((getYearLevel) => {
-        return {
-          render: () => `<div class="w-full">${getYearLevel()}</div>`
-        };
-      });
-
-      return renderSnippet(yearLevelSnippet, row.getValue('year_level'));
-    },
-    enableSorting: true,
-    enableHiding: true
-  },
-
-  {
-    accessorKey: 'semester',
-    header: ({ column }) => {
-      return renderComponent(TableColumnHeader<RequestPageTable, unknown>, {
-        column,
-        title: 'Semester'
-      });
-    },
-    cell: ({ row }) => {
-      const semesterSnippet = createRawSnippet<[string]>((getSemester) => {
-        return {
-          render: () => `<div class="w-full">${getSemester()}</div>`
-        };
-      });
-
-      return renderSnippet(semesterSnippet, row.getValue('semester'));
-    },
-    enableSorting: true,
-    enableHiding: true
-  },
-
-  {
-    accessorKey: 'section',
-    header: ({ column }) => {
-      return renderComponent(TableColumnHeader<RequestPageTable, unknown>, {
-        column,
-        title: 'Section'
-      });
-    },
-    cell: ({ row }) => {
-      const sectionSnippet = createRawSnippet<[string]>((getSection) => {
-        return {
-          render: () => `<div class="w-full">${getSection()}</div>`
-        };
-      });
-
-      return renderSnippet(sectionSnippet, row.getValue('section'));
-    },
-    enableSorting: true,
+    enableSorting: false,
     enableHiding: true
   },
 

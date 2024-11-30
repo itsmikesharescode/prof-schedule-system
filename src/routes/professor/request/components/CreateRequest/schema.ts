@@ -1,12 +1,11 @@
 import { z } from 'zod';
 
 export const createRequestSchema = z.object({
-  user_id: z.string(),
-  start_time: z.string(),
-  end_time: z.string(),
-  day: z.string(),
-  availability: z.string(),
-  reason: z.string()
+  start_time: z.string().min(1, { message: 'Start time is required' }),
+  end_time: z.string().min(1, { message: 'End time is required' }),
+  day: z.string().min(1, { message: 'Day is required' }),
+  availability: z.string().min(1, { message: 'Availability is required' }),
+  reason: z.string().min(1, { message: 'Reason is required' })
 });
 
-export type CreateRequestSchema = z.infer<typeof createRequestSchema>;
+export type CreateRequestSchema = typeof createRequestSchema;
