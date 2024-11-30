@@ -60,7 +60,9 @@
     if (tableState.getShowUpdate()) {
       $formData.userId = tableState.getActiveRow()?.user_id ?? '';
       $formData.photoPath = tableState.getActiveRow()?.avatar ?? '';
-      $formData.position = tableState.getActiveRow()?.role ?? '';
+      $formData.position =
+        (tableState.getActiveRow()?.role ?? '').charAt(0).toUpperCase() +
+        (tableState.getActiveRow()?.role ?? '').slice(1);
       $formData.firstName = tableState.getActiveRow()?.firstName ?? '';
       $formData.middleName = tableState.getActiveRow()?.middleName ?? '';
       $formData.lastName = tableState.getActiveRow()?.lastName ?? '';

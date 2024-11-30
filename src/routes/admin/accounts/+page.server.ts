@@ -50,7 +50,7 @@ export const actions: Actions = {
         lastName: form.data.lastName,
         department: form.data.department,
         previousSchool: form.data.previousSchool,
-        yearsInService: form.data.yearsOfTeaching,
+        yearsOfTeaching: form.data.yearsOfTeaching,
         schedule: {
           day: form.data.day,
           startTime: form.data.startTime,
@@ -99,7 +99,7 @@ export const actions: Actions = {
           lastName: form.data.lastName,
           department: form.data.department,
           previousSchool: form.data.previousSchool,
-          yearsInService: form.data.yearsOfTeaching,
+          yearsOfTeaching: form.data.yearsOfTeaching,
           schedule: {
             day: form.data.day,
             startTime: form.data.startTime,
@@ -120,23 +120,6 @@ export const actions: Actions = {
 
     if (!form.valid) {
       return fail(400, { form });
-    }
-
-    const { error } = await supabaseAdmin.auth.admin.updateUserById(form.data.userId, {
-      user_metadata: {
-        approved: form.data.status === 'Active' ? true : false
-      }
-    });
-
-    if (error) return fail(401, { form, msg: error.message });
-    return { form, msg: 'Status updated successfully' };
-  },
-
-  updateStatusEvent: async ({ request, locals: { supabaseAdmin } }) => {
-    const form = await superValidate(request, zod(updateStatusSchema));
-
-    if (!form.valid) {
-      return fail(400, withFiles({ form }));
     }
 
     const { error } = await supabaseAdmin.auth.admin.updateUserById(form.data.userId, {
