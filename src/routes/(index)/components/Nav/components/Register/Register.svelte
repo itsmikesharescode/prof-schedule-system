@@ -16,6 +16,7 @@
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
   import { toast } from 'svelte-sonner';
+  import { auxiliaryState } from '$lib/runes/auxiliaryState.svelte';
 
   interface Props {
     registerForm: SuperValidated<Infer<RegisterSchema>>;
@@ -258,7 +259,7 @@
                     name="Select department"
                     {props}
                     class=""
-                    selections={departments}
+                    selections={auxiliaryState.formatDepartments()}
                     bind:selected={$formData.department}
                   />
                   <input type="hidden" {...props} bind:value={$formData.department} />
