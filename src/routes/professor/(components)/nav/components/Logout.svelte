@@ -21,7 +21,7 @@
   };
 </script>
 
-<Button size="sm" onclick={() => (open = true)} class="relative">
+<Button disabled={loading} size="sm" onclick={() => (open = true)} class="relative">
   {#if loading}
     <div
       class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center rounded-lg bg-primary"

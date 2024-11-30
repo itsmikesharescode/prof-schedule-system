@@ -14,9 +14,9 @@
 <div class="flex items-center gap-2.5">
   <Avatar.Root>
     <Avatar.Image src={`${PUBLIC_SUPABASE_STORAGE_URL}${row.original.avatar}`} alt="profile" />
-    <Avatar.Fallback>{row.original.fullName[0].toUpperCase()}</Avatar.Fallback>
+    <Avatar.Fallback>{row.original.firstName[0].toUpperCase()}</Avatar.Fallback>
   </Avatar.Root>
   <div class="">
-    {row.original.fullName}
+    {`${row.original.lastName}, ${row.original.firstName} ${row.original.middleName}`}
   </div>
 </div>

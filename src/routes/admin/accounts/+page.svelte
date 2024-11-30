@@ -27,10 +27,21 @@
   {:then professors}
     <Table
       data={professors?.map((prof) => ({
-        created_at: prof.created_at,
         user_id: prof.user_id,
-        fullName: `${prof.user_meta_data.lastName}, ${prof.user_meta_data.firstName} ${prof.user_meta_data.middleName}`,
-        ...prof.user_meta_data
+        created_at: prof.created_at,
+        role: prof.user_meta_data.role,
+        email: prof.user_meta_data.email,
+        title: prof.user_meta_data.title,
+        avatar: prof.user_meta_data.avatar,
+        approved: prof.user_meta_data.approved,
+        firstName: prof.user_meta_data.firstName,
+        middleName: prof.user_meta_data.middleName,
+        lastName: prof.user_meta_data.lastName,
+        interests: prof.user_meta_data.interests,
+        department: prof.user_meta_data.department,
+        previousSchool: prof.user_meta_data.previousSchool,
+        yearsOfTeaching: prof.user_meta_data.yearsOfTeaching,
+        schedule: prof.user_meta_data.schedule
       })) ?? []}
       {columns}
     />
