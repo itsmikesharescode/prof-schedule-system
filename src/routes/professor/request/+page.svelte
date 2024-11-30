@@ -5,7 +5,9 @@
   import { columns } from './components/Table/components/columns';
   import CreateRequest from './components/CreateRequest/CreateRequest.svelte';
   import UpdateRequest from './components/UpdateRequest/UpdateRequest.svelte';
+  import DeleteRequest from './components/DeleteRequest/DeleteRequest.svelte';
   import { initTableState } from './components/Table/tableState.svelte';
+
   const { data } = $props();
 
   initTableState();
@@ -40,3 +42,4 @@
 </main>
 
 <UpdateRequest updateRequestForm={data.updateRequestForm} />
+<DeleteRequest />
