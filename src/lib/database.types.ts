@@ -170,18 +170,21 @@ export type Database = {
           created_at: string;
           id: number;
           professor_id: string;
+          reason: string;
           schedule: PreferredSchedule;
         };
         Insert: {
           created_at?: string;
           id?: number;
           professor_id: string;
+          reason: string;
           schedule: PreferredSchedule;
         };
         Update: {
           created_at?: string;
           id?: number;
           professor_id?: string;
+          reason?: string;
           schedule?: PreferredSchedule;
         };
         Relationships: [
