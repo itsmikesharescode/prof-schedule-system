@@ -3,7 +3,7 @@
   import Table from './components/Table/components/Table.svelte';
   import { columns } from './components/Table/components/columns';
   import { initTableState } from './components/Table/tableState.svelte';
-
+  import UpdateRequestStatus from './components/UpdateStatus/UpdateRequestStatus.svelte';
   const { data } = $props();
 
   initTableState();
@@ -27,3 +27,5 @@
     />
   {/await}
 </div>
+
+<UpdateRequestStatus updateRequestStatusForm={data.updateRequestStatusForm} />
