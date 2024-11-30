@@ -7,16 +7,17 @@
     ListRestart,
     CalendarCheck,
     ChartColumn,
-    LogOut,
+    CalendarRange,
     ChevronDown,
     CalendarCog
   } from 'lucide-svelte';
+
   import * as Sidebar from '$lib/components/ui/sidebar/index.js';
   import { page } from '$app/stores';
-  import * as Popover from '$lib/components/ui/popover/index.js';
+
   import Profile from './components/Profile.svelte';
   import * as Collapsible from '$lib/components/ui/collapsible';
-
+  import Logout from './components/Logout.svelte';
   const site_map = [
     {
       title: 'Programs',
@@ -42,12 +43,12 @@
       title: 'Class Schedules',
       url: '/admin/class-schedules',
       icon: CalendarCheck
+    },
+    {
+      title: 'Requests',
+      url: '/admin/requests',
+      icon: CalendarRange
     }
-    /* {
-      title: 'Reports',
-      url: '/admin/reports',
-      icon: ChartColumn
-    } */
   ];
 
   const records_map = [
@@ -141,6 +142,6 @@
   </Sidebar.Content>
 
   <Sidebar.Footer>
-    <Profile />
+    <Logout />
   </Sidebar.Footer>
 </Sidebar.Root>

@@ -24,9 +24,9 @@
   };
 </script>
 
-<Button size="sm" onclick={() => (open = true)}>
+<Button size="sm" onclick={() => (open = true)} class="flex items-center justify-between">
   <LogOut class="size-4" />
-  Log out
+  Logout
 </Button>
 
 <AlertDialog.Root bind:open>
