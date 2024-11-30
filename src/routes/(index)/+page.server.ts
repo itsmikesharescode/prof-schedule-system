@@ -64,7 +64,7 @@ export const actions: Actions = {
         data: {
           approve: false,
           role: 'professor',
-          photo: storageRes.fullPath,
+          avatar: storageRes.fullPath,
           email: form.data.email,
           title: form.data.title,
           firstName: form.data.firstName,
