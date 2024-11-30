@@ -1,5 +1,4 @@
 <script lang="ts">
-  import Darkmode from '$lib/components/general/Darkmode.svelte';
   import type { Infer, SuperValidated } from 'sveltekit-superforms';
   import Register from './components/Register/Register.svelte';
   import type { RegisterSchema } from './components/Register/schema';
@@ -24,7 +23,6 @@
     <div class="flex items-center gap-2.5">
       <Login {loginForm} />
       <Register {registerForm} />
-      <Darkmode />
     </div>
   </div>
 </nav>

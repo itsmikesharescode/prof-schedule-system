@@ -335,7 +335,7 @@ CREATE TABLE IF NOT EXISTS "public"."requests_tb" (
     "professor_id" "uuid" NOT NULL,
     "schedule" "jsonb" NOT NULL,
     "reason" "text" NOT NULL,
-    "status" character varying DEFAULT '"Pending"'::character varying NOT NULL
+    "status" character varying DEFAULT 'Pending'::character varying NOT NULL
 );
 
 
@@ -685,6 +685,10 @@ CREATE POLICY "Allow all if admin" ON "public"."subjects_tb" TO "authenticated" 
 
 
 
+CREATE POLICY "Allow delete if professor" ON "public"."requests_tb" FOR DELETE TO "authenticated" USING (("public"."is_professor"() AND ("auth"."uid"() = "professor_id")));
+
+
+
 CREATE POLICY "Allow if professor" ON "public"."requests_tb" FOR INSERT TO "authenticated" WITH CHECK ("public"."is_professor"());
 
 
@@ -706,6 +710,10 @@ CREATE POLICY "Allow select if logged in" ON "public"."faculties_tb" FOR SELECT 
 
 
 CREATE POLICY "Allow select if prof" ON "public"."requests_tb" FOR SELECT TO "authenticated" USING (("public"."is_professor"() AND ("auth"."uid"() = "professor_id")));
+
+
+
+CREATE POLICY "Allow update if professor" ON "public"."requests_tb" FOR UPDATE TO "authenticated" USING (("public"."is_professor"() AND ("auth"."uid"() = "professor_id"))) WITH CHECK (("public"."is_professor"() AND ("auth"."uid"() = "professor_id")));
 
 
 
