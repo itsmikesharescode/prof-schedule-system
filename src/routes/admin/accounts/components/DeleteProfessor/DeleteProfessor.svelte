@@ -12,8 +12,8 @@
 
   let deleteLoader = $state(false);
   const deleteProfessorEvent: SubmitFunction = () => {
+    deleteLoader = true;
     return async ({ result, update }) => {
-      deleteLoader = true;
       const { status, data } = result as Result<{ msg: string }>;
 
       switch (status) {
