@@ -12,24 +12,24 @@ class TableState {
     return this.#activeRow;
   }
 
-  #showViewCalendar = $state(false);
+  #showViewComparison = $state(false);
 
-  setShowViewCalendar(show: boolean) {
-    this.#showViewCalendar = show;
+  setShowViewComparison(show: boolean) {
+    this.#showViewComparison = show;
   }
 
-  getShowViewCalendar() {
-    return this.#showViewCalendar;
+  getShowViewComparison() {
+    return this.#showViewComparison;
   }
 
-  #showUpdate = $state(false);
+  #showUpdateStatus = $state(false);
 
-  setShowUpdate(show: boolean) {
-    this.#showUpdate = show;
+  setShowUpdateStatus(show: boolean) {
+    this.#showUpdateStatus = show;
   }
 
-  getShowUpdate() {
-    return this.#showUpdate;
+  getShowUpdateStatus() {
+    return this.#showUpdateStatus;
   }
 
   #showDelete = $state(false);

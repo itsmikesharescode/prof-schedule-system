@@ -6,7 +6,6 @@
   import Ellipsis from 'lucide-svelte/icons/ellipsis';
   import FileMinus from 'lucide-svelte/icons/file-minus';
   import Pen from 'lucide-svelte/icons/pen';
-  import Calendar from 'lucide-svelte/icons/calendar';
   import GitCompare from 'lucide-svelte/icons/git-compare';
   import type { Row } from '@tanstack/table-core';
   import { type RequestsPageTable } from '../data/schemas';
@@ -32,7 +31,7 @@
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
-        tableState.setShowViewCalendar(true);
+        tableState.setShowViewComparison(true);
       }}
     >
       <GitCompare />
@@ -42,7 +41,7 @@
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
-        tableState.setShowUpdate(true);
+        tableState.setShowUpdateStatus(true);
       }}
     >
       <Pen />
