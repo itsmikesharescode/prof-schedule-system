@@ -1,4 +1,4 @@
-import type { UserMetaData, YearLevel, Subject } from './types';
+import type { UserMetaData, YearLevel, Subject, PreferredSchedule } from './types';
 
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
@@ -170,19 +170,19 @@ export type Database = {
           created_at: string;
           id: number;
           professor_id: string;
-          schedule: Json;
+          schedule: PreferredSchedule;
         };
         Insert: {
           created_at?: string;
           id?: number;
           professor_id: string;
-          schedule: Json;
+          schedule: PreferredSchedule;
         };
         Update: {
           created_at?: string;
           id?: number;
           professor_id?: string;
-          schedule?: Json;
+          schedule?: PreferredSchedule;
         };
         Relationships: [
           {

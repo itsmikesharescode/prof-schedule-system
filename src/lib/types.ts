@@ -38,3 +38,10 @@ export type Subject = {
   day: string;
   room: string;
 };
+
+export type PreferredSchedule = {
+  day: string;
+  startTime: string;
+  endTime: string;
+  available: 'Full Time' | 'Part Time';
+};
