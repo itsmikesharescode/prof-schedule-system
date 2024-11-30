@@ -42,7 +42,7 @@ export const actions: Actions = {
       user_metadata: {
         approved: true,
         email: form.data.email,
-        role: form.data.position,
+        role: form.data.position.toLowerCase(),
         avatar: storageRes.fullPath,
         title: form.data.title,
         firstName: form.data.firstName,
@@ -92,7 +92,7 @@ export const actions: Actions = {
         user_metadata: {
           avatar: storageRes.fullPath,
           email: form.data.email,
-          role: form.data.position,
+          role: form.data.position.toLowerCase(),
           title: form.data.title,
           firstName: form.data.firstName,
           middleName: form.data.middleName,

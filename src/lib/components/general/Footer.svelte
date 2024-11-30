@@ -15,7 +15,7 @@
         >ProfSched@gmail.com</a
       >
       <a href="tel:+639022516325" class="text-sm underline transition-all hover:text-black"
-        >+639022516325</a
+        >+<!-- 639022516325 --></a
       >
     </div>
     <Darkmode />

@@ -9,7 +9,7 @@ export const requestSchema = z.object({
   schedule: z.custom<PreferredSchedule>(),
   reason: z.string(),
   status: z.string(),
-  professors_tb: z.custom<Database['public']['Tables']['professors_tb']['Row']>()
+  professors_tb: z.custom<Database['public']['Tables']['professors_tb']['Row']>().nullable()
 });
 
 export type RequestsPageTable = z.output<typeof requestSchema>;

@@ -14,30 +14,21 @@
   let { table }: { table: Table<RequestsPageTable> } = $props();
 
   const isFiltered = $derived(table.getState().columnFilters.length > 0);
-  const statusCol = $derived(table.getColumn('status'));
-  const priorityCol = $derived(table.getColumn('priority'));
 </script>
 
 <div class="flex items-center justify-between">
   <div class="flex flex-1 items-center space-x-2">
     <Input
-      placeholder="Search department..."
-      value={(table.getColumn('department')?.getFilterValue() as string) ?? ''}
+      placeholder="Search by ID..."
+      value={(table.getColumn('id')?.getFilterValue() as string) ?? ''}
       oninput={(e) => {
-        table.getColumn('department')?.setFilterValue(e.currentTarget.value);
+        table.getColumn('id')?.setFilterValue(e.currentTarget.value);
       }}
       onchange={(e) => {
-        table.getColumn('department')?.setFilterValue(e.currentTarget.value);
+        table.getColumn('id')?.setFilterValue(e.currentTarget.value);
       }}
       class="h-8 w-[150px] lg:w-[250px]"
     />
-
-    {#if statusCol}
-      <TableFacetedFilter column={statusCol} title="Status" options={statuses} />
-    {/if}
-    {#if priorityCol}
-      <TableFacetedFilter column={priorityCol} title="Priority" options={priorities} />
-    {/if}
 
     {#if isFiltered}
       <Button variant="ghost" onclick={() => table.resetColumnFilters()} class="h-8 px-2 lg:px-3">

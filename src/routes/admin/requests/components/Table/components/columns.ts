@@ -5,8 +5,8 @@ import {
   TableCheckbox,
   TableColumnHeader,
   TableRowActions,
-  TableTitleCell,
-  TableSubjectsCell
+  TableSubjectsCell,
+  TableFullnameRow
 } from './index.js';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/render-helpers.js';
 
@@ -53,22 +53,14 @@ export const columns: ColumnDef<RequestsPageTable>[] = [
   },
 
   {
-    accessorKey: 'school_year',
+    accessorKey: 'professor_id',
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<RequestsPageTable, unknown>, {
         column,
-        title: 'School Year'
+        title: 'Full Name'
       });
     },
-    cell: ({ row }) => {
-      const schoolYearSnippet = createRawSnippet<[string]>((getSchoolYear) => {
-        return {
-          render: () => `<div class="w-full">${getSchoolYear()}</div>`
-        };
-      });
-
-      return renderSnippet(schoolYearSnippet, row.getValue('school_year'));
-    },
+    cell: ({ row }) => renderComponent(TableFullnameRow, { row }),
     enableSorting: true,
     enableHiding: true
   },
