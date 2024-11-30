@@ -21,7 +21,5 @@
       {row.original.professors_tb?.user_meta_data?.lastName[0].toUpperCase()}
     </Avatar.Fallback>
   </Avatar.Root>
-  <div class="">
-    {`${row.original.professors_tb?.user_meta_data?.lastName}, ${row.original.professors_tb?.user_meta_data?.firstName} ${row.original.professors_tb?.user_meta_data?.middleName}`}
-  </div>
+  <div class="">{row.original.full_name}</div>
 </div>

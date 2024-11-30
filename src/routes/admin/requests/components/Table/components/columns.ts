@@ -31,29 +31,28 @@ export const columns: ColumnDef<RequestsPageTable>[] = [
     enableHiding: false
   },
   {
-    accessorKey: 'id',
+    accessorKey: 'reference_id',
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<RequestsPageTable, unknown>, {
         column,
-        title: 'ID'
+        title: 'Reference ID'
       });
     },
     cell: ({ row }) => {
-      const idSnippet = createRawSnippet<[string]>((getId) => {
-        const id = getId();
+      const idSnippet = createRawSnippet<[string]>((getReferenceId) => {
         return {
-          render: () => `<div class="w-[80px]">${id}</div>`
+          render: () => `<div class="w-[80px]">${getReferenceId()}</div>`
         };
       });
 
-      return renderSnippet(idSnippet, row.getValue('id'));
+      return renderSnippet(idSnippet, row.getValue('reference_id'));
     },
     enableSorting: false,
     enableHiding: false
   },
 
   {
-    accessorKey: 'professor_id',
+    accessorKey: 'full_name',
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<RequestsPageTable, unknown>, {
         column,
@@ -66,102 +65,26 @@ export const columns: ColumnDef<RequestsPageTable>[] = [
   },
 
   {
-    accessorKey: 'semester',
+    accessorKey: 'status',
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<RequestsPageTable, unknown>, {
         column,
-        title: 'Semester'
+        title: 'Status'
       });
     },
     cell: ({ row }) => {
-      const semesterSnippet = createRawSnippet<[string]>((getSemester) => {
+      const statusSnippet = createRawSnippet<[string]>((getStatus) => {
         return {
-          render: () => `<div class="w-full">${getSemester()}</div>`
+          render: () => `<div class="w-full">${getStatus()}</div>`
         };
       });
 
-      return renderSnippet(semesterSnippet, row.getValue('semester'));
+      return renderSnippet(statusSnippet, row.getValue('status'));
     },
     enableSorting: true,
     enableHiding: true
   },
 
-  {
-    accessorKey: 'year_level',
-    header: ({ column }) => {
-      return renderComponent(TableColumnHeader<RequestsPageTable, unknown>, {
-        column,
-        title: 'Year Level'
-      });
-    },
-    cell: ({ row }) => {
-      const yearLevelSnippet = createRawSnippet<[string]>((getYearLevel) => {
-        return {
-          render: () => `<div class="w-full">${getYearLevel()}</div>`
-        };
-      });
-
-      return renderSnippet(yearLevelSnippet, row.getValue('year_level'));
-    },
-    enableSorting: true,
-    enableHiding: true
-  },
-
-  {
-    accessorKey: 'section',
-    header: ({ column }) => {
-      return renderComponent(TableColumnHeader<RequestsPageTable, unknown>, {
-        column,
-        title: 'Section'
-      });
-    },
-    cell: ({ row }) => {
-      const sectionSnippet = createRawSnippet<[string]>((getSection) => {
-        return {
-          render: () => `<div class="w-full">${getSection()}</div>`
-        };
-      });
-
-      return renderSnippet(sectionSnippet, row.getValue('section'));
-    },
-    enableSorting: true,
-    enableHiding: true
-  },
-
-  {
-    accessorKey: 'department',
-    header: ({ column }) => {
-      return renderComponent(TableColumnHeader<RequestsPageTable, unknown>, {
-        column,
-        title: 'Department'
-      });
-    },
-    cell: ({ row }) => {
-      const departmentSnippet = createRawSnippet<[string]>((getDepartment) => {
-        return {
-          render: () => `<div class="w-full">${getDepartment()}</div>`
-        };
-      });
-
-      return renderSnippet(departmentSnippet, row.getValue('department'));
-    },
-    enableSorting: true,
-    enableHiding: true
-  },
-
-  {
-    accessorKey: 'subjects',
-    id: 'subjects',
-    header: ({ column }) => {
-      return renderComponent(TableColumnHeader<RequestsPageTable, unknown>, {
-        column,
-        title: 'Subjects'
-      });
-    },
-    cell: ({ row }) => renderComponent(TableSubjectsCell, { row }),
-    enableSorting: false,
-    enableHiding: true
-  },
   {
     accessorKey: 'created_at',
     id: 'created_at',

@@ -18,6 +18,12 @@
       <Skeleton class="h-[20px] w-[90%] rounded-full" />
     </section>
   {:then requests}
-    <Table data={requests ?? []} {columns} />
+    <Table
+      data={requests?.map((req) => ({
+        full_name: `${req.professors_tb?.user_meta_data.lastName} ${req.professors_tb?.user_meta_data.firstName} ${req.professors_tb?.user_meta_data.middleName}`,
+        ...req
+      })) ?? []}
+      {columns}
+    />
   {/await}
 </div>
