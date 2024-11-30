@@ -165,6 +165,35 @@ export type Database = {
         };
         Relationships: [];
       };
+      requests_tb: {
+        Row: {
+          created_at: string;
+          id: number;
+          professor_id: string;
+          schedule: Json;
+        };
+        Insert: {
+          created_at?: string;
+          id?: number;
+          professor_id: string;
+          schedule: Json;
+        };
+        Update: {
+          created_at?: string;
+          id?: number;
+          professor_id?: string;
+          schedule?: Json;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'requests_tb_professor_id_fkey';
+            columns: ['professor_id'];
+            isOneToOne: false;
+            referencedRelation: 'professors_tb';
+            referencedColumns: ['user_id'];
+          }
+        ];
+      };
       roles_tb: {
         Row: {
           created_at: string;
