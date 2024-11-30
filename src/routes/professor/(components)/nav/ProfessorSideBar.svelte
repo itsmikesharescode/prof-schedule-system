@@ -2,10 +2,9 @@
   import CalendarCheck2 from 'lucide-svelte/icons/calendar-check-2';
   import CalendarSearch from 'lucide-svelte/icons/calendar-search';
   import UserRoundCog from 'lucide-svelte/icons/user-round-cog';
-
+  import Profile from './components/Profile.svelte';
   import * as Sidebar from '$lib/components/ui/sidebar/index.js';
   import { page } from '$app/stores';
-  import * as Popover from '$lib/components/ui/popover/index.js';
 
   const site_map = [
     {
@@ -51,5 +50,7 @@
     </Sidebar.Group>
   </Sidebar.Content>
 
-  <Sidebar.Footer>logout here</Sidebar.Footer>
+  <Sidebar.Footer>
+    <Profile />
+  </Sidebar.Footer>
 </Sidebar.Root>
