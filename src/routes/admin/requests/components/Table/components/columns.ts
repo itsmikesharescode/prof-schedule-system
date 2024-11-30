@@ -65,6 +65,27 @@ export const columns: ColumnDef<RequestsPageTable>[] = [
   },
 
   {
+    accessorKey: 'reason',
+    header: ({ column }) => {
+      return renderComponent(TableColumnHeader<RequestsPageTable, unknown>, {
+        column,
+        title: 'Reason'
+      });
+    },
+    cell: ({ row }) => {
+      const reasonSnippet = createRawSnippet<[string]>((getReason) => {
+        return {
+          render: () => `<div class="w-full line-clamp-3">${getReason()}</div>`
+        };
+      });
+
+      return renderSnippet(reasonSnippet, row.getValue('reason'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
     accessorKey: 'status',
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<RequestsPageTable, unknown>, {

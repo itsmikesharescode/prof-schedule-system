@@ -7,6 +7,7 @@
   import FileMinus from 'lucide-svelte/icons/file-minus';
   import Pen from 'lucide-svelte/icons/pen';
   import Calendar from 'lucide-svelte/icons/calendar';
+  import GitCompare from 'lucide-svelte/icons/git-compare';
   import type { Row } from '@tanstack/table-core';
   import { type RequestsPageTable } from '../data/schemas';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index';
@@ -27,16 +28,17 @@
       </Button>
     {/snippet}
   </DropdownMenu.Trigger>
-  <DropdownMenu.Content class="w-[160px]" align="end">
+  <DropdownMenu.Content class="w-fit" align="end">
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
         tableState.setShowViewCalendar(true);
       }}
     >
-      <Calendar />
-      View Calendar
+      <GitCompare />
+      View Comparison
     </DropdownMenu.Item>
+
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
@@ -44,7 +46,7 @@
       }}
     >
       <Pen />
-      Update
+      Update Status
     </DropdownMenu.Item>
     <DropdownMenu.Item
       onclick={() => {

@@ -24,7 +24,7 @@
 </script>
 
 {#if !column?.getCanSort()}
-  <div class={className} {...restProps}>
+  <div class="{className} truncate" {...restProps}>
     {title}
   </div>
 {:else}
