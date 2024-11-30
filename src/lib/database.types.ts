@@ -171,6 +171,7 @@ export type Database = {
           id: number;
           professor_id: string;
           reason: string;
+          reference_id: string;
           schedule: PreferredSchedule;
           status: string;
         };
@@ -179,6 +180,7 @@ export type Database = {
           id?: number;
           professor_id: string;
           reason: string;
+          reference_id: string;
           schedule: PreferredSchedule;
           status?: string;
         };
@@ -187,6 +189,7 @@ export type Database = {
           id?: number;
           professor_id?: string;
           reason?: string;
+          reference_id?: string;
           schedule?: PreferredSchedule;
           status?: string;
         };

@@ -5,6 +5,7 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { createRequestSchema } from './components/CreateRequest/schema';
 import { fail, type Actions } from '@sveltejs/kit';
 import { updateRequestSchema } from './components/UpdateRequest/schema';
+import { generateReferenceId } from '$lib';
 
 export const load: PageServerLoad = async ({ locals: { supabase, user } }) => {
   return {
@@ -24,6 +25,7 @@ export const actions: Actions = {
 
     const { error } = await supabase.from('requests_tb').insert({
       professor_id: user?.id ?? '',
+      reference_id: generateReferenceId(),
       schedule: {
         day: form.data.day,
         startTime: form.data.start_time,
