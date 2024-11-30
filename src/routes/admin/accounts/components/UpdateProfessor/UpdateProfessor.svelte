@@ -61,15 +61,18 @@
       $formData.userId = tableState.getActiveRow()?.user_id ?? '';
       $formData.photoPath = tableState.getActiveRow()?.avatar ?? '';
       $formData.position = tableState.getActiveRow()?.role ?? '';
+      $formData.firstName = tableState.getActiveRow()?.firstName ?? '';
+      $formData.middleName = tableState.getActiveRow()?.middleName ?? '';
+      $formData.lastName = tableState.getActiveRow()?.lastName ?? '';
       $formData.title = tableState.getActiveRow()?.title ?? '';
       $formData.email = tableState.getActiveRow()?.email ?? '';
       $formData.previousSchool = tableState.getActiveRow()?.previousSchool ?? '';
-      $formData.yearsOfTeaching = tableState.getActiveRow()?.yearsInService ?? 0;
+      $formData.yearsOfTeaching = tableState.getActiveRow()?.yearsOfTeaching ?? 0;
       $formData.department = tableState.getActiveRow()?.department ?? '';
-      $formData.day = tableState.getActiveRow()?.preferredSchedule.day ?? '';
-      $formData.startTime = tableState.getActiveRow()?.preferredSchedule.startTime ?? '';
-      $formData.endTime = tableState.getActiveRow()?.preferredSchedule.endTime ?? '';
-      $formData.availability = tableState.getActiveRow()?.preferredSchedule.available ?? '';
+      $formData.day = tableState.getActiveRow()?.schedule.day ?? '';
+      $formData.startTime = tableState.getActiveRow()?.schedule.startTime ?? '';
+      $formData.endTime = tableState.getActiveRow()?.schedule.endTime ?? '';
+      $formData.availability = tableState.getActiveRow()?.schedule.available ?? '';
       $formData.interests = tableState.getActiveRow()?.interests ?? [];
     }
   });

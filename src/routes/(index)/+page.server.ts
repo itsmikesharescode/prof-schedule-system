@@ -73,12 +73,12 @@ export const actions: Actions = {
           previousSchool: form.data.previousSchool,
           yearsOfTeaching: form.data.yearsOfTeaching,
           department: form.data.department,
-          availability: form.data.availability,
           interests: form.data.interests,
           schedule: {
             day: form.data.day,
             startTime: form.data.startTime,
-            endTime: form.data.endTime
+            endTime: form.data.endTime,
+            available: form.data.availability
           }
         }
       }

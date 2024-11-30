@@ -4,6 +4,13 @@ export type Result<T> = {
   data: T;
 };
 
+export type PreferredSchedule = {
+  day: string;
+  startTime: string;
+  endTime: string;
+  available: string;
+};
+
 export type UserMetaData = {
   role: 'Professor';
   email: string;
@@ -16,13 +23,8 @@ export type UserMetaData = {
   interests: string[];
   department: string;
   previousSchool: string;
-  yearsInService: number;
-  preferredSchedule: {
-    day: string;
-    endTime: string;
-    available: 'Full Time' | 'Part Time';
-    startTime: string;
-  };
+  yearsOfTeaching: number;
+  schedule: PreferredSchedule;
 };
 
 export type YearLevel = {

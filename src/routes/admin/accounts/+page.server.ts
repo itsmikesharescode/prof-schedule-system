@@ -51,7 +51,7 @@ export const actions: Actions = {
         department: form.data.department,
         previousSchool: form.data.previousSchool,
         yearsInService: form.data.yearsOfTeaching,
-        preferredSchedule: {
+        schedule: {
           day: form.data.day,
           startTime: form.data.startTime,
           endTime: form.data.endTime,
@@ -100,7 +100,7 @@ export const actions: Actions = {
           department: form.data.department,
           previousSchool: form.data.previousSchool,
           yearsInService: form.data.yearsOfTeaching,
-          preferredSchedule: {
+          schedule: {
             day: form.data.day,
             startTime: form.data.startTime,
             endTime: form.data.endTime,

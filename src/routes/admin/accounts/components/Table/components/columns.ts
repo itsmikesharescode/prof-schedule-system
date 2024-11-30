@@ -55,8 +55,9 @@ export const columns: ColumnDef<AccountPageTable, unknown>[] = [
   },
 
   {
-    accessorKey: 'fullName',
-    id: 'fullName',
+    accessorKey: 'firstName',
+    accessorFn: (row) => `${row.firstName}, ${row.middleName} ${row.lastName}`,
+    id: 'firstName',
     header: ({ column }) => {
       return renderComponent(DataTableColumnHeader<AccountPageTable, unknown>, {
         column,

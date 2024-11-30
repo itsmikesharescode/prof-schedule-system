@@ -21,8 +21,6 @@
 
   let { subjects }: Props = $props();
 
-  console.log(subjects);
-
   // Calendar instance and DOM element references
   let calendar: Calendar;
   let calendarEl: HTMLElement;

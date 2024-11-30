@@ -2,31 +2,40 @@
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
   import Button from '$lib/components/ui/button/button.svelte';
   import { LogOut } from 'lucide-svelte';
-  import { goto } from '$app/navigation';
+  import { invalidateAll } from '$app/navigation';
   import { LoaderCircle } from 'lucide-svelte';
-  import { useSupabaseState } from '$lib/runes/supabaseState.svelte';
+  import { page } from '$app/stores';
 
   let open = $state(false);
   let loading = $state(false);
 
-  const supabaseState = useSupabaseState();
-  const sb = supabaseState.get();
-
   const handleLogout = async () => {
-    if (!sb) return;
+    if (!$page.data.supabase) return;
 
     loading = true;
-    const { error } = await sb.auth.signOut();
+    const { error } = await $page.data.supabase.auth.signOut();
     if (error) {
       console.error(error);
     }
-    await goto('/');
+    invalidateAll();
   };
 </script>
 
-<Button size="sm" onclick={() => (open = true)}>
+<Button
+  disabled={loading}
+  size="sm"
+  onclick={() => (open = true)}
+  class="flex items-center justify-between"
+>
+  {#if loading}
+    <div
+      class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center rounded-lg bg-primary"
+    >
+      <LoaderCircle class="size-4 animate-spin" />
+    </div>
+  {/if}
   <LogOut class="size-4" />
-  Log out
+  Logout
 </Button>
 
 <AlertDialog.Root bind:open>

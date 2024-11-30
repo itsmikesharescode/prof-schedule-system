@@ -16,6 +16,7 @@
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
   import { toast } from 'svelte-sonner';
+  import { auxiliaryState } from '$lib/runes/auxiliaryState.svelte';
 
   interface Props {
     registerForm: SuperValidated<Infer<RegisterSchema>>;
@@ -258,10 +259,10 @@
                     name="Select department"
                     {props}
                     class=""
-                    selections={departments}
+                    selections={auxiliaryState.formatDepartments()}
                     bind:selected={$formData.department}
                   />
-                  <input type="hidden" {...props} bind:value={$formData.department} />
+                  <input name={props.name} type="hidden" bind:value={$formData.department} />
                 {/snippet}
               </Form.Control>
               <Form.FieldErrors />
@@ -278,7 +279,7 @@
                     selections={days}
                     bind:selected={$formData.day}
                   />
-                  <input type="hidden" {...props} bind:value={$formData.day} />
+                  <input name={props.name} type="hidden" bind:value={$formData.day} />
                 {/snippet}
               </Form.Control>
               <Form.FieldErrors />
@@ -294,7 +295,7 @@
                     selections={availableTimes}
                     bind:selected={$formData.startTime}
                   />
-                  <input type="hidden" {...props} bind:value={$formData.startTime} />
+                  <input name={props.name} type="hidden" bind:value={$formData.startTime} />
                 {/snippet}
               </Form.Control>
               <Form.FieldErrors />
@@ -310,7 +311,7 @@
                     selections={availableTimes}
                     bind:selected={$formData.endTime}
                   />
-                  <input type="hidden" {...props} bind:value={$formData.endTime} />
+                  <input name={props.name} type="hidden" bind:value={$formData.endTime} />
                 {/snippet}
               </Form.Control>
               <Form.FieldErrors />
@@ -330,7 +331,7 @@
                     ]}
                     bind:selected={$formData.availability}
                   />
-                  <input type="hidden" {...props} bind:value={$formData.availability} />
+                  <input name={props.name} type="hidden" bind:value={$formData.availability} />
                 {/snippet}
               </Form.Control>
               <Form.FieldErrors />

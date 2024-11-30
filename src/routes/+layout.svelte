@@ -7,7 +7,7 @@
   import { Toaster } from '$lib/components/ui/sonner/index';
   import { initSupabaseState, useSupabaseState } from '$lib/runes/supabaseState.svelte';
   import { auxiliaryState } from '$lib/runes/auxiliaryState.svelte';
-
+  import Footer from '$lib/components/general/Footer.svelte';
   let { children, data } = $props();
 
   initUserState();
@@ -40,3 +40,4 @@
 <ModeWatcher />
 <Toaster position="bottom-right" richColors />
 {@render children()}
+<Footer />

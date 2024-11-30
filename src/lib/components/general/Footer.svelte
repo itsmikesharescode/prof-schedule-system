@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Darkmode from '$lib/components/general/Darkmode.svelte';
 </script>
 
 <div class=" bg-gradient-to-l from-[#3331C2] to-black">
@@ -17,5 +18,6 @@
         >+639022516325</a
       >
     </div>
+    <Darkmode />
   </div>
 </div>

@@ -1,4 +1,4 @@
-import type { UserMetaData, YearLevel, Subject } from './types';
+import type { UserMetaData, YearLevel, Subject, PreferredSchedule } from './types';
 
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
@@ -164,6 +164,41 @@ export type Database = {
           id?: number;
         };
         Relationships: [];
+      };
+      requests_tb: {
+        Row: {
+          created_at: string;
+          id: number;
+          professor_id: string;
+          reason: string;
+          schedule: PreferredSchedule;
+          status: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: number;
+          professor_id: string;
+          reason: string;
+          schedule: PreferredSchedule;
+          status?: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: number;
+          professor_id?: string;
+          reason?: string;
+          schedule?: PreferredSchedule;
+          status?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'requests_tb_professor_id_fkey';
+            columns: ['professor_id'];
+            isOneToOne: false;
+            referencedRelation: 'professors_tb';
+            referencedColumns: ['user_id'];
+          }
+        ];
       };
       roles_tb: {
         Row: {
