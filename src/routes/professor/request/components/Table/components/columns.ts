@@ -102,7 +102,9 @@ export const columns: ColumnDef<RequestPageTable>[] = [
       const createdAtSnippet = createRawSnippet<[string]>((getCreatedAt) => {
         return {
           render: () =>
-            `<div class="w-[80px]">${new Date(getCreatedAt()).toLocaleDateString()}</div>`
+            `<div class="w-[180px]">${new Date(getCreatedAt()).toLocaleDateString()} @ ${new Date(
+              getCreatedAt()
+            ).toLocaleTimeString()} </div>`
         };
       });
 

@@ -4,8 +4,11 @@
   import Table from './components/Table/components/Table.svelte';
   import { columns } from './components/Table/components/columns';
   import CreateRequest from './components/CreateRequest/CreateRequest.svelte';
-
+  import UpdateRequest from './components/UpdateRequest/UpdateRequest.svelte';
+  import { initTableState } from './components/Table/tableState.svelte';
   const { data } = $props();
+
+  initTableState();
 </script>
 
 <main class="py-[3rem]">
@@ -35,3 +38,5 @@
     {/await}
   </section>
 </main>
+
+<UpdateRequest updateRequestForm={data.updateRequestForm} />
