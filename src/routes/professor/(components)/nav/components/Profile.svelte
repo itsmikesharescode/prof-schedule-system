@@ -1,6 +1,5 @@
 <script lang="ts">
   import * as Avatar from '$lib/components/ui/avatar/index.js';
-  import { Settings } from 'lucide-svelte';
   import Logout from './Logout.svelte';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
   import { buttonVariants } from '$lib/components/ui/button';
@@ -19,9 +18,9 @@
         <Avatar.Fallback>{$page.data.user?.user_metadata.firstName[0]}</Avatar.Fallback>
       </Avatar.Root>
       <div class="flex flex-col items-start justify-start">
-        <span class="text-sm font-semibold"
-          >Hello, 👋 {$page.data.user?.user_metadata.firstName}</span
-        >
+        <span class="line-clamp-1 text-wrap text-left text-sm font-semibold">
+          Hello, 👋 {$page.data.user?.user_metadata.firstName}
+        </span>
         <span class="text-xs text-gray-500">{$page.data.user?.email}</span>
       </div>
     </div>

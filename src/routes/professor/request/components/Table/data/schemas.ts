@@ -4,6 +4,7 @@ import type { PreferredSchedule } from '$lib/types';
 export const requestSchema = z.object({
   id: z.number(),
   created_at: z.string(),
+  reference_id: z.string(),
   professor_id: z.string(),
   status: z.string(),
   day: z.string(),

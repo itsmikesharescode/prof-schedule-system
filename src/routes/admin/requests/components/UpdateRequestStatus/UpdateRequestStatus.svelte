@@ -4,22 +4,22 @@
   import * as Form from '$lib/components/ui/form/index.js';
   import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
-  import { updateStatusSchema, type UpdateStatusSchema } from './schema';
+  import { updateRequestStatusSchema, type UpdateRequestStatusSchema } from './schema';
   import SelectPicker from '$lib/components/general/SelectPicker.svelte';
   import type { Result } from '$lib/types';
   import { toast } from 'svelte-sonner';
   import { useTableState } from '../Table/tableState.svelte';
 
   interface Props {
-    updateStatusForm: SuperValidated<Infer<UpdateStatusSchema>>;
+    updateRequestStatusForm: SuperValidated<Infer<UpdateRequestStatusSchema>>;
   }
 
-  const { updateStatusForm }: Props = $props();
+  const { updateRequestStatusForm }: Props = $props();
 
   const tableState = useTableState();
 
-  const form = superForm(updateStatusForm, {
-    validators: zodClient(updateStatusSchema),
+  const form = superForm(updateRequestStatusForm, {
+    validators: zodClient(updateRequestStatusSchema),
     id: 'updateAccountStatus',
     onUpdate: ({ result }) => {
       const { status, data } = result as Result<{ msg: string }>;
@@ -41,8 +41,13 @@
 
   $effect(() => {
     if (tableState.getShowUpdateStatus()) {
-      $formData.status = tableState.getActiveRow()?.approved ? 'Active' : 'In-Active';
-      $formData.userId = tableState.getActiveRow()?.user_id || '';
+      $formData.id = tableState.getActiveRow()?.id || 0;
+      $formData.status = tableState.getActiveRow()?.status || '';
+
+      return () => {
+        $formData.id = 0;
+        $formData.status = '';
+      };
     }
   });
 </script>
@@ -61,20 +66,21 @@
       <span class="sr-only">Close</span>
     </button>
     <AlertDialog.Header>
-      <AlertDialog.Title>Update Status</AlertDialog.Title>
-      <AlertDialog.Description>Update the status of the professor.</AlertDialog.Description>
+      <AlertDialog.Title>Update Request Status</AlertDialog.Title>
+      <AlertDialog.Description>Update the status of the request.</AlertDialog.Description>
     </AlertDialog.Header>
 
-    <form method="POST" action="?/updateProfessorStatusEvent" use:enhance>
-      <input type="hidden" name="userId" bind:value={$formData.userId} />
+    <form method="POST" action="?/updateRequestStatusEvent" use:enhance>
+      <input type="hidden" name="id" bind:value={$formData.id} />
       <Form.Field {form} name="status">
         <Form.Control>
           {#snippet children({ props })}
             <Form.Label>Status</Form.Label>
             <SelectPicker
               selections={[
-                { label: 'Active', value: 'Active' },
-                { label: 'In-Active', value: 'In-Active' }
+                { label: 'Pending', value: 'Pending' },
+                { label: 'Approved', value: 'Approved' },
+                { label: 'Rejected', value: 'Rejected' }
               ]}
               name="Select Status"
               bind:selected={$formData.status}

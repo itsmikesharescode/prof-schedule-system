@@ -5,12 +5,13 @@
 <script lang="ts" generics="TData">
   import X from 'lucide-svelte/icons/x';
   import type { Table } from '@tanstack/table-core';
-  import { TableViewOptions } from './index';
+  import { priorities, statuses } from '../data/data';
+  import { TableFacetedFilter, TableViewOptions } from './index';
   import Button from '$lib/components/ui/button/button.svelte';
   import { Input } from '$lib/components/ui/input/index';
-  import type { RequestPageTable } from '../data/schemas';
+  import type { RequestsPageTable } from '../data/schemas';
 
-  let { table }: { table: Table<RequestPageTable> } = $props();
+  let { table }: { table: Table<RequestsPageTable> } = $props();
 
   const isFiltered = $derived(table.getState().columnFilters.length > 0);
 </script>
@@ -18,13 +19,13 @@
 <div class="flex items-center justify-between">
   <div class="flex flex-1 items-center space-x-2">
     <Input
-      placeholder="Search by Reference ID..."
-      value={(table.getColumn('reference_id')?.getFilterValue() as string) ?? ''}
+      placeholder="Search by full name..."
+      value={(table.getColumn('full_name')?.getFilterValue() as string) ?? ''}
       oninput={(e) => {
-        table.getColumn('reference_id')?.setFilterValue(e.currentTarget.value);
+        table.getColumn('full_name')?.setFilterValue(e.currentTarget.value);
       }}
       onchange={(e) => {
-        table.getColumn('reference_id')?.setFilterValue(e.currentTarget.value);
+        table.getColumn('full_name')?.setFilterValue(e.currentTarget.value);
       }}
       class="h-8 w-[150px] lg:w-[250px]"
     />

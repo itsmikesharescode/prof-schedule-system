@@ -11,7 +11,7 @@
   const tableState = useTableState();
 
   let deleteLoader = $state(false);
-  const deleteScheduleEvent: SubmitFunction = () => {
+  const deleteRequestEvent: SubmitFunction = () => {
     deleteLoader = true;
     return async ({ result, update }) => {
       const { status, data } = result as Result<{ msg: string }>;
@@ -36,10 +36,10 @@
 <AlertDialog.Root open={tableState.getShowDelete()}>
   <AlertDialog.Content>
     <AlertDialog.Header>
-      <AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+      <AlertDialog.Title>Delete Request</AlertDialog.Title>
       <AlertDialog.Description>
-        Are you sure you want to delete? This action cannot be undone and will permanently remove
-        this schedule from the system.
+        Are you sure you want to delete this request? This action cannot be undone and the request
+        will be permanently removed from the system.
       </AlertDialog.Description>
     </AlertDialog.Header>
     <AlertDialog.Footer>
@@ -53,7 +53,7 @@
       >
         Cancel
       </Button>
-      <form method="POST" action="?/deleteScheduleEvent" use:enhance={deleteScheduleEvent}>
+      <form method="POST" action="?/deleteRequestEvent" use:enhance={deleteRequestEvent}>
         <input name="id" type="hidden" value={tableState.getActiveRow()?.id ?? 0} />
         <Button type="submit" disabled={deleteLoader} size="sm" class="relative">
           {#if deleteLoader}

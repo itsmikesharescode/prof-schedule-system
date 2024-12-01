@@ -35,9 +35,10 @@
 <AlertDialog.Root open={tableState.getShowDelete()}>
   <AlertDialog.Content>
     <AlertDialog.Header>
-      <AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+      <AlertDialog.Title>Delete Request</AlertDialog.Title>
       <AlertDialog.Description>
-        This action cannot be undone. This will permanently delete the request.
+        Are you sure you want to delete this request? This action cannot be undone and the request
+        will be permanently removed from the system.
       </AlertDialog.Description>
     </AlertDialog.Header>
     <AlertDialog.Footer>

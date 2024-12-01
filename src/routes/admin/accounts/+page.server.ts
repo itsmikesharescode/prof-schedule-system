@@ -42,7 +42,7 @@ export const actions: Actions = {
       user_metadata: {
         approved: true,
         email: form.data.email,
-        role: form.data.position,
+        role: form.data.position.toLowerCase(),
         avatar: storageRes.fullPath,
         title: form.data.title,
         firstName: form.data.firstName,
@@ -50,7 +50,7 @@ export const actions: Actions = {
         lastName: form.data.lastName,
         department: form.data.department,
         previousSchool: form.data.previousSchool,
-        yearsInService: form.data.yearsOfTeaching,
+        yearsOfTeaching: form.data.yearsOfTeaching,
         schedule: {
           day: form.data.day,
           startTime: form.data.startTime,
@@ -92,14 +92,14 @@ export const actions: Actions = {
         user_metadata: {
           avatar: storageRes.fullPath,
           email: form.data.email,
-          role: form.data.position,
+          role: form.data.position.toLowerCase(),
           title: form.data.title,
           firstName: form.data.firstName,
           middleName: form.data.middleName,
           lastName: form.data.lastName,
           department: form.data.department,
           previousSchool: form.data.previousSchool,
-          yearsInService: form.data.yearsOfTeaching,
+          yearsOfTeaching: form.data.yearsOfTeaching,
           schedule: {
             day: form.data.day,
             startTime: form.data.startTime,
@@ -120,23 +120,6 @@ export const actions: Actions = {
 
     if (!form.valid) {
       return fail(400, { form });
-    }
-
-    const { error } = await supabaseAdmin.auth.admin.updateUserById(form.data.userId, {
-      user_metadata: {
-        approved: form.data.status === 'Active' ? true : false
-      }
-    });
-
-    if (error) return fail(401, { form, msg: error.message });
-    return { form, msg: 'Status updated successfully' };
-  },
-
-  updateStatusEvent: async ({ request, locals: { supabaseAdmin } }) => {
-    const form = await superValidate(request, zod(updateStatusSchema));
-
-    if (!form.valid) {
-      return fail(400, withFiles({ form }));
     }
 
     const { error } = await supabaseAdmin.auth.admin.updateUserById(form.data.userId, {
