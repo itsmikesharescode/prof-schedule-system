@@ -30,5 +30,13 @@ export const actions: Actions = {
 
     return { form, msg: 'Request status updated successfully' };
   },
-  deleteRequestEvent: async ({ locals: { supabase } }) => {}
+  deleteRequestEvent: async ({ locals: { supabase }, request }) => {
+    const formData = await request.formData();
+    const id = formData.get('id') as string;
+
+    const { error } = await supabase.from('requests_tb').delete().eq('id', Number(id));
+
+    if (error) return fail(401, { msg: error.message });
+    return { msg: 'Request deleted successfully' };
+  }
 };
