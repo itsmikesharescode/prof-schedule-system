@@ -3,7 +3,8 @@
   import Table from './components/Table/components/Table.svelte';
   import { columns } from './components/Table/components/columns';
   import { initTableState } from './components/Table/tableState.svelte';
-  import UpdateRequestStatus from './components/UpdateStatus/UpdateRequestStatus.svelte';
+  import ViewRequestComparison from './components/ViewRequestComparison/ViewRequestComparison.svelte';
+  import UpdateRequestStatus from './components/UpdateRequestStatus/UpdateRequestStatus.svelte';
   import DeleteRequest from './components/DeleteRequest/DeleteRequest.svelte';
 
   const { data } = $props();
@@ -30,5 +31,6 @@
   {/await}
 </div>
 
+<ViewRequestComparison />
 <UpdateRequestStatus updateRequestStatusForm={data.updateRequestStatusForm} />
 <DeleteRequest />

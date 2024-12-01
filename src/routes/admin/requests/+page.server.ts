@@ -2,7 +2,7 @@ import type { Actions, PageServerLoad } from './$types';
 import streamRequests from '../(db_calls)/streamRequest';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import { updateRequestStatusSchema } from './components/UpdateStatus/schema';
+import { updateRequestStatusSchema } from './components/UpdateRequestStatus/schema';
 import { fail } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
