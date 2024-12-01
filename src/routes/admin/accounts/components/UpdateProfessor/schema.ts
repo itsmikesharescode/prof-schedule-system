@@ -5,9 +5,6 @@ export const updateProfessorSchema = z
   .object({
     userId: z.string(),
     photoPath: z.string(),
-    position: z.string().refine((v) => ['Professor', 'Program Head'].includes(v), {
-      message: 'Must select position.'
-    }),
     photo: z.instanceof(File),
     title: z
       .string()

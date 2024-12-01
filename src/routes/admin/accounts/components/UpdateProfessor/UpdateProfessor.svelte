@@ -60,9 +60,6 @@
     if (tableState.getShowUpdate()) {
       $formData.userId = tableState.getActiveRow()?.user_id ?? '';
       $formData.photoPath = tableState.getActiveRow()?.avatar ?? '';
-      $formData.position =
-        (tableState.getActiveRow()?.role ?? '').charAt(0).toUpperCase() +
-        (tableState.getActiveRow()?.role ?? '').slice(1);
       $formData.firstName = tableState.getActiveRow()?.firstName ?? '';
       $formData.middleName = tableState.getActiveRow()?.middleName ?? '';
       $formData.lastName = tableState.getActiveRow()?.lastName ?? '';
@@ -395,27 +392,6 @@
                 <Form.FieldErrors />
               </div>
             </Form.Fieldset>
-
-            <Form.Field {form} name="position">
-              <Form.Control>
-                {#snippet children({ props })}
-                  <Form.Label>Position</Form.Label>
-                  <SelectPicker
-                    name="Select position"
-                    {props}
-                    class=""
-                    selections={[
-                      { value: 'Professor', label: 'Professor' },
-                      { value: 'Program Head', label: 'Program Head' }
-                    ]}
-                    bind:selected={$formData.position}
-                  />
-                  <input type="hidden" {...props} bind:value={$formData.position} />
-                {/snippet}
-              </Form.Control>
-              <Form.Description />
-              <Form.FieldErrors />
-            </Form.Field>
           </div>
         </div>
 
