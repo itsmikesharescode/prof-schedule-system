@@ -21,7 +21,7 @@
   const site_map = [
     {
       title: 'Faculty Loading',
-      url: '/program-head/faculty-loading',
+      url: '/program-head/',
       icon: ListRestart
     },
     {
