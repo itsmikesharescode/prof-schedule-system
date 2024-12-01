@@ -9,7 +9,8 @@
     ChartColumn,
     CalendarRange,
     ChevronDown,
-    CalendarCog
+    CalendarCog,
+    UserCog
   } from 'lucide-svelte';
 
   import * as Sidebar from '$lib/components/ui/sidebar/index.js';
@@ -20,7 +21,7 @@
   const site_map = [
     {
       title: 'Faculty Loading',
-      url: '/program-head/faculty-loading',
+      url: '/program-head',
       icon: ListRestart
     },
     {
@@ -32,6 +33,11 @@
       title: 'Requests',
       url: '/program-head/requests',
       icon: CalendarRange
+    },
+    {
+      title: 'Profile',
+      url: '/program-head/profile',
+      icon: UserCog
     }
   ];
 
