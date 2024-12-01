@@ -20,15 +20,14 @@
 
   let { table }: { table: Table<RequestsPageTable> } = $props();
 
-  const sb = $page.data.supabase;
   let deleteLoader = $state(false);
   const handleDeleteSelected = async () => {
-    if (!sb) return;
+    if (!$page.data.supabase) return;
 
     deleteLoader = true;
 
-    const { error } = await sb
-      ?.from('class_schedules_tb')
+    const { error } = await $page.data.supabase
+      ?.from('requests_tb')
       .delete()
       .in(
         'id',
@@ -41,7 +40,7 @@
     }
 
     await invalidateAll();
-    toast.success('Year levels deleted successfully');
+    toast.success('Requests deleted successfully');
     deleteLoader = false;
   };
 </script>
