@@ -92,7 +92,6 @@ export const actions: Actions = {
         user_metadata: {
           avatar: storageRes.fullPath,
           email: form.data.email,
-          role: form.data.position.toLowerCase(),
           title: form.data.title,
           firstName: form.data.firstName,
           middleName: form.data.middleName,

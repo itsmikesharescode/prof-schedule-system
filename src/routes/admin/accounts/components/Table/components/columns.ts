@@ -103,7 +103,7 @@ export const columns: ColumnDef<AccountPageTable, unknown>[] = [
     cell: ({ row }) => {
       const roleSnippet = createRawSnippet<[string]>((getRole) => {
         return {
-          render: () => `<div class="w-full">${getRole()}</div>`
+          render: () => `<div class="w-full truncate">${getRole()}</div>`
         };
       });
 

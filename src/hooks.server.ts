@@ -89,7 +89,7 @@ const authGuard: Handle = async ({ event, resolve }) => {
 
   if (user && path.startsWith('/program-head')) {
     const { role } = user.user_metadata;
-    if (role !== 'program-head') redirect(303, '/');
+    if (role !== 'program head') redirect(303, '/');
   }
 
   if (user && path.startsWith('/professor')) {
@@ -111,7 +111,7 @@ const authGuard: Handle = async ({ event, resolve }) => {
   if (user && path === '/') {
     const { role } = user.user_metadata;
     if (role === 'admin') redirect(303, '/admin');
-    if (role === 'program-head') redirect(303, '/program-head');
+    if (role === 'program head') redirect(303, '/program-head');
     if (role === 'professor') redirect(303, '/professor');
   }
 

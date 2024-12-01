@@ -124,7 +124,7 @@ CREATE OR REPLACE FUNCTION "public"."is_program_head"() RETURNS boolean
     AS $$
 begin
     return exists(
-        select 1 from public.roles_tb where user_id = auth.uid() and role = 'program-head'
+        select 1 from public.roles_tb where user_id = auth.uid() and role = 'program head'
     );
 end;
 $$;
@@ -542,6 +542,11 @@ ALTER TABLE ONLY "public"."requests_tb"
 
 
 
+ALTER TABLE ONLY "public"."requests_tb"
+    ADD CONSTRAINT "requests_tb_reference_id_key" UNIQUE ("reference_id");
+
+
+
 ALTER TABLE ONLY "public"."roles_tb"
     ADD CONSTRAINT "roles_tb_pkey" PRIMARY KEY ("user_id");
 
@@ -650,19 +655,11 @@ ALTER TABLE ONLY "public"."roles_tb"
 
 
 
-CREATE POLICY "Allow all for admin" ON "public"."rooms_tb" USING ("public"."is_admin"()) WITH CHECK ("public"."is_admin"());
+CREATE POLICY "Allow all for admin or program head" ON "public"."rooms_tb" USING (("public"."is_admin"() OR "public"."is_program_head"())) WITH CHECK (("public"."is_admin"() OR "public"."is_program_head"()));
 
 
 
-CREATE POLICY "Allow all for admin" ON "public"."year_levels_tb" TO "authenticated" USING ("public"."is_admin"()) WITH CHECK ("public"."is_admin"());
-
-
-
-CREATE POLICY "Allow all if admin" ON "public"."class_schedules_tb" TO "authenticated" USING ("public"."is_admin"()) WITH CHECK ("public"."is_admin"());
-
-
-
-CREATE POLICY "Allow all if admin" ON "public"."faculties_tb" TO "authenticated" USING ("public"."is_admin"()) WITH CHECK ("public"."is_admin"());
+CREATE POLICY "Allow all for admin or program head" ON "public"."year_levels_tb" TO "authenticated" USING (("public"."is_admin"() OR "public"."is_program_head"())) WITH CHECK (("public"."is_admin"() OR "public"."is_program_head"()));
 
 
 
@@ -670,19 +667,27 @@ CREATE POLICY "Allow all if admin" ON "public"."programs_tb" TO "authenticated" 
 
 
 
-CREATE POLICY "Allow all if admin" ON "public"."requests_tb" USING ("public"."is_admin"()) WITH CHECK ("public"."is_admin"());
+CREATE POLICY "Allow all if admin or program head" ON "public"."class_schedules_tb" TO "authenticated" USING (("public"."is_admin"() OR "public"."is_program_head"())) WITH CHECK (("public"."is_admin"() OR "public"."is_program_head"()));
 
 
 
-CREATE POLICY "Allow all if admin" ON "public"."school_years_tb" TO "authenticated" USING ("public"."is_admin"()) WITH CHECK ("public"."is_admin"());
+CREATE POLICY "Allow all if admin or program head" ON "public"."faculties_tb" TO "authenticated" USING (("public"."is_admin"() OR "public"."is_program_head"())) WITH CHECK (("public"."is_admin"() OR "public"."is_program_head"()));
 
 
 
-CREATE POLICY "Allow all if admin" ON "public"."sections_tb" TO "authenticated" USING ("public"."is_admin"()) WITH CHECK ("public"."is_admin"());
+CREATE POLICY "Allow all if admin or program head" ON "public"."requests_tb" USING (("public"."is_admin"() OR "public"."is_program_head"())) WITH CHECK (("public"."is_admin"() OR "public"."is_program_head"()));
 
 
 
-CREATE POLICY "Allow all if admin" ON "public"."subjects_tb" TO "authenticated" USING ("public"."is_admin"()) WITH CHECK ("public"."is_admin"());
+CREATE POLICY "Allow all if admin or program head" ON "public"."school_years_tb" TO "authenticated" USING (("public"."is_admin"() OR "public"."is_program_head"())) WITH CHECK (("public"."is_admin"() OR "public"."is_program_head"()));
+
+
+
+CREATE POLICY "Allow all if admin or program head" ON "public"."sections_tb" TO "authenticated" USING (("public"."is_admin"() OR "public"."is_program_head"())) WITH CHECK (("public"."is_admin"() OR "public"."is_program_head"()));
+
+
+
+CREATE POLICY "Allow all if admin or program head" ON "public"."subjects_tb" TO "authenticated" USING (("public"."is_admin"() OR "public"."is_program_head"())) WITH CHECK (("public"."is_admin"() OR "public"."is_program_head"()));
 
 
 
@@ -702,7 +707,7 @@ CREATE POLICY "Allow select if admin" ON "public"."logs_tb" FOR SELECT TO "authe
 
 
 
-CREATE POLICY "Allow select if admin" ON "public"."professors_tb" FOR SELECT TO "authenticated" USING (("public"."is_admin"() OR "public"."is_program_head"()));
+CREATE POLICY "Allow select if admin or program head" ON "public"."professors_tb" FOR SELECT TO "authenticated" USING (("public"."is_admin"() OR "public"."is_program_head"()));
 
 
 
