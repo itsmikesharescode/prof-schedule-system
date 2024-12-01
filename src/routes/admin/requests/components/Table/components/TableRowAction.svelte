@@ -6,6 +6,7 @@
   import Ellipsis from 'lucide-svelte/icons/ellipsis';
   import FileMinus from 'lucide-svelte/icons/file-minus';
   import Pen from 'lucide-svelte/icons/pen';
+  import Check from 'lucide-svelte/icons/check';
   import GitCompare from 'lucide-svelte/icons/git-compare';
   import type { Row } from '@tanstack/table-core';
   import { type RequestsPageTable } from '../data/schemas';
@@ -44,7 +45,7 @@
         tableState.setShowUpdateStatus(true);
       }}
     >
-      <Pen />
+      <Check />
       Update Status
     </DropdownMenu.Item>
     <DropdownMenu.Item
