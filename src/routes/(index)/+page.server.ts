@@ -83,7 +83,7 @@ export const actions: Actions = {
         }
       }
     });
-
+    console.log(error);
     if (error) return fail(401, withFiles({ form, msg: error.message }));
     else if (user) return withFiles({ form, msg: `Welcome! ${user.user_metadata.firstName}` });
     return fail(401, withFiles({ form, msg: 'Something went wrong' }));

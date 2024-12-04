@@ -30,23 +30,23 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-svelte": "^2.46.1",
     "formsnap": "^2.0.0-next.1",
-    "globals": "^15.12.0",
+    "globals": "^15.13.0",
     "lucide-svelte": "^0.454.0",
     "mode-watcher": "^0.4.1",
     "paneforge": "^1.0.0-next.1",
-    "prettier": "^3.4.1",
+    "prettier": "^3.4.2",
     "prettier-plugin-svelte": "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.6.9",
-    "svelte": "^5.2.12",
-    "svelte-check": "^4.1.0",
+    "svelte": "^5.6.1",
+    "svelte-check": "^4.1.1",
     "svelte-sonner": "^0.3.28",
-    "sveltekit-superforms": "^2.20.1",
+    "sveltekit-superforms": "^2.21.1",
     "tailwind-merge": "^2.5.5",
     "tailwind-variants": "^0.2.1",
-    "tailwindcss": "^3.4.15",
+    "tailwindcss": "^3.4.16",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.7.2",
-    "typescript-eslint": "^8.16.0",
+    "typescript-eslint": "^8.17.0",
     "vaul-svelte": "^1.0.0-next.3",
     "vite": "^5.4.11",
     "zod": "^3.23.8"
@@ -61,6 +61,6 @@
     "@tanstack/table-core": "^8.20.5",
     "embla-carousel-autoplay": "^8.5.1",
     "sharp": "^0.33.5",
-    "supabase": "^1.223.10"
+    "supabase": "^1.226.4"
   }
 }

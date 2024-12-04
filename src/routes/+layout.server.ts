@@ -7,8 +7,8 @@ export const load: LayoutServerLoad = async ({
 }) => {
   const { session } = await safeGetSession();
 
-  /*  const { data, error } = await supabaseAdmin.auth.admin.updateUserById(
-    '01ffc919-7bb5-4a32-95be-22b868d55a54',
+  /* const { data, error } = await supabaseAdmin.auth.admin.updateUserById(
+    '9b1851f4-004f-44f2-9951-2ea7fc36d9a7',
     {
       user_metadata: {
         role: 'admin',
