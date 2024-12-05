@@ -1,5 +1,4 @@
-import type { UserMetaData, YearLevel, Subject, PreferredSchedule } from './types';
-
+import type { UserMetaData, YearLevel, PreferredSchedule } from './types';
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type Database = {
@@ -33,32 +32,44 @@ export type Database = {
       class_schedules_tb: {
         Row: {
           created_at: string;
+          day: string;
           department: string;
+          end_time: string;
           id: number;
+          room: string;
           school_year: string;
           section: string;
           semester: string;
-          subjects: Subject[];
+          start_time: string;
+          subject: string;
           year_level: string;
         };
         Insert: {
           created_at?: string;
+          day: string;
           department: string;
+          end_time: string;
           id?: number;
+          room: string;
           school_year: string;
           section: string;
           semester: string;
-          subjects: Subject[];
+          start_time: string;
+          subject: string;
           year_level: string;
         };
         Update: {
           created_at?: string;
+          day?: string;
           department?: string;
+          end_time?: string;
           id?: number;
+          room?: string;
           school_year?: string;
           section?: string;
           semester?: string;
-          subjects?: Subject[];
+          start_time?: string;
+          subject?: string;
           year_level?: string;
         };
         Relationships: [];
