@@ -9,6 +9,7 @@
   import UpdateSchedule from './components/UpdateSchedule/UpdateSchedule.svelte';
   import ViewCalendar from './components/ViewCalendar/ViewCalendar.svelte';
   import DownloadSchedules from '$lib/components/general/DownloadSchedules.svelte';
+  import { convert24HourTo12Hour } from '$lib';
   const { data } = $props();
 
   initTableState();
@@ -31,7 +32,7 @@
     <Table
       data={classSchedules?.map((sched) => ({
         ...sched,
-        day_time: `${sched.day} ${sched.start_time} - ${sched.end_time}`
+        day_time: `${sched.day} ${convert24HourTo12Hour(sched.start_time)} - ${convert24HourTo12Hour(sched.end_time)}`
       })) ?? []}
       {columns}
     />

@@ -44,7 +44,7 @@ export const columns: ColumnDef<ClassSchedulesPageTable>[] = [
     cell: ({ row }) => {
       const subjectSnippet = createRawSnippet<[string]>((getSubject) => {
         return {
-          render: () => `<div class="w-full">${getSubject()}</div>`
+          render: () => `<div class="w-full line-clamp-2">${getSubject()}</div>`
         };
       });
 
@@ -86,7 +86,7 @@ export const columns: ColumnDef<ClassSchedulesPageTable>[] = [
     cell: ({ row }) => {
       const dayTimeSnippet = createRawSnippet<[string]>((getDayTime) => {
         return {
-          render: () => `<div class="w-full">${getDayTime()}</div>`
+          render: () => `<div class="w-full truncate">${getDayTime()}</div>`
         };
       });
 
