@@ -17,6 +17,7 @@
   import { goto } from '$app/navigation';
   import { toast } from 'svelte-sonner';
   import { auxiliaryState } from '$lib/runes/auxiliaryState.svelte';
+  import MultiSelect from '$lib/components/general/MultiSelect.svelte';
 
   interface Props {
     registerForm: SuperValidated<Infer<RegisterSchema>>;
@@ -268,18 +269,16 @@
               <Form.FieldErrors />
             </Form.Field>
 
-            <Form.Field {form} name="day">
+            <Form.Field {form} name="days">
               <Form.Control>
                 {#snippet children({ props })}
                   <Form.Label>Day</Form.Label>
-                  <SelectPicker
-                    name="Select day"
-                    {props}
-                    class=""
-                    selections={days}
-                    bind:selected={$formData.day}
+                  <MultiSelect
+                    selections={days.map((day) => day.value)}
+                    bind:selected={$formData.days}
+                    placeholder="Select days"
                   />
-                  <input name={props.name} type="hidden" bind:value={$formData.day} />
+                  <input name={props.name} type="hidden" bind:value={$formData.days} />
                 {/snippet}
               </Form.Control>
               <Form.FieldErrors />
