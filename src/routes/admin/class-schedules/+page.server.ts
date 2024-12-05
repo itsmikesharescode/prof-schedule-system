@@ -51,7 +51,11 @@ export const actions: Actions = {
         section: form.data.section,
         year_level: form.data.yearLevel,
         semester: form.data.semester,
-        subjects: form.data.subjects
+        subject: form.data.subject,
+        room: form.data.room,
+        day: form.data.day,
+        start_time: form.data.start_time,
+        end_time: form.data.end_time
       })
       .eq('id', form.data.id);
 
