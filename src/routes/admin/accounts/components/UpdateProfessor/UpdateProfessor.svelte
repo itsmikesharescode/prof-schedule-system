@@ -17,6 +17,7 @@
   import { toast } from 'svelte-sonner';
   import { PUBLIC_SUPABASE_STORAGE_URL } from '$env/static/public';
   import { useTableState } from '../Table/tableState.svelte';
+  import MultiSelect from '$lib/components/general/MultiSelect.svelte';
 
   interface Props {
     updateProfessorForm: SuperValidated<Infer<UpdateProfessorSchema>>;
@@ -68,7 +69,7 @@
       $formData.previousSchool = tableState.getActiveRow()?.previousSchool ?? '';
       $formData.yearsOfTeaching = tableState.getActiveRow()?.yearsOfTeaching ?? 0;
       $formData.department = tableState.getActiveRow()?.department ?? '';
-      $formData.day = tableState.getActiveRow()?.schedule.day ?? '';
+      $formData.days = tableState.getActiveRow()?.schedule.days ?? [];
       $formData.startTime = tableState.getActiveRow()?.schedule.startTime ?? '';
       $formData.endTime = tableState.getActiveRow()?.schedule.endTime ?? '';
       $formData.availability = tableState.getActiveRow()?.schedule.available ?? '';
@@ -287,18 +288,16 @@
               <Form.FieldErrors />
             </Form.Field>
 
-            <Form.Field {form} name="day">
+            <Form.Field {form} name="days">
               <Form.Control>
                 {#snippet children({ props })}
-                  <Form.Label>Day</Form.Label>
-                  <SelectPicker
-                    name="Select day"
-                    {props}
-                    class=""
-                    selections={days}
-                    bind:selected={$formData.day}
+                  <Form.Label>Days</Form.Label>
+                  <MultiSelect
+                    selections={days.map((day) => day.value)}
+                    bind:selected={$formData.days}
+                    placeholder="Select days"
                   />
-                  <input type="hidden" {...props} bind:value={$formData.day} />
+                  <input type="hidden" {...props} bind:value={$formData.days} />
                 {/snippet}
               </Form.Control>
               <Form.FieldErrors />
