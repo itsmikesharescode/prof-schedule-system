@@ -22,6 +22,7 @@
     getYearLevel
   } from '../../(db_calls)/getDropDowns';
   import { useTableState } from '../Table/tableState.svelte';
+  import { tick } from 'svelte';
 
   interface Props {
     updateScheduleForm: SuperValidated<Infer<UpdateScheduleSchema>>;
@@ -69,6 +70,32 @@
         getSubjects($page.data.supabase, $formData.department)
       ]);
   };
+
+  $effect(() => {
+    if (tableState.getShowUpdate()) {
+      $formData.department = tableState.getActiveRow()?.department ?? '';
+      $formData.semester = tableState.getActiveRow()?.semester ?? '';
+      $formData.schoolYear = tableState.getActiveRow()?.school_year ?? '';
+      $formData.yearLevel = tableState.getActiveRow()?.year_level ?? '';
+      $formData.section = tableState.getActiveRow()?.section ?? '';
+      $formData.subject = tableState.getActiveRow()?.subject ?? '';
+      $formData.start_time = tableState.getActiveRow()?.start_time ?? '';
+      $formData.end_time = tableState.getActiveRow()?.end_time ?? '';
+      $formData.day = tableState.getActiveRow()?.day ?? '';
+      $formData.room = tableState.getActiveRow()?.room ?? '';
+    }
+  });
+
+  const open = $derived.by(() => {
+    if (tableState.getShowUpdate()) {
+      tick().then(async () => {
+        await handleDepartmentChange();
+      });
+      return true;
+    }
+
+    return false;
+  });
 </script>
 
 {#snippet Checkings()}
@@ -79,7 +106,7 @@
   </div>
 {/snippet}
 
-<AlertDialog.Root open={tableState.getShowUpdate()}>
+<AlertDialog.Root {open}>
   <AlertDialog.Content class="max-w-3xl p-0">
     <button
       onclick={() => {
@@ -110,9 +137,7 @@
                   <Form.Label>Select Department</Form.Label>
                   <SelectPicker
                     onValueChange={handleDepartmentChange}
-                    name="Select department"
-                    {props}
-                    class=""
+                    placeholder="Select department"
                     selections={auxiliaryState.formatDepartments()}
                     bind:selected={$formData.department}
                   />
@@ -128,9 +153,8 @@
                 {#snippet children({ props })}
                   <Form.Label>Select Semester</Form.Label>
                   <SelectPicker
-                    name="Select semester"
-                    {props}
-                    class=""
+                    placeholder="Select semester"
+                    noDescription
                     selections={[
                       { label: 'First Semester', value: 'First Semester' },
                       { label: 'Second Semester', value: 'Second Semester' },
@@ -151,9 +175,8 @@
                   <Form.Label>School Year</Form.Label>
                   {#if $formData.department}
                     <SelectPicker
-                      name="Select school year"
-                      {props}
-                      class=""
+                      placeholder="Select school year"
+                      noDescription
                       selections={schoolYearsDropdown?.map((level) => ({
                         label: level.year,
                         value: level.year
@@ -176,9 +199,8 @@
                   <Form.Label>Select Year Level</Form.Label>
                   {#if $formData.department}
                     <SelectPicker
-                      name="Select year level"
-                      {props}
-                      class=""
+                      placeholder="Select year level"
+                      noDescription
                       selections={yearLevelsDropdown?.levels.map((level) => ({
                         label: level.yearLevel,
                         value: level.yearLevel
@@ -201,11 +223,9 @@
                   <Form.Label>Select Section</Form.Label>
                   {#if $formData.department}
                     <SelectPicker
-                      name="Select section"
-                      {props}
-                      class=""
+                      placeholder="Select section"
                       selections={sectionsDropdown?.map((section) => ({
-                        label: section.section_code,
+                        label: section.class,
                         value: section.section_code
                       })) ?? []}
                       bind:selected={$formData.section}
@@ -229,10 +249,8 @@
                   <Form.Label>Select Subject</Form.Label>
                   {#if $formData.department}
                     <SelectPicker
-                      name="Select subject"
+                      placeholder="Select subject"
                       onValueChange={handleDepartmentChange}
-                      {props}
-                      class=""
                       selections={subjectsDropdown?.map((subject) => ({
                         label: subject.name,
                         value: subject.name
@@ -306,9 +324,9 @@
                   <Form.Label>Select Room</Form.Label>
                   {#if $formData.department}
                     <SelectPicker
-                      name="Select room"
+                      placeholder="Select room"
                       selections={roomsDropdown?.map((room) => ({
-                        label: room.code,
+                        label: room.type,
                         value: room.code
                       })) ?? []}
                       bind:selected={$formData.room}

@@ -19,7 +19,7 @@
   let { selected = $bindable(), ...props }: Props = $props();
 </script>
 
-<Select.Root type="single" bind:value={selected}>
+<Select.Root onValueChange={props.onValueChange} type="single" bind:value={selected}>
   <Select.Trigger class={cn('', props.class)}>
     {selected ? selected : props.placeholder}
   </Select.Trigger>
