@@ -81,7 +81,7 @@
             <Form.Label>Department</Form.Label>
             <SelectPicker
               {...props}
-              name="Select department"
+              placeholder="Select department"
               bind:selected={$formData.department}
               selections={auxiliaryState.formatDepartments()}
             />
