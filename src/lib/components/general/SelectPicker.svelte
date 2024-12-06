@@ -4,36 +4,35 @@
   import type { ClassNameValue } from 'tailwind-merge';
 
   interface Props {
-    props?: {
-      name: string;
-      id: string;
-      'data-fs-error': string | undefined;
-      'aria-describedby': string | undefined;
-      'aria-invalid': 'true' | undefined;
-      'aria-required': 'true' | undefined;
-      'data-fs-control': string;
-    };
     selections: {
       label: string;
       value: string;
     }[];
     selected: string;
     class?: ClassNameValue;
-    name: string;
+    placeholder?: string;
     onValueChange?: (value: string) => void;
     disabled?: boolean;
+    noDescription?: boolean;
   }
 
   let { selected = $bindable(), ...props }: Props = $props();
 </script>
 
-<Select.Root {...props} type="single" bind:value={selected}>
+<Select.Root type="single" bind:value={selected}>
   <Select.Trigger class={cn('', props.class)}>
-    {selected ? selected : props.name}
+    {selected ? selected : props.placeholder}
   </Select.Trigger>
   <Select.Content>
     {#each props.selections as selection}
-      <Select.Item value={selection.value}>{selection.label}</Select.Item>
+      <Select.Item value={selection.value}>
+        <section class="flex flex-col">
+          <span>{selection.value}</span>
+          {#if !props.noDescription}
+            <span class="text-xs text-muted-foreground">{selection.label}</span>
+          {/if}
+        </section>
+      </Select.Item>
     {/each}
   </Select.Content>
 </Select.Root>
