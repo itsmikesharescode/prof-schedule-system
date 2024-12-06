@@ -126,9 +126,7 @@
                 {#snippet children({ props })}
                   <Form.Label>Select Department</Form.Label>
                   <SelectPicker
-                    name="Select department"
-                    {props}
-                    class=""
+                    placeholder="Select department"
                     selections={auxiliaryState.formatDepartments()}
                     bind:selected={$formData.department}
                   />
@@ -144,9 +142,8 @@
                 {#snippet children({ props })}
                   <Form.Label>Select Semester</Form.Label>
                   <SelectPicker
-                    name="Select semester"
-                    {props}
-                    class=""
+                    placeholder="Select semester"
+                    noDescription
                     selections={[
                       { label: 'First Semester', value: 'First Semester' },
                       { label: 'Second Semester', value: 'Second Semester' },
@@ -167,9 +164,8 @@
                   <Form.Label>School Year</Form.Label>
                   {#if $formData.department}
                     <SelectPicker
-                      name="Select school year"
-                      {props}
-                      class=""
+                      placeholder="Select school year"
+                      noDescription
                       selections={schoolYearsDropdown?.map((level) => ({
                         label: level.year,
                         value: level.year
@@ -192,9 +188,8 @@
                   <Form.Label>Select Year Level</Form.Label>
                   {#if $formData.department}
                     <SelectPicker
-                      name="Select year level"
-                      {props}
-                      class=""
+                      placeholder="Select year level"
+                      noDescription
                       selections={yearLevelsDropdown?.levels.map((level) => ({
                         label: level.yearLevel,
                         value: level.yearLevel
@@ -217,11 +212,9 @@
                   <Form.Label>Select Section</Form.Label>
                   {#if $formData.department}
                     <SelectPicker
-                      name="Select section"
-                      {props}
-                      class=""
+                      placeholder="Select section"
                       selections={sectionsDropdown?.map((section) => ({
-                        label: section.section_code,
+                        label: section.class,
                         value: section.section_code
                       })) ?? []}
                       bind:selected={$formData.section}
@@ -245,13 +238,11 @@
                   <Form.Label>Select Subject</Form.Label>
                   {#if $formData.department}
                     <SelectPicker
-                      name="Select subject"
+                      placeholder="Select subject"
                       onValueChange={handleDepartmentChange}
-                      {props}
-                      class=""
                       selections={subjectsDropdown?.map((subject) => ({
                         label: subject.name,
-                        value: subject.name
+                        value: subject.code
                       })) ?? []}
                       bind:selected={$formData.subject}
                     />
@@ -322,9 +313,9 @@
                   <Form.Label>Select Room</Form.Label>
                   {#if $formData.department}
                     <SelectPicker
-                      name="Select room"
+                      placeholder="Select room"
                       selections={roomsDropdown?.map((room) => ({
-                        label: room.code,
+                        label: room.type,
                         value: room.code
                       })) ?? []}
                       bind:selected={$formData.room}
