@@ -17,11 +17,11 @@
         />
         <Avatar.Fallback>{$page.data.user?.user_metadata.firstName[0]}</Avatar.Fallback>
       </Avatar.Root>
-      <div class="flex flex-col items-start justify-start">
+      <div class="flex flex-col items-start justify-start overflow-hidden">
         <span class="line-clamp-1 text-wrap text-left text-sm font-semibold">
           Hello, 👋 {$page.data.user?.user_metadata.firstName}
         </span>
-        <span class="text-xs text-gray-500">{$page.data.user?.email}</span>
+        <span class="line-clamp-1 text-xs text-gray-500">{$page.data.user?.email} </span>
       </div>
     </div>
   </DropdownMenu.Trigger>

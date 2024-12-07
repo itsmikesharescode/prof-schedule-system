@@ -27,7 +27,7 @@ export const actions: Actions = {
       professor_id: user?.id ?? '',
       reference_id: generateReferenceId(),
       schedule: {
-        day: form.data.day,
+        days: form.data.days[0].split(','),
         startTime: form.data.start_time,
         endTime: form.data.end_time,
         available: form.data.availability
@@ -53,7 +53,7 @@ export const actions: Actions = {
       .from('requests_tb')
       .update({
         schedule: {
-          day: form.data.day,
+          days: form.data.days[0].split(','),
           startTime: form.data.start_time,
           endTime: form.data.end_time,
           available: form.data.availability

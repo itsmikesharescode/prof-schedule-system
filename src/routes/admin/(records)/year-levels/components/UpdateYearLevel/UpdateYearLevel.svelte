@@ -121,7 +121,7 @@
                       {...props}
                       bind:selected={$formData.department}
                       selections={auxiliaryState.formatDepartments()}
-                      name="Select department"
+                      placeholder="Select department"
                     />
                     <input type="hidden" name={props.name} bind:value={$formData.department} />
                   {/snippet}

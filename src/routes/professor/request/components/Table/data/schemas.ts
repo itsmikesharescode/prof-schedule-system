@@ -7,7 +7,7 @@ export const requestSchema = z.object({
   reference_id: z.string(),
   professor_id: z.string(),
   status: z.string(),
-  day: z.string(),
+  days: z.array(z.string()),
   start_time: z.string(),
   end_time: z.string(),
   schedule: z.custom<PreferredSchedule>(),

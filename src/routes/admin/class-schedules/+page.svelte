@@ -8,12 +8,15 @@
   import DeleteSchedule from './components/DeleteSchedule/DeleteSchedule.svelte';
   import UpdateSchedule from './components/UpdateSchedule/UpdateSchedule.svelte';
   import ViewCalendar from './components/ViewCalendar/ViewCalendar.svelte';
+  import DownloadSchedules from '$lib/components/general/DownloadSchedules.svelte';
+  import { convert24HourTo12Hour } from '$lib';
   const { data } = $props();
 
   initTableState();
 </script>
 
-<div class="sticky top-2 z-30 flex justify-end">
+<div class="sticky top-2 z-30 flex items-center justify-end gap-2.5">
+  <!-- <DownloadSchedules classSchedules={data.streamClassSchedules} /> -->
   <AddSchedule addScheduleForm={data.addScheduleForm} />
 </div>
 
@@ -26,7 +29,13 @@
       <Skeleton class="h-[20px] w-[90%] rounded-full" />
     </section>
   {:then classSchedules}
-    <Table data={classSchedules ?? []} {columns} />
+    <Table
+      data={classSchedules?.map((sched) => ({
+        ...sched,
+        day_time: `${sched.day} ${convert24HourTo12Hour(sched.start_time)} - ${convert24HourTo12Hour(sched.end_time)}`
+      })) ?? []}
+      {columns}
+    />
   {/await}
 </div>
 

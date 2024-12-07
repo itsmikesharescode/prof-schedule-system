@@ -30,7 +30,7 @@
           created_at: item.created_at,
           professor_id: item.professor_id,
           status: item.status,
-          day: item.schedule.day,
+          days: item.schedule.days,
           start_time: item.schedule.startTime,
           end_time: item.schedule.endTime,
           schedule: item.schedule,

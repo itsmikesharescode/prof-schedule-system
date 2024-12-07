@@ -5,7 +5,7 @@ export type Result<T> = {
 };
 
 export type PreferredSchedule = {
-  day: string;
+  days: string[];
   startTime: string;
   endTime: string;
   available: string;

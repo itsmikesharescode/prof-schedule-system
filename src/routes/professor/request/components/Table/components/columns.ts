@@ -1,7 +1,7 @@
 import type { ColumnDef } from '@tanstack/table-core';
 import { createRawSnippet } from 'svelte';
 import type { RequestPageTable } from '../data/schemas.js';
-import { TableColumnHeader, TableRowActions } from './index.js';
+import { TableColumnHeader, TableRowActions, TablePreferedDateRow } from './index.js';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/render-helpers.js';
 
 export const columns: ColumnDef<RequestPageTable>[] = [
@@ -48,7 +48,7 @@ export const columns: ColumnDef<RequestPageTable>[] = [
   },
   {
     accessorKey: 'date',
-    accessorFn: (row) => `${row.day} ${row.start_time} - ${row.end_time}`,
+    accessorFn: (row) => `${row.days} ${row.start_time} - ${row.end_time}`,
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<RequestPageTable, unknown>, {
         column,
@@ -62,7 +62,7 @@ export const columns: ColumnDef<RequestPageTable>[] = [
         };
       });
 
-      return renderSnippet(dateSnippet, row.getValue('date'));
+      return renderComponent(TablePreferedDateRow<RequestPageTable>, { row });
     },
     enableSorting: false,
     enableHiding: true

@@ -6,18 +6,11 @@ export const addScheduleSchema = z.object({
   yearLevel: z.string().min(1, { message: 'Year level is required.' }),
   section: z.string().min(1, { message: 'Section is required.' }),
   department: z.string().min(1, { message: 'Department is required.' }),
-  subjects: z
-    .array(
-      z.object({
-        id: z.string(),
-        name: z.string().min(1, { message: 'Subject is required.' }),
-        startTime: z.string().min(1, { message: 'Start time is required.' }),
-        endTime: z.string().min(1, { message: 'End time is required.' }),
-        day: z.string().min(1, { message: 'Day is required.' }),
-        room: z.string().min(1, { message: 'Room is required.' })
-      })
-    )
-    .min(1, { message: 'At least one subject is required.' })
+  subject: z.string().min(1, { message: 'Subject is required.' }),
+  start_time: z.string().min(1, { message: 'Start time is required.' }),
+  end_time: z.string().min(1, { message: 'End time is required.' }),
+  day: z.string().min(1, { message: 'Day is required.' }),
+  room: z.string().min(1, { message: 'Room is required.' })
 });
 
 export type AddScheduleSchema = typeof addScheduleSchema;

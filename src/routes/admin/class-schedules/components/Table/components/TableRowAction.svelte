@@ -31,15 +31,6 @@
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
-        tableState.setShowViewCalendar(true);
-      }}
-    >
-      <Calendar />
-      View Calendar
-    </DropdownMenu.Item>
-    <DropdownMenu.Item
-      onclick={() => {
-        tableState.setActiveRow(row.original);
         tableState.setShowUpdate(true);
       }}
     >

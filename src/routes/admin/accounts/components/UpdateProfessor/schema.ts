@@ -18,9 +18,7 @@ export const updateProfessorSchema = z
     previousSchool: z.string().min(1, { message: 'Must enter previous school.' }),
     yearsOfTeaching: z.number().min(1, { message: 'Must enter years of teaching.' }),
     department: z.string().min(1, { message: 'Must select department.' }),
-    day: z.string().refine((v) => days.map((t) => t.value).includes(v), {
-      message: 'Must select day.'
-    }),
+    days: z.array(z.string()).min(1, { message: 'Must select at least one day.' }),
     startTime: z.string().min(1, { message: 'Must enter start time.' }),
     endTime: z.string().min(1, { message: 'Must enter end time.' }),
     availability: z.string().refine((v) => ['Part Time', 'Full Time'].includes(v), {

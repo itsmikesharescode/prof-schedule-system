@@ -16,6 +16,7 @@
   import { auxiliaryState } from '$lib/runes/auxiliaryState.svelte';
   import type { Result } from '$lib/types';
   import { toast } from 'svelte-sonner';
+  import MultiSelect from '$lib/components/general/MultiSelect.svelte';
 
   interface Props {
     addProfessorForm: SuperValidated<Infer<AddProfessorSchema>>;
@@ -265,18 +266,16 @@
               <Form.FieldErrors />
             </Form.Field>
 
-            <Form.Field {form} name="day">
+            <Form.Field {form} name="days">
               <Form.Control>
                 {#snippet children({ props })}
-                  <Form.Label>Day</Form.Label>
-                  <SelectPicker
-                    name="Select day"
-                    {props}
-                    class=""
-                    selections={days}
-                    bind:selected={$formData.day}
+                  <Form.Label>Days</Form.Label>
+                  <MultiSelect
+                    selections={days.map((day) => day.value)}
+                    bind:selected={$formData.days}
+                    placeholder="Select days"
                   />
-                  <input type="hidden" {...props} bind:value={$formData.day} />
+                  <input type="hidden" {...props} bind:value={$formData.days} />
                 {/snippet}
               </Form.Control>
               <Form.FieldErrors />

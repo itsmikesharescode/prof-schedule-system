@@ -46,5 +46,6 @@
       </Button>
     {/if}
   </div>
+
   <TableViewOptions {table} />
 </div>

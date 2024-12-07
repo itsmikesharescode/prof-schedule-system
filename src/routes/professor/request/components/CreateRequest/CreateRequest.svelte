@@ -13,6 +13,7 @@
   import { goto } from '$app/navigation';
   import { toast } from 'svelte-sonner';
   import Textarea from '$lib/components/ui/textarea/textarea.svelte';
+  import MultiSelect from '$lib/components/general/MultiSelect.svelte';
 
   interface Props {
     createRequestForm: SuperValidated<Infer<CreateRequestSchema>>;
@@ -71,18 +72,16 @@
         use:enhance
         class="flex flex-col gap-2.5 px-6 pb-6"
       >
-        <Form.Field {form} name="day">
+        <Form.Field {form} name="days">
           <Form.Control>
             {#snippet children({ props })}
               <Form.Label>Day</Form.Label>
-              <SelectPicker
-                name="Select day"
-                {props}
-                class=""
-                selections={days}
-                bind:selected={$formData.day}
+              <MultiSelect
+                placeholder="Select days"
+                selections={days.map((day) => day.value)}
+                bind:selected={$formData.days}
               />
-              <input type="hidden" {...props} bind:value={$formData.day} />
+              <input type="hidden" {...props} bind:value={$formData.days} />
             {/snippet}
           </Form.Control>
           <Form.FieldErrors />
@@ -125,9 +124,8 @@
             {#snippet children({ props })}
               <Form.Label>Availability</Form.Label>
               <SelectPicker
-                name="Select availability"
-                {props}
-                class=""
+                placeholder="Select availability"
+                noDescription
                 selections={[
                   { value: 'Part Time', label: 'Part Time' },
                   { value: 'Full Time', label: 'Full Time' }
