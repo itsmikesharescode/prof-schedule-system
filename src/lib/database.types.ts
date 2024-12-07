@@ -1,5 +1,4 @@
 import type { UserMetaData, YearLevel, PreferredSchedule } from './types';
-
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type Database = {
@@ -72,21 +71,27 @@ export type Database = {
       faculties_tb: {
         Row: {
           created_at: string;
+          end_time: string;
           id: number;
           professor_id: string;
           schedule_id: number;
+          start_time: string;
         };
         Insert: {
           created_at?: string;
+          end_time: string;
           id?: number;
           professor_id: string;
           schedule_id: number;
+          start_time: string;
         };
         Update: {
           created_at?: string;
+          end_time?: string;
           id?: number;
           professor_id?: string;
           schedule_id?: number;
+          start_time?: string;
         };
         Relationships: [
           {

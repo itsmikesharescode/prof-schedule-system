@@ -241,7 +241,9 @@ CREATE TABLE IF NOT EXISTS "public"."faculties_tb" (
     "id" bigint NOT NULL,
     "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
     "professor_id" "uuid" NOT NULL,
-    "schedule_id" bigint NOT NULL
+    "schedule_id" bigint NOT NULL,
+    "start_time" time without time zone NOT NULL,
+    "end_time" time without time zone NOT NULL
 );
 
 
