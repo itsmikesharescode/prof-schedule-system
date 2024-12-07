@@ -205,7 +205,10 @@
               <Form.Description />
               <Form.FieldErrors />
             </Form.Field>
+          </div>
 
+          <!--Schedule-->
+          <div class="">
             <Form.Field {form} name="section">
               <Form.Control>
                 {#snippet children({ props })}
@@ -228,10 +231,6 @@
               <Form.Description />
               <Form.FieldErrors />
             </Form.Field>
-          </div>
-
-          <!--Schedule-->
-          <div class="">
             <Form.Field {form} name="subject">
               <Form.Control>
                 {#snippet children({ props })}
@@ -250,40 +249,6 @@
                   {:else}
                     {@render Checkings()}
                   {/if}
-                {/snippet}
-              </Form.Control>
-              <Form.Description />
-              <Form.FieldErrors />
-            </Form.Field>
-
-            <Form.Field {form} name="start_time">
-              <Form.Control>
-                {#snippet children({ props })}
-                  <Form.Label>Select Start Time</Form.Label>
-                  <Combobox
-                    name="Select start time"
-                    placeholder="Search start time"
-                    selections={availableTimes}
-                    bind:selected={$formData.start_time}
-                  />
-                  <input type="hidden" {...props} bind:value={$formData.start_time} />
-                {/snippet}
-              </Form.Control>
-              <Form.Description />
-              <Form.FieldErrors />
-            </Form.Field>
-
-            <Form.Field {form} name="end_time">
-              <Form.Control>
-                {#snippet children({ props })}
-                  <Form.Label>Select End Time</Form.Label>
-                  <Combobox
-                    name="Select end time"
-                    placeholder="Search end time"
-                    selections={availableTimes}
-                    bind:selected={$formData.end_time}
-                  />
-                  <input type="hidden" {...props} bind:value={$formData.end_time} />
                 {/snippet}
               </Form.Control>
               <Form.Description />

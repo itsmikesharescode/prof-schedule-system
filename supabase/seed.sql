@@ -212,8 +212,10 @@ CREATE TABLE IF NOT EXISTS "public"."class_schedules_tb" (
     "semester" "text" NOT NULL,
     "year_level" "text" NOT NULL,
     "section" "text" NOT NULL,
-    "subjects" "jsonb" NOT NULL,
-    "department" "text" NOT NULL
+    "department" "text" NOT NULL,
+    "subject" "text" NOT NULL,
+    "day" "text" NOT NULL,
+    "room" "text" NOT NULL
 );
 
 
@@ -775,9 +777,6 @@ GRANT USAGE ON SCHEMA "public" TO "postgres";
 GRANT USAGE ON SCHEMA "public" TO "anon";
 GRANT USAGE ON SCHEMA "public" TO "authenticated";
 GRANT USAGE ON SCHEMA "public" TO "service_role";
-
-
-
 
 
 

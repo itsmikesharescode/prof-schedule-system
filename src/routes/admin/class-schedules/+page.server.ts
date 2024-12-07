@@ -27,9 +27,7 @@ export const actions: Actions = {
         semester: form.data.semester,
         subject: form.data.subject,
         room: form.data.room,
-        day: form.data.day,
-        start_time: form.data.start_time,
-        end_time: form.data.end_time
+        day: form.data.day
       }
     ]);
 
@@ -53,9 +51,7 @@ export const actions: Actions = {
         semester: form.data.semester,
         subject: form.data.subject,
         room: form.data.room,
-        day: form.data.day,
-        start_time: form.data.start_time,
-        end_time: form.data.end_time
+        day: form.data.day
       })
       .eq('id', form.data.id);
 

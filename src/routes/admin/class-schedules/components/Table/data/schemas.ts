@@ -9,11 +9,8 @@ export const classScheduleSchema = z.object({
   year_level: z.string(),
   section: z.string(),
   subject: z.string(),
-  start_time: z.string(),
-  end_time: z.string(),
   room: z.string(),
-  day: z.string(),
-  day_time: z.string()
+  day: z.string()
 });
 
 export type ClassSchedulesPageTable = z.output<typeof classScheduleSchema>;

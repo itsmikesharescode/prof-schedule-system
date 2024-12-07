@@ -29,13 +29,7 @@
       <Skeleton class="h-[20px] w-[90%] rounded-full" />
     </section>
   {:then classSchedules}
-    <Table
-      data={classSchedules?.map((sched) => ({
-        ...sched,
-        day_time: `${sched.day} ${convert24HourTo12Hour(sched.start_time)} - ${convert24HourTo12Hour(sched.end_time)}`
-      })) ?? []}
-      {columns}
-    />
+    <Table data={classSchedules ?? []} {columns} />
   {/await}
 </div>
 

@@ -1,15 +1,7 @@
 import type { ColumnDef } from '@tanstack/table-core';
 import { createRawSnippet } from 'svelte';
 import type { ClassSchedulesPageTable } from '../data/schemas.js';
-import {
-  TableCheckbox,
-  TableColumnHeader,
-  TablePriorityCell,
-  TableRowActions,
-  TableStatusCell,
-  TableTitleCell,
-  TableSubjectsCell
-} from './index.js';
+import { TableCheckbox, TableColumnHeader, TableRowActions } from './index.js';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/render-helpers.js';
 
 export const columns: ColumnDef<ClassSchedulesPageTable>[] = [
@@ -76,21 +68,21 @@ export const columns: ColumnDef<ClassSchedulesPageTable>[] = [
   },
 
   {
-    accessorKey: 'day_time',
+    accessorKey: 'day',
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<ClassSchedulesPageTable, unknown>, {
         column,
-        title: 'Day Time'
+        title: 'Day'
       });
     },
     cell: ({ row }) => {
-      const dayTimeSnippet = createRawSnippet<[string]>((getDayTime) => {
+      const daySnippet = createRawSnippet<[string]>((getDay) => {
         return {
-          render: () => `<div class="w-full truncate">${getDayTime()}</div>`
+          render: () => `<div class="w-full truncate">${getDay()}</div>`
         };
       });
 
-      return renderSnippet(dayTimeSnippet, row.getValue('day_time'));
+      return renderSnippet(daySnippet, row.getValue('day'));
     },
     enableSorting: true,
     enableHiding: true

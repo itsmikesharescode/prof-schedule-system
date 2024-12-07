@@ -24,6 +24,11 @@
     {selected ? selected : props.placeholder}
   </Select.Trigger>
   <Select.Content>
+    {#if !props.selections.length}
+      <div class="flex min-h-[50px] items-center justify-center">
+        <span class="text-xs text-muted-foreground">There is no uploaded data</span>
+      </div>
+    {/if}
     {#each props.selections as selection}
       <Select.Item value={selection.value}>
         <section class="flex flex-col">

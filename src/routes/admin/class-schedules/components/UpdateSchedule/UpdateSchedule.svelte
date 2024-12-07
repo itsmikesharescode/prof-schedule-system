@@ -73,14 +73,13 @@
 
   $effect(() => {
     if (tableState.getShowUpdate()) {
+      $formData.id = tableState.getActiveRow()?.id ?? 0;
       $formData.department = tableState.getActiveRow()?.department ?? '';
       $formData.semester = tableState.getActiveRow()?.semester ?? '';
       $formData.schoolYear = tableState.getActiveRow()?.school_year ?? '';
       $formData.yearLevel = tableState.getActiveRow()?.year_level ?? '';
       $formData.section = tableState.getActiveRow()?.section ?? '';
       $formData.subject = tableState.getActiveRow()?.subject ?? '';
-      $formData.start_time = tableState.getActiveRow()?.start_time ?? '';
-      $formData.end_time = tableState.getActiveRow()?.end_time ?? '';
       $formData.day = tableState.getActiveRow()?.day ?? '';
       $formData.room = tableState.getActiveRow()?.room ?? '';
     }
@@ -216,7 +215,10 @@
               <Form.Description />
               <Form.FieldErrors />
             </Form.Field>
+          </div>
 
+          <!--Schedule-->
+          <div class="">
             <Form.Field {form} name="section">
               <Form.Control>
                 {#snippet children({ props })}
@@ -239,10 +241,6 @@
               <Form.Description />
               <Form.FieldErrors />
             </Form.Field>
-          </div>
-
-          <!--Schedule-->
-          <div class="">
             <Form.Field {form} name="subject">
               <Form.Control>
                 {#snippet children({ props })}
@@ -261,40 +259,6 @@
                   {:else}
                     {@render Checkings()}
                   {/if}
-                {/snippet}
-              </Form.Control>
-              <Form.Description />
-              <Form.FieldErrors />
-            </Form.Field>
-
-            <Form.Field {form} name="start_time">
-              <Form.Control>
-                {#snippet children({ props })}
-                  <Form.Label>Select Start Time</Form.Label>
-                  <Combobox
-                    name="Select start time"
-                    placeholder="Search start time"
-                    selections={availableTimes}
-                    bind:selected={$formData.start_time}
-                  />
-                  <input type="hidden" {...props} bind:value={$formData.start_time} />
-                {/snippet}
-              </Form.Control>
-              <Form.Description />
-              <Form.FieldErrors />
-            </Form.Field>
-
-            <Form.Field {form} name="end_time">
-              <Form.Control>
-                {#snippet children({ props })}
-                  <Form.Label>Select End Time</Form.Label>
-                  <Combobox
-                    name="Select end time"
-                    placeholder="Search end time"
-                    selections={availableTimes}
-                    bind:selected={$formData.end_time}
-                  />
-                  <input type="hidden" {...props} bind:value={$formData.end_time} />
                 {/snippet}
               </Form.Control>
               <Form.Description />
