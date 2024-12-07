@@ -29,7 +29,9 @@ export const actions: Actions = {
     const { error } = await supabase.from('faculties_tb').insert([
       {
         professor_id: form.data.user_id,
-        schedule_id: Number(form.data.schedule_id)
+        schedule_id: Number(form.data.schedule_id),
+        start_time: form.data.start_time,
+        end_time: form.data.end_time
       }
     ]);
 
@@ -39,13 +41,26 @@ export const actions: Actions = {
 
     return { form, msg: 'Faculty added successfully' };
   },
-  /* updateFacultyEvent: async ({ request, locals: { supabase } }) => {
+  updateFacultyEvent: async ({ request, locals: { supabase } }) => {
     const form = await superValidate(request, zod(updateFacultySchema));
 
     if (!form.valid) {
       return fail(400, { form });
     }
-  }, */
+
+    const { error } = await supabase
+      .from('faculties_tb')
+      .update({
+        schedule_id: Number(form.data.schedule_id),
+        start_time: form.data.start_time,
+        end_time: form.data.end_time
+      })
+      .eq('id', Number(form.data.id));
+
+    if (error) {
+      return fail(401, { form, msg: error.message });
+    }
+  },
 
   deleteFacultyEvent: async ({ request, locals: { supabase } }) => {
     const formData = await request.formData();
