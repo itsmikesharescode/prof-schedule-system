@@ -6,11 +6,18 @@
   import ViewRequestComparison from './components/ViewRequestComparison/ViewRequestComparison.svelte';
   import UpdateRequestStatus from './components/UpdateRequestStatus/UpdateRequestStatus.svelte';
   import DeleteRequest from './components/DeleteRequest/DeleteRequest.svelte';
+  import Button from '$lib/components/ui/button/button.svelte';
 
   const { data } = $props();
 
   initTableState();
+
+  const handlePrint = () => {
+    window.print();
+  };
 </script>
+
+<Button onclick={handlePrint}>Eto oh print</Button>
 
 <div class="mt-6">
   {#await data.getRequests}
