@@ -132,6 +132,7 @@
                   <SelectPicker
                     placeholder="Select Title"
                     selections={titles}
+                    noDescription
                     bind:selected={$formData.title}
                   />
                   <input type="hidden" {...props} bind:value={$formData.title} />
@@ -270,9 +271,7 @@
                 {#snippet children({ props })}
                   <Form.Label>Department</Form.Label>
                   <SelectPicker
-                    name="Select department"
-                    {props}
-                    class=""
+                    placeholder="Select department"
                     selections={auxiliaryState.formatDepartments()}
                     bind:selected={$formData.department}
                   />
@@ -334,9 +333,8 @@
                 {#snippet children({ props })}
                   <Form.Label>Availability</Form.Label>
                   <SelectPicker
-                    name="Select availability"
-                    {props}
-                    class=""
+                    placeholder="Select availability"
+                    noDescription
                     selections={[
                       { value: 'Part Time', label: 'Part Time' },
                       { value: 'Full Time', label: 'Full Time' }
