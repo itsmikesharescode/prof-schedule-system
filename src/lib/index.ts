@@ -13,7 +13,7 @@ export const convertTo24Hour = (timeStr: string) => {
     hour = 0;
   }
 
-  return `${hour.toString().padStart(2, '0')}:${minutes}`;
+  return `${hour.toString().padStart(2, '0')}:${minutes}:00`;
 };
 
 export const checkTimeOverlap = (

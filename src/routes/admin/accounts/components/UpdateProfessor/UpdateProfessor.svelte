@@ -18,6 +18,7 @@
   import { PUBLIC_SUPABASE_STORAGE_URL } from '$env/static/public';
   import { useTableState } from '../Table/tableState.svelte';
   import MultiSelect from '$lib/components/general/MultiSelect.svelte';
+  import { convertTo24Hour } from '$lib';
 
   interface Props {
     updateProfessorForm: SuperValidated<Infer<UpdateProfessorSchema>>;
@@ -70,8 +71,9 @@
       $formData.yearsOfTeaching = tableState.getActiveRow()?.yearsOfTeaching ?? 0;
       $formData.department = tableState.getActiveRow()?.department ?? '';
       $formData.days = tableState.getActiveRow()?.schedule.days ?? [];
-      $formData.startTime = tableState.getActiveRow()?.schedule.startTime ?? '';
-      $formData.endTime = tableState.getActiveRow()?.schedule.endTime ?? '';
+      $formData.startTime =
+        convertTo24Hour(tableState.getActiveRow()?.schedule.startTime ?? '') ?? '';
+      $formData.endTime = convertTo24Hour(tableState.getActiveRow()?.schedule.endTime ?? '') ?? '';
       $formData.availability = tableState.getActiveRow()?.schedule.available ?? '';
       $formData.interests = tableState.getActiveRow()?.interests ?? [];
     }
@@ -91,21 +93,15 @@
       <X class="size-4" />
       <span class="sr-only">Close</span>
     </button>
-
+    {$formData.startTime}
     <AlertDialog.Header class="px-6 pt-6">
       <AlertDialog.Title>Update Professor</AlertDialog.Title>
       <AlertDialog.Description>
         Fill the fields below to update a professor.
       </AlertDialog.Description>
     </AlertDialog.Header>
-    <ScrollArea class="h-[80dvh]">
-      <form
-        method="POST"
-        action="?/updateProfessorEvent"
-        enctype="multipart/form-data"
-        use:enhance
-        class=" "
-      >
+    <ScrollArea class="max-h-[80dvh]">
+      <form method="POST" action="?/updateProfessorEvent" enctype="multipart/form-data" use:enhance>
         <input type="hidden" name="userId" bind:value={$formData.userId} />
         <input type="hidden" name="photoPath" bind:value={$formData.photoPath} />
         <div class="grid grid-cols-3 gap-6 px-6 pb-6">
