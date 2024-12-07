@@ -26,7 +26,7 @@ export const actions: Actions = {
       {
         class: form.data.class,
         section_code: form.data.sectionCode,
-        department: form.data.department
+        department_id: parseInt(form.data.department.split(',')[1]) // hacky way to get the department id
       }
     ]);
 
@@ -43,7 +43,7 @@ export const actions: Actions = {
     const { error } = await supabase
       .from('sections_tb')
       .update({
-        department: form.data.department,
+        department_id: parseInt(form.data.department.split(',')[1]), // hacky way to get the department id
         class: form.data.class,
         section_code: form.data.sectionCode
       })
@@ -55,9 +55,9 @@ export const actions: Actions = {
 
   deleteSectionEvent: async ({ request, locals: { supabase } }) => {
     const formData = await request.formData();
-    const id = formData.get('id');
+    const id = formData.get('id') as string;
 
-    const { error } = await supabase.from('sections_tb').delete().eq('id', id);
+    const { error } = await supabase.from('sections_tb').delete().eq('id', parseInt(id));
 
     if (error) return fail(401, { msg: error.message });
     return { msg: 'Deleted successfully' };

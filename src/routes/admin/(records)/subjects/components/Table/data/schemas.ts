@@ -6,7 +6,8 @@ export const subjectsSchema = z.object({
   name: z.string(),
   code: z.string(),
   unit: z.number(),
-  department: z.string()
+  department: z.string(),
+  department_id: z.number()
 });
 
 export type SubjectsPageTable = z.output<typeof subjectsSchema>;

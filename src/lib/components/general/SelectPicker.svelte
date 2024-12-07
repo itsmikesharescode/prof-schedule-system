@@ -21,7 +21,7 @@
 
 <Select.Root onValueChange={props.onValueChange} type="single" bind:value={selected}>
   <Select.Trigger class={cn('', props.class)}>
-    {selected ? selected : props.placeholder}
+    {selected ? selected.split(',')[0] : props.placeholder}
   </Select.Trigger>
   <Select.Content>
     {#if !props.selections.length}
@@ -32,7 +32,7 @@
     {#each props.selections as selection}
       <Select.Item value={selection.value}>
         <section class="flex flex-col">
-          <span>{selection.value}</span>
+          <span>{selection.value.split(',')[0]}</span>
           {#if !props.noDescription}
             <span class="text-xs text-muted-foreground">{selection.label}</span>
           {/if}

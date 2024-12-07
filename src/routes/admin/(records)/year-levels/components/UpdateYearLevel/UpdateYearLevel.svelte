@@ -81,7 +81,7 @@
     if (tableState.getShowUpdate()) {
       yearLevels = tableState.getActiveRow()?.levels as typeof yearLevels;
       $formData.id = tableState.getActiveRow()?.id;
-      $formData.department = tableState.getActiveRow()?.department;
+      $formData.department = `${tableState.getActiveRow()?.department},${tableState.getActiveRow()?.department_id}`;
     }
   });
 </script>

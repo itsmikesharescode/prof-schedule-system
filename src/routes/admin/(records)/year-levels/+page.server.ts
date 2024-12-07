@@ -25,7 +25,7 @@ export const actions: Actions = {
     const { error } = await supabase.from('year_levels_tb').insert([
       {
         levels: form.data.yearLevels,
-        department: form.data.department
+        department_id: parseInt(form.data.department.split(',')[1]) // hacky way to get the department id
       }
     ]);
 
@@ -43,7 +43,7 @@ export const actions: Actions = {
       .from('year_levels_tb')
       .update({
         levels: form.data.yearLevels,
-        department: form.data.department
+        department_id: parseInt(form.data.department.split(',')[1]) // hacky way to get the department id
       })
       .eq('id', form.data.id);
 
