@@ -8,20 +8,19 @@
   import { addFacultySchema, type AddFacultySchema } from './schema';
   import { ScrollArea } from '$lib/components/ui/scroll-area/index';
   import CustomComboBox from '../CustomComboBox.svelte';
-  import type { streamProfessors } from '../../../(db_calls)/streamProfessors';
-  import type { streamClassSchedules } from '../../../(db_calls)/streamClassSchedules';
+  import { streamProfessors } from '../../../(db_calls)/streamProfessors';
+  import { streamClassSchedules } from '../../../(db_calls)/streamClassSchedules';
   import LoaderCircle from 'lucide-svelte/icons/loader-circle';
   import type { Result } from '$lib/types';
   import { toast } from 'svelte-sonner';
   import { availableTimes } from '$lib/metadata';
+  import { page } from '$app/stores';
 
   interface Props {
     addFacultyForm: SuperValidated<Infer<AddFacultySchema>>;
-    professors: Awaited<ReturnType<typeof streamProfessors>>;
-    schedules: Awaited<ReturnType<typeof streamClassSchedules>>;
   }
 
-  let { addFacultyForm, professors, schedules }: Props = $props();
+  let { addFacultyForm }: Props = $props();
 
   let open = $state(false);
 
@@ -44,9 +43,24 @@
   });
 
   const { form: formData, enhance, submitting } = form;
+
+  let professors = $state<Awaited<ReturnType<typeof streamProfessors>>>(null);
+  let schedules = $state<Awaited<ReturnType<typeof streamClassSchedules>>>(null);
+
+  const showAddFaculty = async () => {
+    open = true;
+    if (!$page.data.supabase) return;
+    const [profs, scheds] = await Promise.all([
+      streamProfessors($page.data.supabase, null),
+      streamClassSchedules($page.data.supabase, null)
+    ]);
+
+    professors = profs;
+    schedules = scheds;
+  };
 </script>
 
-<Button size="sm" onclick={() => (open = true)}>
+<Button size="sm" onclick={showAddFaculty}>
   <Plus class="size-4" />
   Assign Faculty
 </Button>

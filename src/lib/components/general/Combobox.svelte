@@ -21,10 +21,9 @@
   let { selected = $bindable(), selections, placeholder, name, disabled }: Props = $props();
 
   let open = $state(false);
-  let value = $state('');
   let triggerRef = $state<HTMLButtonElement>(null!);
 
-  const selectedValue = $derived(selections.find((f) => f.value === value)?.label);
+  const selectedValue = $derived(selections.find((f) => f.value === selected));
 
   // We want to refocus the trigger button when the user selects
   // an item from the list so users can continue navigating the
@@ -38,7 +37,7 @@
 
   $effect(() => {
     if (selectedValue) {
-      selected = selectedValue;
+      selected = selectedValue.value;
     }
   });
 </script>
@@ -54,7 +53,7 @@
         role="combobox"
         aria-expanded={open}
       >
-        <span class={selected ? '' : 'text-muted-foreground'}>{selected || name}</span>
+        <span class={selected ? '' : 'text-muted-foreground'}>{selectedValue?.label || name}</span>
         <ChevronsUpDown class="ml-2 size-4 shrink-0 opacity-50" />
       </Button>
     {/snippet}
@@ -69,11 +68,13 @@
             <Command.Item
               value={selection.value}
               onSelect={() => {
-                value = selection.value;
+                selected = selection.value;
                 closeAndFocusTrigger();
               }}
             >
-              <Check class={cn('mr-2 size-4', value !== selection.value && 'text-transparent')} />
+              <Check
+                class={cn('mr-2 size-4', selected !== selection.value && 'text-transparent')}
+              />
               {selection.label}
             </Command.Item>
           {/each}
