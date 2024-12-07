@@ -37,7 +37,7 @@
     <input
       class="hidden"
       type="file"
-      accept="image/png, image/jpeg"
+      accept="image/*"
       oninput={(e) => {
         image = e.currentTarget.files?.item(0) as File;
         imageLink = e.currentTarget.files?.item(0) as File;

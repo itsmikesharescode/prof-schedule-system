@@ -1,4 +1,4 @@
-import { days, departments, titles } from '$lib/metadata';
+import { titles } from '$lib/metadata';
 import { z } from 'zod';
 
 export const addProfessorSchema = z

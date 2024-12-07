@@ -81,7 +81,7 @@
         Fill the fields below to create a new professor.
       </AlertDialog.Description>
     </AlertDialog.Header>
-    <ScrollArea class="h-[80dvh]">
+    <ScrollArea class="max-h-[80dvh]">
       <form
         method="POST"
         action="?/addProfessorEvent"
@@ -112,10 +112,9 @@
                 {#snippet children({ props })}
                   <Form.Label>Title</Form.Label>
                   <SelectPicker
-                    name="Select title"
-                    {props}
-                    class=""
+                    placeholder="Select title"
                     selections={titles}
+                    noDescription
                     bind:selected={$formData.title}
                   />
                   <input type="hidden" {...props} bind:value={$formData.title} />
@@ -254,9 +253,7 @@
                 {#snippet children({ props })}
                   <Form.Label>Department</Form.Label>
                   <SelectPicker
-                    name="Select department"
-                    {props}
-                    class=""
+                    placeholder="Select department"
                     selections={auxiliaryState.formatDepartments()}
                     bind:selected={$formData.department}
                   />
@@ -318,9 +315,8 @@
                 {#snippet children({ props })}
                   <Form.Label>Availability</Form.Label>
                   <SelectPicker
-                    name="Select availability"
-                    {props}
-                    class=""
+                    placeholder="Select availability"
+                    noDescription
                     selections={[
                       { value: 'Part Time', label: 'Part Time' },
                       { value: 'Full Time', label: 'Full Time' }
@@ -375,8 +371,8 @@
                 {#snippet children({ props })}
                   <Form.Label>Position</Form.Label>
                   <SelectPicker
-                    name="Select position"
-                    {props}
+                    placeholder="Select position"
+                    noDescription
                     class=""
                     selections={[
                       { value: 'Professor', label: 'Professor' },
