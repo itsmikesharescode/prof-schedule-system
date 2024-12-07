@@ -70,7 +70,7 @@
       $formData.previousSchool = tableState.getActiveRow()?.previousSchool ?? '';
       $formData.yearsOfTeaching = tableState.getActiveRow()?.yearsOfTeaching ?? 0;
       $formData.department = tableState.getActiveRow()?.department ?? '';
-      $formData.days = tableState.getActiveRow()?.schedule.days ?? [];
+      $formData.days = tableState.getActiveRow()?.schedule.days[0].split(',') ?? [];
       $formData.startTime =
         convertTo24Hour(tableState.getActiveRow()?.schedule.startTime ?? '') ?? '';
       $formData.endTime = convertTo24Hour(tableState.getActiveRow()?.schedule.endTime ?? '') ?? '';
@@ -130,9 +130,7 @@
                 {#snippet children({ props })}
                   <Form.Label>Title</Form.Label>
                   <SelectPicker
-                    name="Select title"
-                    {props}
-                    class=""
+                    placeholder="Select Title"
                     selections={titles}
                     bind:selected={$formData.title}
                   />
