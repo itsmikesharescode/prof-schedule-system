@@ -95,7 +95,7 @@
     <span class="text-sm text-muted-foreground">Please select a department first.</span>
   </div>
 {/snippet}
-
+{$formData.schoolYear}
 <AlertDialog.Root bind:open>
   <AlertDialog.Content class="max-w-3xl p-0">
     <button
@@ -157,7 +157,6 @@
               <Form.Description />
               <Form.FieldErrors />
             </Form.Field>
-
             <Form.Field {form} name="schoolYear">
               <Form.Control>
                 {#snippet children({ props })}
@@ -168,7 +167,7 @@
                       noDescription
                       selections={schoolYearsDropdown?.map((level) => ({
                         label: level.year,
-                        value: level.year
+                        value: `${level.year}, ${level.id}`
                       })) ?? []}
                       bind:selected={$formData.schoolYear}
                     />
@@ -181,7 +180,6 @@
               <Form.Description />
               <Form.FieldErrors />
             </Form.Field>
-
             <Form.Field {form} name="yearLevel">
               <Form.Control>
                 {#snippet children({ props })}
@@ -192,7 +190,7 @@
                       noDescription
                       selections={yearLevelsDropdown?.levels.map((level) => ({
                         label: level.yearLevel,
-                        value: level.yearLevel
+                        value: `${level.yearLevel}, ${yearLevelsDropdown?.id}`
                       })) ?? []}
                       bind:selected={$formData.yearLevel}
                     />
@@ -218,7 +216,7 @@
                       placeholder="Select section"
                       selections={sectionsDropdown?.map((section) => ({
                         label: section.class,
-                        value: section.section_code
+                        value: `${section.section_code}, ${section.id}`
                       })) ?? []}
                       bind:selected={$formData.section}
                     />
@@ -241,7 +239,7 @@
                       onValueChange={handleDepartmentChange}
                       selections={subjectsDropdown?.map((subject) => ({
                         label: subject.name,
-                        value: subject.code
+                        value: `${subject.code}, ${subject.id}`
                       })) ?? []}
                       bind:selected={$formData.subject}
                     />
@@ -281,7 +279,7 @@
                       placeholder="Select room"
                       selections={roomsDropdown?.map((room) => ({
                         label: room.type,
-                        value: room.code
+                        value: `${room.code}, ${room.id}`
                       })) ?? []}
                       bind:selected={$formData.room}
                     />
