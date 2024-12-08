@@ -1,15 +1,33 @@
 <script lang="ts">
   import type { ClassSchedulesPageTable } from '../data/schemas';
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
+  import PrinterCheck from 'lucide-svelte/icons/printer-check';
+  import { buttonVariants } from '$lib/components/ui/button';
+  import ChevronDown from 'lucide-svelte/icons/chevron-down';
+
   interface Props {
     data: ClassSchedulesPageTable[];
-    open: boolean;
   }
 
-  let { open = $bindable(), data }: Props = $props();
+  import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
+
+  let { data }: Props = $props();
 </script>
 
-<AlertDialog.Root bind:open>
+<DropdownMenu.Root>
+  <DropdownMenu.Trigger class={buttonVariants({ variant: 'outline', size: 'sm' })}>
+    Print Class Schedules <ChevronDown />
+  </DropdownMenu.Trigger>
+  <DropdownMenu.Content>
+    <DropdownMenu.Group>
+      <DropdownMenu.Item><PrinterCheck /> Morning Classes</DropdownMenu.Item>
+      <DropdownMenu.Item><PrinterCheck /> Afternoon Classes</DropdownMenu.Item>
+      <DropdownMenu.Item><PrinterCheck /> Evening Classes</DropdownMenu.Item>
+    </DropdownMenu.Group>
+  </DropdownMenu.Content>
+</DropdownMenu.Root>
+
+<AlertDialog.Root open={false}>
   <AlertDialog.Content class="flex h-full max-w-full flex-col gap-5 overflow-auto">
     <section class="grid grid-cols-[1fr,2fr] border-2">
       <div class="grid min-h-20 grid-cols-2">

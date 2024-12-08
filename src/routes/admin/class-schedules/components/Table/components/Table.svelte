@@ -124,14 +124,9 @@
 </script>
 
 <div class="sticky top-2 z-30 mb-4 flex items-center justify-end gap-2.5">
-  <Button size="sm" variant="outline" onclick={handlePrint}>
-    <PrinterCheck />
-    Print Class Schedules
-  </Button>
+  <PrintLayout {data} />
   <AddSchedule {addScheduleForm} />
 </div>
-
-<PrintLayout bind:open {data} />
 
 <div class="space-y-4">
   <DataTableToolbar {table} />
