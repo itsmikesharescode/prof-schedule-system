@@ -36,7 +36,7 @@ export const columns: ColumnDef<ClassSchedulesPageTable>[] = [
     cell: ({ row }) => {
       const subjectSnippet = createRawSnippet<[string]>((getSubject) => {
         return {
-          render: () => `<div class="w-full line-clamp-2">${getSubject()}</div>`
+          render: () => `<div class="w-full line-clamp-2">${getSubject().split(',')[0]}</div>`
         };
       });
 
@@ -57,7 +57,7 @@ export const columns: ColumnDef<ClassSchedulesPageTable>[] = [
     cell: ({ row }) => {
       const departmentSnippet = createRawSnippet<[string]>((getDepartment) => {
         return {
-          render: () => `<div class="w-full">${getDepartment()}</div>`
+          render: () => `<div class="w-full">${getDepartment().split(',')[0]}</div>`
         };
       });
 
@@ -99,7 +99,7 @@ export const columns: ColumnDef<ClassSchedulesPageTable>[] = [
     cell: ({ row }) => {
       const schoolYearSnippet = createRawSnippet<[string]>((getSchoolYear) => {
         return {
-          render: () => `<div class="w-full">${getSchoolYear()}</div>`
+          render: () => `<div class="w-full">${getSchoolYear().split(',')[0]}</div>`
         };
       });
 
@@ -141,7 +141,7 @@ export const columns: ColumnDef<ClassSchedulesPageTable>[] = [
     cell: ({ row }) => {
       const yearLevelSnippet = createRawSnippet<[string]>((getYearLevel) => {
         return {
-          render: () => `<div class="w-full">${getYearLevel()}</div>`
+          render: () => `<div class="w-full">${getYearLevel().split(',')[0]}</div>`
         };
       });
 
@@ -162,7 +162,7 @@ export const columns: ColumnDef<ClassSchedulesPageTable>[] = [
     cell: ({ row }) => {
       const sectionSnippet = createRawSnippet<[string]>((getSection) => {
         return {
-          render: () => `<div class="w-full">${getSection()}</div>`
+          render: () => `<div class="w-full">${getSection().split(',')[0]}</div>`
         };
       });
 
