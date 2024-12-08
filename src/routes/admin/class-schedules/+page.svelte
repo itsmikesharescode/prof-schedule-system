@@ -3,7 +3,6 @@
   import Table from './components/Table/components/Table.svelte';
   import { columns } from './components/Table/components/columns';
 
-  import AddSchedule from './components/AddSchedule/AddSchedule.svelte';
   import { initTableState } from './components/Table/tableState.svelte';
   import DeleteSchedule from './components/DeleteSchedule/DeleteSchedule.svelte';
   import UpdateSchedule from './components/UpdateSchedule/UpdateSchedule.svelte';
@@ -13,11 +12,6 @@
 
   initTableState();
 </script>
-
-<div class="sticky top-2 z-30 flex items-center justify-end gap-2.5">
-  <!-- <DownloadSchedules classSchedules={data.streamClassSchedules} /> -->
-  <AddSchedule addScheduleForm={data.addScheduleForm} />
-</div>
 
 <div class="mt-6">
   {#await data.streamClassSchedules}
@@ -30,6 +24,7 @@
   {:then classSchedules}
     <!--Typescript error from supabase in year_level it must not be array-->
     <Table
+      addScheduleForm={data.addScheduleForm}
       data={classSchedules?.map((cSched) => ({
         ...cSched,
         department: `${cSched.programs_tb?.code},${cSched.programs_tb?.id}`,

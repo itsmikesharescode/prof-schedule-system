@@ -24,12 +24,19 @@
   import FlexRender from '$lib/components/ui/data-table/flex-render.svelte';
   import * as Table from '$lib/components/ui/table/index';
   import type { ClassSchedulesPageTable } from '../data/schemas';
+  import { type Infer, superForm, type SuperValidated } from 'sveltekit-superforms';
+  import type { AddScheduleSchema } from '../../AddSchedule/schema';
+  import AddSchedule from '../../AddSchedule/AddSchedule.svelte';
+  import Button from '$lib/components/ui/button/button.svelte';
+  import PrinterCheck from 'lucide-svelte/icons/printer-check';
 
-  let {
-    columns,
-    data
-  }: { columns: ColumnDef<ClassSchedulesPageTable, unknown>[]; data: ClassSchedulesPageTable[] } =
-    $props();
+  interface Props {
+    columns: ColumnDef<ClassSchedulesPageTable, unknown>[];
+    data: ClassSchedulesPageTable[];
+    addScheduleForm: SuperValidated<Infer<AddScheduleSchema>>;
+  }
+
+  let { addScheduleForm, columns, data }: Props = $props();
 
   let rowSelection = $state<RowSelectionState>({});
   let columnVisibility = $state<VisibilityState>({});
@@ -103,6 +110,14 @@
     getFacetedUniqueValues: getFacetedUniqueValues()
   });
 </script>
+
+<div class="sticky top-2 z-30 mb-4 flex items-center justify-end gap-2.5">
+  <Button size="sm" variant="outline">
+    <PrinterCheck />
+    Print Class Schedules
+  </Button>
+  <AddSchedule {addScheduleForm} />
+</div>
 
 <div class="space-y-4">
   <DataTableToolbar {table} />
