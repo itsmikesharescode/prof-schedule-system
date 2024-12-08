@@ -27,6 +27,8 @@
       addScheduleForm={data.addScheduleForm}
       data={classSchedules?.map((cSched) => ({
         ...cSched,
+        courseCode: cSched.subjects_tb?.code ?? '',
+        units: cSched.subjects_tb?.unit ?? 0,
         department: `${cSched.programs_tb?.code},${cSched.programs_tb?.id}`,
         school_year: `${cSched.school_years_tb?.year},${cSched.school_years_tb?.id}`,
         year_level: `${cSched.year_levels_tb?.levels[0].yearLevel},${cSched.year_levels_tb?.id}`,

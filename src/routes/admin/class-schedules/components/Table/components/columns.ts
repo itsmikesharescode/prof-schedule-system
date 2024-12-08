@@ -26,11 +26,32 @@ export const columns: ColumnDef<ClassSchedulesPageTable>[] = [
   },
 
   {
+    accessorKey: 'courseCode',
+    header: ({ column }) => {
+      return renderComponent(TableColumnHeader<ClassSchedulesPageTable, unknown>, {
+        column,
+        title: 'Course Code'
+      });
+    },
+    cell: ({ row }) => {
+      const courseCodeSnippet = createRawSnippet<[string]>((getCourseCode) => {
+        return {
+          render: () => `<div class="w-full">${getCourseCode().split(',')[0]}</div>`
+        };
+      });
+
+      return renderSnippet(courseCodeSnippet, row.getValue('courseCode'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
     accessorKey: 'subject',
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<ClassSchedulesPageTable, unknown>, {
         column,
-        title: 'Subject'
+        title: 'Course Title'
       });
     },
     cell: ({ row }) => {
@@ -62,6 +83,27 @@ export const columns: ColumnDef<ClassSchedulesPageTable>[] = [
       });
 
       return renderSnippet(departmentSnippet, row.getValue('department'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
+    accessorKey: 'units',
+    header: ({ column }) => {
+      return renderComponent(TableColumnHeader<ClassSchedulesPageTable, unknown>, {
+        column,
+        title: 'Units'
+      });
+    },
+    cell: ({ row }) => {
+      const unitsSnippet = createRawSnippet<[number]>((getUnits) => {
+        return {
+          render: () => `<div class="w-full">${getUnits()}</div>`
+        };
+      });
+
+      return renderSnippet(unitsSnippet, row.getValue('units'));
     },
     enableSorting: true,
     enableHiding: true

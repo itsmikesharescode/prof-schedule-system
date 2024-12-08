@@ -29,6 +29,8 @@
   import AddSchedule from '../../AddSchedule/AddSchedule.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import PrinterCheck from 'lucide-svelte/icons/printer-check';
+  import PrintLayout from './PrintLayout.svelte';
+  import { tick } from 'svelte';
 
   interface Props {
     columns: ColumnDef<ClassSchedulesPageTable, unknown>[];
@@ -109,15 +111,27 @@
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues()
   });
+
+  let open = $state(false);
+  const handlePrint = async () => {
+    open = true;
+    setTimeout(() => {
+      open = false;
+    }, 2000);
+    await tick();
+    print();
+  };
 </script>
 
 <div class="sticky top-2 z-30 mb-4 flex items-center justify-end gap-2.5">
-  <Button size="sm" variant="outline">
+  <Button size="sm" variant="outline" onclick={handlePrint}>
     <PrinterCheck />
     Print Class Schedules
   </Button>
   <AddSchedule {addScheduleForm} />
 </div>
+
+<PrintLayout bind:open {data} />
 
 <div class="space-y-4">
   <DataTableToolbar {table} />

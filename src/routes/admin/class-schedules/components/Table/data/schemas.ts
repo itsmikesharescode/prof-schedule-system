@@ -16,7 +16,9 @@ export const classScheduleSchema = z.object({
   room: z.string(),
   room_id: z.number(),
   semester: z.string(),
-  day: z.string()
+  day: z.string(),
+  courseCode: z.string(),
+  units: z.number()
 });
 
 export type ClassSchedulesPageTable = z.output<typeof classScheduleSchema>;
