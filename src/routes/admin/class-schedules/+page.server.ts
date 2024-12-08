@@ -44,13 +44,13 @@ export const actions: Actions = {
     const { error } = await supabase
       .from('class_schedules_tb')
       .update({
-        school_year: form.data.schoolYear,
-        department: form.data.department,
-        section: form.data.section,
-        year_level: form.data.yearLevel,
+        school_year_id: parseInt(form.data.schoolYear.split(',')[1]),
+        department_id: parseInt(form.data.department.split(',')[1]),
+        section_id: parseInt(form.data.section.split(',')[1]),
+        year_level_id: parseInt(form.data.yearLevel.split(',')[1]),
+        subject_id: parseInt(form.data.subject.split(',')[1]),
+        room_id: parseInt(form.data.room.split(',')[1]),
         semester: form.data.semester,
-        subject: form.data.subject,
-        room: form.data.room,
         day: form.data.day
       })
       .eq('id', form.data.id);

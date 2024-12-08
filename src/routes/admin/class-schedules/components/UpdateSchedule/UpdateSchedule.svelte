@@ -63,25 +63,25 @@
   const handleDepartmentChange = async () => {
     [schoolYearsDropdown, yearLevelsDropdown, sectionsDropdown, roomsDropdown, subjectsDropdown] =
       await Promise.all([
-        getSchoolYears($page.data.supabase, $formData.department),
-        getYearLevel($page.data.supabase, $formData.department),
-        getSections($page.data.supabase, $formData.department),
-        getRooms($page.data.supabase, $formData.department),
-        getSubjects($page.data.supabase, $formData.department)
+        getSchoolYears($page.data.supabase, parseInt($formData.department.split(',')[1])),
+        getYearLevel($page.data.supabase, parseInt($formData.department.split(',')[1])),
+        getSections($page.data.supabase, parseInt($formData.department.split(',')[1])),
+        getRooms($page.data.supabase, parseInt($formData.department.split(',')[1])),
+        getSubjects($page.data.supabase, parseInt($formData.department.split(',')[1]))
       ]);
   };
 
   $effect(() => {
     if (tableState.getShowUpdate()) {
       $formData.id = tableState.getActiveRow()?.id ?? 0;
-      $formData.department = tableState.getActiveRow()?.department ?? '';
-      $formData.semester = tableState.getActiveRow()?.semester ?? '';
-      $formData.schoolYear = tableState.getActiveRow()?.school_year ?? '';
-      $formData.yearLevel = tableState.getActiveRow()?.year_level ?? '';
-      $formData.section = tableState.getActiveRow()?.section ?? '';
-      $formData.subject = tableState.getActiveRow()?.subject ?? '';
+      $formData.department = `${tableState.getActiveRow()?.department},${tableState.getActiveRow()?.department_id}`;
+      $formData.schoolYear = `${tableState.getActiveRow()?.school_year},${tableState.getActiveRow()?.school_year_id}`;
+      $formData.yearLevel = `${tableState.getActiveRow()?.year_level},${tableState.getActiveRow()?.year_level_id}`;
+      $formData.section = `${tableState.getActiveRow()?.section},${tableState.getActiveRow()?.section_id}`;
+      $formData.subject = `${tableState.getActiveRow()?.subject},${tableState.getActiveRow()?.subject_id}`;
+      $formData.room = `${tableState.getActiveRow()?.room},${tableState.getActiveRow()?.room_id}`;
       $formData.day = tableState.getActiveRow()?.day ?? '';
-      $formData.room = tableState.getActiveRow()?.room ?? '';
+      $formData.semester = tableState.getActiveRow()?.semester ?? '';
     }
   });
 
@@ -178,7 +178,7 @@
                       noDescription
                       selections={schoolYearsDropdown?.map((level) => ({
                         label: level.year,
-                        value: level.year
+                        value: `${level.year}, ${level.id}`
                       })) ?? []}
                       bind:selected={$formData.schoolYear}
                     />
@@ -202,7 +202,7 @@
                       noDescription
                       selections={yearLevelsDropdown?.levels.map((level) => ({
                         label: level.yearLevel,
-                        value: level.yearLevel
+                        value: `${level.yearLevel}, ${yearLevelsDropdown?.id}`
                       })) ?? []}
                       bind:selected={$formData.yearLevel}
                     />
@@ -228,7 +228,7 @@
                       placeholder="Select section"
                       selections={sectionsDropdown?.map((section) => ({
                         label: section.class,
-                        value: section.section_code
+                        value: `${section.section_code}, ${section.id}`
                       })) ?? []}
                       bind:selected={$formData.section}
                     />
@@ -251,7 +251,7 @@
                       onValueChange={handleDepartmentChange}
                       selections={subjectsDropdown?.map((subject) => ({
                         label: subject.name,
-                        value: subject.name
+                        value: `${subject.name}, ${subject.id}`
                       })) ?? []}
                       bind:selected={$formData.subject}
                     />
@@ -291,7 +291,7 @@
                       placeholder="Select room"
                       selections={roomsDropdown?.map((room) => ({
                         label: room.type,
-                        value: room.code
+                        value: `${room.code}, ${room.id}`
                       })) ?? []}
                       bind:selected={$formData.room}
                     />
