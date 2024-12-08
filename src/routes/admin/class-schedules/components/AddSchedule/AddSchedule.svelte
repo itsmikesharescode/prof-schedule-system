@@ -29,6 +29,7 @@
   } from '../../(db_calls)/getDropDowns';
   import CustomComboBox from '$lib/components/general/CustomComboBox.svelte';
   import { streamProfessors } from '../../../(db_calls)/streamProfessors';
+  import { tick } from 'svelte';
 
   interface Props {
     addScheduleForm: SuperValidated<Infer<AddScheduleSchema>>;
@@ -87,10 +88,16 @@
     ]);
   };
 
-  $effect(() => {
+  const detectOpen = $derived.by(() => {
     if (open) {
-      handleDepartmentChange();
+      tick().then(async () => {
+        await handleDepartmentChange();
+      });
+
+      return true;
     }
+
+    return false;
   });
 </script>
 
@@ -107,7 +114,7 @@
   </div>
 {/snippet}
 {$formData.schoolYear}
-<AlertDialog.Root bind:open>
+<AlertDialog.Root open={detectOpen}>
   <AlertDialog.Content class="max-w-3xl p-0">
     <button
       onclick={() => {

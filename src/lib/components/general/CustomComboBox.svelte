@@ -32,12 +32,6 @@
       triggerRef.focus();
     });
   }
-
-  $effect(() => {
-    if (selectedValue) {
-      selected = selectedValue.value;
-    }
-  });
 </script>
 
 <Popover.Root bind:open>
