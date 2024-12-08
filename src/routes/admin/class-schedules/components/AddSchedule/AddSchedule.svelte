@@ -88,20 +88,21 @@
     ]);
   };
 
-  const detectOpen = $derived.by(() => {
-    if (open) {
+  $effect(() => {
+    if ($formData.department) {
       tick().then(async () => {
         await handleDepartmentChange();
       });
-
-      return true;
     }
-
-    return false;
   });
 </script>
 
-<Button size="sm" onclick={() => (open = true)}>
+<Button
+  size="sm"
+  onclick={() => {
+    open = true;
+  }}
+>
   <Plus class="size-4" />
   Add Schedule
 </Button>
@@ -114,7 +115,7 @@
   </div>
 {/snippet}
 {$formData.schoolYear}
-<AlertDialog.Root open={detectOpen}>
+<AlertDialog.Root {open}>
   <AlertDialog.Content class="max-w-3xl p-0">
     <button
       onclick={() => {
@@ -139,28 +140,6 @@
         <div class="grid gap-5 px-6 pb-6 md:grid-cols-2">
           <!--Records-->
           <div class="">
-            <Form.Field {form} name="professor_id">
-              <Form.Control>
-                {#snippet children({ props })}
-                  <Form.Label>Professor Name</Form.Label>
-                  <CustomComboBox
-                    {...props}
-                    name="Select Professor"
-                    placeholder="Search for a professor"
-                    selections={professors?.map((prof) => ({
-                      label: `${prof.user_meta_data.firstName} ${prof.user_meta_data.middleName} ${prof.user_meta_data.lastName}`,
-                      value: prof.user_id,
-                      photoLink: prof.user_meta_data.avatar
-                    })) ?? []}
-                    bind:selected={$formData.professor_id}
-                  />
-                  <input type="hidden" name={props.name} bind:value={$formData.professor_id} />
-                {/snippet}
-              </Form.Control>
-              <Form.Description />
-              <Form.FieldErrors />
-            </Form.Field>
-
             <Form.Field {form} name="department">
               <Form.Control>
                 {#snippet children({ props })}
@@ -171,6 +150,32 @@
                     bind:selected={$formData.department}
                   />
                   <input type="hidden" {...props} bind:value={$formData.semester} />
+                {/snippet}
+              </Form.Control>
+              <Form.Description />
+              <Form.FieldErrors />
+            </Form.Field>
+
+            <Form.Field {form} name="professor_id">
+              <Form.Control>
+                {#snippet children({ props })}
+                  <Form.Label>Professor Name</Form.Label>
+                  {#if $formData.department}
+                    <CustomComboBox
+                      {...props}
+                      name="Select Professor"
+                      placeholder="Search for a professor"
+                      selections={professors?.map((prof) => ({
+                        label: `${prof.user_meta_data.firstName} ${prof.user_meta_data.middleName} ${prof.user_meta_data.lastName}`,
+                        value: prof.user_id,
+                        photoLink: prof.user_meta_data.avatar
+                      })) ?? []}
+                      bind:selected={$formData.professor_id}
+                    />
+                    <input type="hidden" name={props.name} bind:value={$formData.professor_id} />
+                  {:else}
+                    {@render Checkings()}
+                  {/if}
                 {/snippet}
               </Form.Control>
               <Form.Description />
