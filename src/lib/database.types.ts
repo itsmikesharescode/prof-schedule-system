@@ -33,7 +33,7 @@ export type Database = {
       class_schedules_tb: {
         Row: {
           created_at: string;
-          day: number;
+          day: string;
           department_id: number;
           id: number;
           room_id: number;
@@ -45,7 +45,7 @@ export type Database = {
         };
         Insert: {
           created_at?: string;
-          day: number;
+          day: string;
           department_id: number;
           id?: number;
           room_id: number;
@@ -57,7 +57,7 @@ export type Database = {
         };
         Update: {
           created_at?: string;
-          day?: number;
+          day?: string;
           department_id?: number;
           id?: number;
           room_id?: number;
@@ -83,6 +83,13 @@ export type Database = {
             referencedColumns: ['id'];
           },
           {
+            foreignKeyName: 'class_schedules_tb_school_year_id_fkey';
+            columns: ['school_year_id'];
+            isOneToOne: false;
+            referencedRelation: 'school_years_tb';
+            referencedColumns: ['id'];
+          },
+          {
             foreignKeyName: 'class_schedules_tb_section_id_fkey';
             columns: ['section_id'];
             isOneToOne: false;
@@ -100,7 +107,7 @@ export type Database = {
             foreignKeyName: 'class_schedules_tb_year_level_id_fkey';
             columns: ['year_level_id'];
             isOneToOne: false;
-            referencedRelation: 'school_years_tb';
+            referencedRelation: 'year_levels_tb';
             referencedColumns: ['id'];
           }
         ];

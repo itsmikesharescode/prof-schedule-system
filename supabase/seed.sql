@@ -214,7 +214,7 @@ CREATE TABLE IF NOT EXISTS "public"."class_schedules_tb" (
     "section_id" bigint NOT NULL,
     "department_id" bigint NOT NULL,
     "subject_id" bigint NOT NULL,
-    "day" bigint NOT NULL,
+    "day" character varying NOT NULL,
     "room_id" bigint NOT NULL
 );
 
@@ -640,6 +640,11 @@ ALTER TABLE ONLY "public"."class_schedules_tb"
 
 
 ALTER TABLE ONLY "public"."class_schedules_tb"
+    ADD CONSTRAINT "class_schedules_tb_school_year_id_fkey" FOREIGN KEY ("school_year_id") REFERENCES "public"."school_years_tb"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."class_schedules_tb"
     ADD CONSTRAINT "class_schedules_tb_section_id_fkey" FOREIGN KEY ("section_id") REFERENCES "public"."sections_tb"("id") ON DELETE CASCADE;
 
 
@@ -650,7 +655,7 @@ ALTER TABLE ONLY "public"."class_schedules_tb"
 
 
 ALTER TABLE ONLY "public"."class_schedules_tb"
-    ADD CONSTRAINT "class_schedules_tb_year_level_id_fkey" FOREIGN KEY ("year_level_id") REFERENCES "public"."school_years_tb"("id") ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT "class_schedules_tb_year_level_id_fkey" FOREIGN KEY ("year_level_id") REFERENCES "public"."year_levels_tb"("id") ON DELETE CASCADE;
 
 
 

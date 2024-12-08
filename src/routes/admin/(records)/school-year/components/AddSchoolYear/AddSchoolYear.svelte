@@ -76,7 +76,6 @@
               bind:selected={$formData.department}
               selections={auxiliaryState.formatDepartments()}
               placeholder="Select department"
-              onValueChange={(v) => alert(v)}
             />
             <input type="hidden" name={props.name} bind:value={$formData.department} />
           {/snippet}

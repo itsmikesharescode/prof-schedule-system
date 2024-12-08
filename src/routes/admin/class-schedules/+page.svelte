@@ -8,8 +8,7 @@
   import DeleteSchedule from './components/DeleteSchedule/DeleteSchedule.svelte';
   import UpdateSchedule from './components/UpdateSchedule/UpdateSchedule.svelte';
   import ViewCalendar from './components/ViewCalendar/ViewCalendar.svelte';
-  import DownloadSchedules from '$lib/components/general/DownloadSchedules.svelte';
-  import { convert24HourTo12Hour } from '$lib';
+
   const { data } = $props();
 
   initTableState();
@@ -29,7 +28,19 @@
       <Skeleton class="h-[20px] w-[90%] rounded-full" />
     </section>
   {:then classSchedules}
-    <Table data={classSchedules ?? []} {columns} />
+    <!--Typescript error from supabase in year_level it must not be array-->
+    <Table
+      data={classSchedules?.map((cSched) => ({
+        ...cSched,
+        department: `${cSched.programs_tb?.code},${cSched.programs_tb?.id}`,
+        school_year: `${cSched.school_years_tb?.year},${cSched.school_years_tb?.id}`,
+        year_level: `${cSched.year_levels_tb?.name},${cSched.year_levels_tb?.id}`,
+        section: `${cSched.sections_tb?.section_code},${cSched.sections_tb?.id}`,
+        subject: `${cSched.subjects_tb?.name},${cSched.subjects_tb?.id}`,
+        room: `${cSched.rooms_tb?.code},${cSched.rooms_tb?.id}`
+      })) ?? []}
+      {columns}
+    />
   {/await}
 </div>
 

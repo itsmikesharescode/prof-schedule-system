@@ -68,11 +68,11 @@
   const handleDepartmentChange = async () => {
     [schoolYearsDropdown, yearLevelsDropdown, sectionsDropdown, roomsDropdown, subjectsDropdown] =
       await Promise.all([
-        getSchoolYears($page.data.supabase, $formData.department),
-        getYearLevel($page.data.supabase, $formData.department),
-        getSections($page.data.supabase, $formData.department),
-        getRooms($page.data.supabase, $formData.department),
-        getSubjects($page.data.supabase, $formData.department)
+        getSchoolYears($page.data.supabase, parseInt($formData.department.split(',')[1])),
+        getYearLevel($page.data.supabase, parseInt($formData.department.split(',')[1])),
+        getSections($page.data.supabase, parseInt($formData.department.split(',')[1])),
+        getRooms($page.data.supabase, parseInt($formData.department.split(',')[1])),
+        getSubjects($page.data.supabase, parseInt($formData.department.split(',')[1]))
       ]);
   };
 
