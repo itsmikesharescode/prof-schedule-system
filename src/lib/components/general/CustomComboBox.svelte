@@ -22,10 +22,9 @@
   let { selected = $bindable(), selections, placeholder, name, disabled }: Props = $props();
 
   let open = $state(false);
-  let value = $state('');
   let triggerRef = $state<HTMLButtonElement>(null!);
 
-  const selectedValue = $derived(selections.find((f) => f.value === value));
+  const selectedValue = $derived(selections.find((f) => f.value === selected));
 
   function closeAndFocusTrigger() {
     open = false;
@@ -78,11 +77,13 @@
             <Command.Item
               value={selection.label}
               onSelect={() => {
-                value = selection.value;
+                selected = selection.value;
                 closeAndFocusTrigger();
               }}
             >
-              <Check class={cn('mr-2 size-4', value !== selection.value && 'text-transparent')} />
+              <Check
+                class={cn('mr-2 size-4', selected !== selection.value && 'text-transparent')}
+              />
               <section class="flex items-center gap-2">
                 {#if selection.photoLink}
                   <img

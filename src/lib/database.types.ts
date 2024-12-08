@@ -35,7 +35,10 @@ export type Database = {
           created_at: string;
           day: string;
           department_id: number;
+          final_time: string;
           id: number;
+          initial_time: string;
+          professor_id: string;
           room_id: number;
           school_year_id: number;
           section_id: number;
@@ -47,7 +50,10 @@ export type Database = {
           created_at?: string;
           day: string;
           department_id: number;
+          final_time: string;
           id?: number;
+          initial_time: string;
+          professor_id: string;
           room_id: number;
           school_year_id: number;
           section_id: number;
@@ -59,7 +65,10 @@ export type Database = {
           created_at?: string;
           day?: string;
           department_id?: number;
+          final_time?: string;
           id?: number;
+          initial_time?: string;
+          professor_id?: string;
           room_id?: number;
           school_year_id?: number;
           section_id?: number;
@@ -74,6 +83,13 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: 'programs_tb';
             referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'class_schedules_tb_professor_id_fkey';
+            columns: ['professor_id'];
+            isOneToOne: false;
+            referencedRelation: 'professors_tb';
+            referencedColumns: ['user_id'];
           },
           {
             foreignKeyName: 'class_schedules_tb_room_id_fkey';

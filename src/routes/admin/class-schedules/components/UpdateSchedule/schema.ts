@@ -9,7 +9,10 @@ export const updateScheduleSchema = z.object({
   department: z.string().min(1, { message: 'Department is required.' }),
   subject: z.string().min(1, { message: 'Subject is required.' }),
   day: z.string().min(1, { message: 'Day is required.' }),
-  room: z.string().min(1, { message: 'Room is required.' })
+  room: z.string().min(1, { message: 'Room is required.' }),
+  initial_time: z.string().min(1, { message: 'Initial time is required.' }),
+  final_time: z.string().min(1, { message: 'Final time is required.' }),
+  professor_id: z.string().min(1, { message: 'Professor is required.' })
 });
 
 export type UpdateScheduleSchema = typeof updateScheduleSchema;

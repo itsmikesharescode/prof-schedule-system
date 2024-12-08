@@ -2,6 +2,7 @@
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
   import LoaderCircle from 'lucide-svelte/icons/loader-circle';
   import X from 'lucide-svelte/icons/x';
+  import Plus from 'lucide-svelte/icons/plus';
   import { type Infer, superForm, type SuperValidated } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import * as Form from '$lib/components/ui/form/index.js';
@@ -21,6 +22,8 @@
     getSubjects,
     getYearLevel
   } from '../../(db_calls)/getDropDowns';
+  import CustomComboBox from '$lib/components/general/CustomComboBox.svelte';
+  import { streamProfessors } from '../../../(db_calls)/streamProfessors';
   import { useTableState } from '../Table/tableState.svelte';
   import { tick } from 'svelte';
 
@@ -29,6 +32,7 @@
   }
 
   let { updateScheduleForm }: Props = $props();
+
   const tableState = useTableState();
 
   const form = superForm(updateScheduleForm, {
@@ -59,28 +63,40 @@
   let sectionsDropdown = $state<Awaited<ReturnType<typeof getSections>>>(null);
   let roomsDropdown = $state<Awaited<ReturnType<typeof getRooms>>>(null);
   let subjectsDropdown = $state<Awaited<ReturnType<typeof getSubjects>>>(null);
+  let professors = $state<Awaited<ReturnType<typeof streamProfessors>>>(null);
 
   const handleDepartmentChange = async () => {
-    [schoolYearsDropdown, yearLevelsDropdown, sectionsDropdown, roomsDropdown, subjectsDropdown] =
-      await Promise.all([
-        getSchoolYears($page.data.supabase, parseInt($formData.department.split(',')[1])),
-        getYearLevel($page.data.supabase, parseInt($formData.department.split(',')[1])),
-        getSections($page.data.supabase, parseInt($formData.department.split(',')[1])),
-        getRooms($page.data.supabase, parseInt($formData.department.split(',')[1])),
-        getSubjects($page.data.supabase, parseInt($formData.department.split(',')[1]))
-      ]);
+    if (!$page.data.supabase) return;
+    [
+      schoolYearsDropdown,
+      yearLevelsDropdown,
+      sectionsDropdown,
+      roomsDropdown,
+      subjectsDropdown,
+      professors
+    ] = await Promise.all([
+      getSchoolYears($page.data.supabase, parseInt($formData.department.split(',')[1])),
+      getYearLevel($page.data.supabase, parseInt($formData.department.split(',')[1])),
+      getSections($page.data.supabase, parseInt($formData.department.split(',')[1])),
+      getRooms($page.data.supabase, parseInt($formData.department.split(',')[1])),
+      getSubjects($page.data.supabase, parseInt($formData.department.split(',')[1])),
+      streamProfessors($page.data.supabase, null)
+    ]);
   };
 
   $effect(() => {
     if (tableState.getShowUpdate()) {
       $formData.id = tableState.getActiveRow()?.id ?? 0;
-      $formData.department = `${tableState.getActiveRow()?.department},${tableState.getActiveRow()?.department_id}`;
-      $formData.schoolYear = `${tableState.getActiveRow()?.school_year},${tableState.getActiveRow()?.school_year_id}`;
-      $formData.yearLevel = `${tableState.getActiveRow()?.year_level},${tableState.getActiveRow()?.year_level_id}`;
-      $formData.section = `${tableState.getActiveRow()?.section},${tableState.getActiveRow()?.section_id}`;
-      $formData.subject = `${tableState.getActiveRow()?.subject},${tableState.getActiveRow()?.subject_id}`;
-      $formData.room = `${tableState.getActiveRow()?.room},${tableState.getActiveRow()?.room_id}`;
+      $formData.professor_id = tableState.getActiveRow()?.professor_id ?? '';
+      $formData.department = tableState.getActiveRow()?.department ?? '';
+      $formData.subject = tableState.getActiveRow()?.subject ?? '';
+      $formData.schoolYear = tableState.getActiveRow()?.school_year ?? '';
+      $formData.yearLevel = tableState.getActiveRow()?.year_level ?? '';
+      $formData.section = tableState.getActiveRow()?.section ?? '';
       $formData.day = tableState.getActiveRow()?.day ?? '';
+      $formData.initial_time = tableState.getActiveRow()?.initial_time ?? '';
+      $formData.final_time = tableState.getActiveRow()?.final_time ?? '';
+      $formData.room = tableState.getActiveRow()?.room ?? '';
       $formData.semester = tableState.getActiveRow()?.semester ?? '';
     }
   });
@@ -90,6 +106,7 @@
       tick().then(async () => {
         await handleDepartmentChange();
       });
+
       return true;
     }
 
@@ -104,13 +121,13 @@
     <span class="text-sm text-muted-foreground">Please select a department first.</span>
   </div>
 {/snippet}
-
+{$formData.schoolYear}
 <AlertDialog.Root {open}>
   <AlertDialog.Content class="max-w-3xl p-0">
     <button
       onclick={() => {
-        tableState.setShowUpdate(false);
         tableState.setActiveRow(null);
+        tableState.setShowUpdate(false);
         form.reset();
       }}
       class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
@@ -120,22 +137,45 @@
     </button>
 
     <AlertDialog.Header class="px-6 pt-6">
-      <AlertDialog.Title>Update Schedule</AlertDialog.Title>
-      <AlertDialog.Description>Fill the fields below to update a schedule.</AlertDialog.Description>
+      <AlertDialog.Title>New Schedule</AlertDialog.Title>
+      <AlertDialog.Description>
+        Fill the fields below to create a new schedule.
+      </AlertDialog.Description>
     </AlertDialog.Header>
 
     <ScrollArea class="max-h-[70dvh]">
       <form method="POST" action="?/updateScheduleEvent" use:enhance class="">
-        <input name="id" type="hidden" bind:value={$formData.id} />
+        <input type="hidden" name="id" bind:value={$formData.id} />
         <div class="grid gap-5 px-6 pb-6 md:grid-cols-2">
           <!--Records-->
           <div class="">
+            <Form.Field {form} name="professor_id">
+              <Form.Control>
+                {#snippet children({ props })}
+                  <Form.Label>Professor Name</Form.Label>
+                  <CustomComboBox
+                    {...props}
+                    name="Select Professor"
+                    placeholder="Search for a professor"
+                    selections={professors?.map((prof) => ({
+                      label: `${prof.user_meta_data.firstName} ${prof.user_meta_data.middleName} ${prof.user_meta_data.lastName}`,
+                      value: prof.user_id,
+                      photoLink: prof.user_meta_data.avatar
+                    })) ?? []}
+                    bind:selected={$formData.professor_id}
+                  />
+                  <input type="hidden" name={props.name} bind:value={$formData.professor_id} />
+                {/snippet}
+              </Form.Control>
+              <Form.Description />
+              <Form.FieldErrors />
+            </Form.Field>
+
             <Form.Field {form} name="department">
               <Form.Control>
                 {#snippet children({ props })}
                   <Form.Label>Select Department</Form.Label>
                   <SelectPicker
-                    onValueChange={handleDepartmentChange}
                     placeholder="Select department"
                     selections={auxiliaryState.formatDepartments()}
                     bind:selected={$formData.department}
@@ -167,7 +207,6 @@
               <Form.Description />
               <Form.FieldErrors />
             </Form.Field>
-
             <Form.Field {form} name="schoolYear">
               <Form.Control>
                 {#snippet children({ props })}
@@ -191,7 +230,6 @@
               <Form.Description />
               <Form.FieldErrors />
             </Form.Field>
-
             <Form.Field {form} name="yearLevel">
               <Form.Control>
                 {#snippet children({ props })}
@@ -219,6 +257,40 @@
 
           <!--Schedule-->
           <div class="">
+            <div class="grid grid-cols-2 gap-2.5">
+              <Form.Field {form} name="initial_time">
+                <Form.Control>
+                  {#snippet children({ props })}
+                    <Form.Label>Select Initial Time</Form.Label>
+                    <Combobox
+                      name="Select time"
+                      placeholder="Search initial time"
+                      selections={availableTimes}
+                      bind:selected={$formData.initial_time}
+                    />
+                  {/snippet}
+                </Form.Control>
+                <Form.Description />
+                <Form.FieldErrors />
+              </Form.Field>
+
+              <Form.Field {form} name="final_time">
+                <Form.Control>
+                  {#snippet children({ props })}
+                    <Form.Label>Select Final Time</Form.Label>
+                    <Combobox
+                      name="Select time"
+                      placeholder="Search initial time"
+                      selections={availableTimes}
+                      bind:selected={$formData.final_time}
+                    />
+                  {/snippet}
+                </Form.Control>
+                <Form.Description />
+                <Form.FieldErrors />
+              </Form.Field>
+            </div>
+
             <Form.Field {form} name="section">
               <Form.Control>
                 {#snippet children({ props })}
@@ -251,7 +323,7 @@
                       onValueChange={handleDepartmentChange}
                       selections={subjectsDropdown?.map((subject) => ({
                         label: subject.name,
-                        value: `${subject.name}, ${subject.id}`
+                        value: `${subject.code}, ${subject.id}`
                       })) ?? []}
                       bind:selected={$formData.subject}
                     />

@@ -11,7 +11,7 @@ export const streamClassSchedules = async (
     const { data, error } = await supabase
       .from('class_schedules_tb')
       .select(
-        '*, programs_tb(*), school_years_tb(*), year_levels_tb(*), sections_tb(*), subjects_tb(*), rooms_tb(*)'
+        '*, professors_tb(*), programs_tb(*), school_years_tb(*), year_levels_tb(*), sections_tb(*), subjects_tb(*), rooms_tb(*)'
       )
       .eq('department', params);
 
@@ -22,7 +22,7 @@ export const streamClassSchedules = async (
   const { data, error } = await supabase
     .from('class_schedules_tb')
     .select(
-      '*, programs_tb(*), school_years_tb(*), year_levels_tb(*), sections_tb(*), subjects_tb(*), rooms_tb(*)'
+      '*, professors_tb(*), programs_tb(*), school_years_tb(*), year_levels_tb(*), sections_tb(*), subjects_tb(*), rooms_tb(*)'
     )
     .order('created_at', {
       ascending: true

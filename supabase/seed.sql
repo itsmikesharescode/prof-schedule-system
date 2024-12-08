@@ -215,7 +215,10 @@ CREATE TABLE IF NOT EXISTS "public"."class_schedules_tb" (
     "department_id" bigint NOT NULL,
     "subject_id" bigint NOT NULL,
     "day" character varying NOT NULL,
-    "room_id" bigint NOT NULL
+    "room_id" bigint NOT NULL,
+    "initial_time" time without time zone NOT NULL,
+    "final_time" time without time zone NOT NULL,
+    "professor_id" "uuid" NOT NULL
 );
 
 
@@ -635,6 +638,11 @@ ALTER TABLE ONLY "public"."class_schedules_tb"
 
 
 ALTER TABLE ONLY "public"."class_schedules_tb"
+    ADD CONSTRAINT "class_schedules_tb_professor_id_fkey" FOREIGN KEY ("professor_id") REFERENCES "public"."professors_tb"("user_id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."class_schedules_tb"
     ADD CONSTRAINT "class_schedules_tb_room_id_fkey" FOREIGN KEY ("room_id") REFERENCES "public"."rooms_tb"("id") ON DELETE CASCADE;
 
 
@@ -690,7 +698,7 @@ ALTER TABLE ONLY "public"."roles_tb"
 
 
 ALTER TABLE ONLY "public"."rooms_tb"
-    ADD CONSTRAINT "rooms_tb_department_id_fkey" FOREIGN KEY ("department_id") REFERENCES "public"."programs_tb"("id");
+    ADD CONSTRAINT "rooms_tb_department_id_fkey" FOREIGN KEY ("department_id") REFERENCES "public"."programs_tb"("id") ON DELETE CASCADE;
 
 
 

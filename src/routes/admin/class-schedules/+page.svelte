@@ -7,7 +7,7 @@
   import DeleteSchedule from './components/DeleteSchedule/DeleteSchedule.svelte';
   import UpdateSchedule from './components/UpdateSchedule/UpdateSchedule.svelte';
   import ViewCalendar from './components/ViewCalendar/ViewCalendar.svelte';
-
+  import { convert24HourTo12Hour } from '$lib/index';
   const { data } = $props();
 
   initTableState();
@@ -27,6 +27,8 @@
       addScheduleForm={data.addScheduleForm}
       data={classSchedules?.map((cSched) => ({
         ...cSched,
+        professor: `${cSched.professors_tb?.user_meta_data.lastName}, ${cSched.professors_tb?.user_meta_data.firstName} ${cSched.professors_tb?.user_meta_data.middleName}`,
+        time: `${convert24HourTo12Hour(cSched.initial_time)} - ${convert24HourTo12Hour(cSched.final_time)}`,
         courseCode: cSched.subjects_tb?.code ?? '',
         units: cSched.subjects_tb?.unit ?? 0,
         department: `${cSched.programs_tb?.code},${cSched.programs_tb?.id}`,

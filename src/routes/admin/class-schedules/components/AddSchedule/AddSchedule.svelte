@@ -27,6 +27,8 @@
     getSubjects,
     getYearLevel
   } from '../../(db_calls)/getDropDowns';
+  import CustomComboBox from '$lib/components/general/CustomComboBox.svelte';
+  import { streamProfessors } from '../../../(db_calls)/streamProfessors';
 
   interface Props {
     addScheduleForm: SuperValidated<Infer<AddScheduleSchema>>;
@@ -64,16 +66,25 @@
   let sectionsDropdown = $state<Awaited<ReturnType<typeof getSections>>>(null);
   let roomsDropdown = $state<Awaited<ReturnType<typeof getRooms>>>(null);
   let subjectsDropdown = $state<Awaited<ReturnType<typeof getSubjects>>>(null);
+  let professors = $state<Awaited<ReturnType<typeof streamProfessors>>>(null);
 
   const handleDepartmentChange = async () => {
-    [schoolYearsDropdown, yearLevelsDropdown, sectionsDropdown, roomsDropdown, subjectsDropdown] =
-      await Promise.all([
-        getSchoolYears($page.data.supabase, parseInt($formData.department.split(',')[1])),
-        getYearLevel($page.data.supabase, parseInt($formData.department.split(',')[1])),
-        getSections($page.data.supabase, parseInt($formData.department.split(',')[1])),
-        getRooms($page.data.supabase, parseInt($formData.department.split(',')[1])),
-        getSubjects($page.data.supabase, parseInt($formData.department.split(',')[1]))
-      ]);
+    if (!$page.data.supabase) return;
+    [
+      schoolYearsDropdown,
+      yearLevelsDropdown,
+      sectionsDropdown,
+      roomsDropdown,
+      subjectsDropdown,
+      professors
+    ] = await Promise.all([
+      getSchoolYears($page.data.supabase, parseInt($formData.department.split(',')[1])),
+      getYearLevel($page.data.supabase, parseInt($formData.department.split(',')[1])),
+      getSections($page.data.supabase, parseInt($formData.department.split(',')[1])),
+      getRooms($page.data.supabase, parseInt($formData.department.split(',')[1])),
+      getSubjects($page.data.supabase, parseInt($formData.department.split(',')[1])),
+      streamProfessors($page.data.supabase, null)
+    ]);
   };
 
   $effect(() => {
@@ -121,6 +132,28 @@
         <div class="grid gap-5 px-6 pb-6 md:grid-cols-2">
           <!--Records-->
           <div class="">
+            <Form.Field {form} name="professor_id">
+              <Form.Control>
+                {#snippet children({ props })}
+                  <Form.Label>Professor Name</Form.Label>
+                  <CustomComboBox
+                    {...props}
+                    name="Select Professor"
+                    placeholder="Search for a professor"
+                    selections={professors?.map((prof) => ({
+                      label: `${prof.user_meta_data.firstName} ${prof.user_meta_data.middleName} ${prof.user_meta_data.lastName}`,
+                      value: prof.user_id,
+                      photoLink: prof.user_meta_data.avatar
+                    })) ?? []}
+                    bind:selected={$formData.professor_id}
+                  />
+                  <input type="hidden" name={props.name} bind:value={$formData.professor_id} />
+                {/snippet}
+              </Form.Control>
+              <Form.Description />
+              <Form.FieldErrors />
+            </Form.Field>
+
             <Form.Field {form} name="department">
               <Form.Control>
                 {#snippet children({ props })}
@@ -207,6 +240,40 @@
 
           <!--Schedule-->
           <div class="">
+            <div class="grid grid-cols-2 gap-2.5">
+              <Form.Field {form} name="initial_time">
+                <Form.Control>
+                  {#snippet children({ props })}
+                    <Form.Label>Select Initial Time</Form.Label>
+                    <Combobox
+                      name="Select time"
+                      placeholder="Search initial time"
+                      selections={availableTimes}
+                      bind:selected={$formData.initial_time}
+                    />
+                  {/snippet}
+                </Form.Control>
+                <Form.Description />
+                <Form.FieldErrors />
+              </Form.Field>
+
+              <Form.Field {form} name="final_time">
+                <Form.Control>
+                  {#snippet children({ props })}
+                    <Form.Label>Select Final Time</Form.Label>
+                    <Combobox
+                      name="Select time"
+                      placeholder="Search initial time"
+                      selections={availableTimes}
+                      bind:selected={$formData.final_time}
+                    />
+                  {/snippet}
+                </Form.Control>
+                <Form.Description />
+                <Form.FieldErrors />
+              </Form.Field>
+            </div>
+
             <Form.Field {form} name="section">
               <Form.Control>
                 {#snippet children({ props })}
