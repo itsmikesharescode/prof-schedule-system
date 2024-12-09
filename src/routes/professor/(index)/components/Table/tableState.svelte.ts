@@ -3,7 +3,6 @@ import type { SchedulePageTable } from './data/schemas';
 
 class TableState {
   #activeRow = $state<SchedulePageTable | null>(null);
-
   setActiveRow(row: SchedulePageTable | null) {
     this.#activeRow = row;
   }
@@ -12,14 +11,14 @@ class TableState {
     return this.#activeRow;
   }
 
-  #showViewCalendar = $state(false);
+  #showPrintFacultyLoad = $state(false);
 
-  setShowViewCalendar(show: boolean) {
-    this.#showViewCalendar = show;
+  setShowPrintFacultyLoad(show: boolean) {
+    this.#showPrintFacultyLoad = show;
   }
 
-  getShowViewCalendar() {
-    return this.#showViewCalendar;
+  getShowPrintFacultyLoad() {
+    return this.#showPrintFacultyLoad;
   }
 }
 

@@ -1,7 +1,7 @@
 import type { ColumnDef } from '@tanstack/table-core';
 import { createRawSnippet } from 'svelte';
 import type { SchedulePageTable } from '../data/schemas.js';
-import { TableColumnHeader, TableRowActions } from './index.js';
+import { TableColumnHeader } from './index.js';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/render-helpers.js';
 
 export const columns: ColumnDef<SchedulePageTable>[] = [
@@ -194,10 +194,5 @@ export const columns: ColumnDef<SchedulePageTable>[] = [
     },
     enableSorting: true,
     enableHiding: true
-  },
-
-  {
-    id: 'actions',
-    cell: ({ row }) => renderComponent(TableRowActions<SchedulePageTable>, { row })
   }
 ];

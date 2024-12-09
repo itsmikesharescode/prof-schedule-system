@@ -1,11 +1,9 @@
 <script lang="ts">
-  import { page } from '$app/stores';
   import { convert24HourTo12Hour } from '$lib';
   import { Skeleton } from '$lib/components/ui/skeleton/index';
   import Table from './components/Table/components/Table.svelte';
   import { columns } from './components/Table/components/columns';
   import { initTableState } from './components/Table/tableState.svelte';
-  import ViewCalendar from './components/ViewCalendar/ViewCalendar.svelte';
   const { data } = $props();
 
   initTableState();
@@ -39,5 +37,3 @@
     {/await}
   </section>
 </main>
-
-<ViewCalendar />

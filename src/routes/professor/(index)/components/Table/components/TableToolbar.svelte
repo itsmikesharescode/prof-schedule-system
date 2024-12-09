@@ -9,6 +9,7 @@
   import Button from '$lib/components/ui/button/button.svelte';
   import { Input } from '$lib/components/ui/input/index';
   import type { SchedulePageTable } from '../data/schemas';
+  import PrintFacultyLoad from './PrintFacultyLoad.svelte';
 
   let { table }: { table: Table<SchedulePageTable> } = $props();
 
@@ -36,5 +37,9 @@
       </Button>
     {/if}
   </div>
-  <TableViewOptions {table} />
+
+  <div class="flex items-center space-x-2">
+    <PrintFacultyLoad />
+    <TableViewOptions {table} />
+  </div>
 </div>
