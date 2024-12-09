@@ -16,6 +16,7 @@
   import { auxiliaryState } from '$lib/runes/auxiliaryState.svelte';
   import type { Result } from '$lib/types';
   import { toast } from 'svelte-sonner';
+  import MultiSelect from '$lib/components/general/MultiSelect.svelte';
 
   interface Props {
     addProfessorForm: SuperValidated<Infer<AddProfessorSchema>>;
@@ -80,7 +81,7 @@
         Fill the fields below to create a new professor.
       </AlertDialog.Description>
     </AlertDialog.Header>
-    <ScrollArea class="h-[80dvh]">
+    <ScrollArea class="max-h-[80dvh]">
       <form
         method="POST"
         action="?/addProfessorEvent"
@@ -111,10 +112,9 @@
                 {#snippet children({ props })}
                   <Form.Label>Title</Form.Label>
                   <SelectPicker
-                    name="Select title"
-                    {props}
-                    class=""
+                    placeholder="Select title"
                     selections={titles}
+                    noDescription
                     bind:selected={$formData.title}
                   />
                   <input type="hidden" {...props} bind:value={$formData.title} />
@@ -253,9 +253,7 @@
                 {#snippet children({ props })}
                   <Form.Label>Department</Form.Label>
                   <SelectPicker
-                    name="Select department"
-                    {props}
-                    class=""
+                    placeholder="Select department"
                     selections={auxiliaryState.formatDepartments()}
                     bind:selected={$formData.department}
                   />
@@ -265,18 +263,16 @@
               <Form.FieldErrors />
             </Form.Field>
 
-            <Form.Field {form} name="day">
+            <Form.Field {form} name="days">
               <Form.Control>
                 {#snippet children({ props })}
-                  <Form.Label>Day</Form.Label>
-                  <SelectPicker
-                    name="Select day"
-                    {props}
-                    class=""
-                    selections={days}
-                    bind:selected={$formData.day}
+                  <Form.Label>Days</Form.Label>
+                  <MultiSelect
+                    selections={days.map((day) => day.value)}
+                    bind:selected={$formData.days}
+                    placeholder="Select days"
                   />
-                  <input type="hidden" {...props} bind:value={$formData.day} />
+                  <input type="hidden" {...props} bind:value={$formData.days} />
                 {/snippet}
               </Form.Control>
               <Form.FieldErrors />
@@ -319,9 +315,8 @@
                 {#snippet children({ props })}
                   <Form.Label>Availability</Form.Label>
                   <SelectPicker
-                    name="Select availability"
-                    {props}
-                    class=""
+                    placeholder="Select availability"
+                    noDescription
                     selections={[
                       { value: 'Part Time', label: 'Part Time' },
                       { value: 'Full Time', label: 'Full Time' }
@@ -376,8 +371,8 @@
                 {#snippet children({ props })}
                   <Form.Label>Position</Form.Label>
                   <SelectPicker
-                    name="Select position"
-                    {props}
+                    placeholder="Select position"
+                    noDescription
                     class=""
                     selections={[
                       { value: 'Professor', label: 'Professor' },

@@ -25,7 +25,10 @@
       <Skeleton class="h-[20px] w-[90%] rounded-full" />
     </section>
   {:then rooms}
-    <Table data={rooms ?? []} {columns} />
+    <Table
+      data={rooms?.map((v) => ({ ...v, department: v.programs_tb?.code ?? '' })) ?? []}
+      {columns}
+    />
   {/await}
 </div>
 

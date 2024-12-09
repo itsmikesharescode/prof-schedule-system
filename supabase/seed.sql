@@ -208,12 +208,17 @@ SET default_table_access_method = "heap";
 CREATE TABLE IF NOT EXISTS "public"."class_schedules_tb" (
     "id" bigint NOT NULL,
     "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
-    "school_year" "text" NOT NULL,
+    "school_year_id" bigint NOT NULL,
     "semester" "text" NOT NULL,
-    "year_level" "text" NOT NULL,
-    "section" "text" NOT NULL,
-    "subjects" "jsonb" NOT NULL,
-    "department" "text" NOT NULL
+    "year_level_id" bigint NOT NULL,
+    "section_id" bigint NOT NULL,
+    "department_id" bigint NOT NULL,
+    "subject_id" bigint NOT NULL,
+    "day" character varying NOT NULL,
+    "room_id" bigint NOT NULL,
+    "initial_time" time without time zone NOT NULL,
+    "final_time" time without time zone NOT NULL,
+    "professor_id" "uuid" NOT NULL
 );
 
 
@@ -239,7 +244,9 @@ CREATE TABLE IF NOT EXISTS "public"."faculties_tb" (
     "id" bigint NOT NULL,
     "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
     "professor_id" "uuid" NOT NULL,
-    "schedule_id" bigint NOT NULL
+    "schedule_id" bigint NOT NULL,
+    "start_time" time without time zone NOT NULL,
+    "end_time" time without time zone NOT NULL
 );
 
 
@@ -378,7 +385,7 @@ CREATE TABLE IF NOT EXISTS "public"."rooms_tb" (
     "type" "text" NOT NULL,
     "number" numeric NOT NULL,
     "code" character varying NOT NULL,
-    "department" character varying NOT NULL
+    "department_id" bigint NOT NULL
 );
 
 
@@ -404,7 +411,7 @@ CREATE TABLE IF NOT EXISTS "public"."school_years_tb" (
     "id" bigint NOT NULL,
     "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
     "year" character varying NOT NULL,
-    "department" character varying NOT NULL
+    "department_id" bigint NOT NULL
 );
 
 
@@ -431,7 +438,7 @@ CREATE TABLE IF NOT EXISTS "public"."sections_tb" (
     "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
     "class" character varying NOT NULL,
     "section_code" character varying NOT NULL,
-    "department" character varying NOT NULL
+    "department_id" bigint NOT NULL
 );
 
 
@@ -459,7 +466,7 @@ CREATE TABLE IF NOT EXISTS "public"."subjects_tb" (
     "name" "text" NOT NULL,
     "code" character varying NOT NULL,
     "unit" numeric NOT NULL,
-    "department" character varying NOT NULL
+    "department_id" bigint NOT NULL
 );
 
 
@@ -485,7 +492,7 @@ CREATE TABLE IF NOT EXISTS "public"."year_levels_tb" (
     "id" bigint NOT NULL,
     "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
     "levels" "jsonb" NOT NULL,
-    "department" character varying NOT NULL
+    "department_id" bigint NOT NULL
 );
 
 
@@ -588,7 +595,7 @@ ALTER TABLE ONLY "public"."subjects_tb"
 
 
 ALTER TABLE ONLY "public"."year_levels_tb"
-    ADD CONSTRAINT "year_levels_tb_department_key" UNIQUE ("department");
+    ADD CONSTRAINT "year_levels_tb_department_key" UNIQUE ("department_id");
 
 
 
@@ -625,6 +632,41 @@ CREATE OR REPLACE TRIGGER "log_year_levels_tb_changes" AFTER INSERT OR DELETE OR
 
 
 
+ALTER TABLE ONLY "public"."class_schedules_tb"
+    ADD CONSTRAINT "class_schedules_tb_department_id_fkey" FOREIGN KEY ("department_id") REFERENCES "public"."programs_tb"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."class_schedules_tb"
+    ADD CONSTRAINT "class_schedules_tb_professor_id_fkey" FOREIGN KEY ("professor_id") REFERENCES "public"."professors_tb"("user_id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."class_schedules_tb"
+    ADD CONSTRAINT "class_schedules_tb_room_id_fkey" FOREIGN KEY ("room_id") REFERENCES "public"."rooms_tb"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."class_schedules_tb"
+    ADD CONSTRAINT "class_schedules_tb_school_year_id_fkey" FOREIGN KEY ("school_year_id") REFERENCES "public"."school_years_tb"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."class_schedules_tb"
+    ADD CONSTRAINT "class_schedules_tb_section_id_fkey" FOREIGN KEY ("section_id") REFERENCES "public"."sections_tb"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."class_schedules_tb"
+    ADD CONSTRAINT "class_schedules_tb_subject_id_fkey" FOREIGN KEY ("subject_id") REFERENCES "public"."subjects_tb"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."class_schedules_tb"
+    ADD CONSTRAINT "class_schedules_tb_year_level_id_fkey" FOREIGN KEY ("year_level_id") REFERENCES "public"."year_levels_tb"("id") ON DELETE CASCADE;
+
+
+
 ALTER TABLE ONLY "public"."faculties_tb"
     ADD CONSTRAINT "faculties_tb_professor_id_fkey" FOREIGN KEY ("professor_id") REFERENCES "public"."professors_tb"("user_id") ON DELETE CASCADE;
 
@@ -652,6 +694,31 @@ ALTER TABLE ONLY "public"."requests_tb"
 
 ALTER TABLE ONLY "public"."roles_tb"
     ADD CONSTRAINT "roles_tb_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."rooms_tb"
+    ADD CONSTRAINT "rooms_tb_department_id_fkey" FOREIGN KEY ("department_id") REFERENCES "public"."programs_tb"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."school_years_tb"
+    ADD CONSTRAINT "school_years_tb_department_id_fkey" FOREIGN KEY ("department_id") REFERENCES "public"."programs_tb"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."sections_tb"
+    ADD CONSTRAINT "sections_tb_department_id_fkey" FOREIGN KEY ("department_id") REFERENCES "public"."programs_tb"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."subjects_tb"
+    ADD CONSTRAINT "subjects_tb_department_id_fkey" FOREIGN KEY ("department_id") REFERENCES "public"."programs_tb"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."year_levels_tb"
+    ADD CONSTRAINT "year_levels_tb_department_id_fkey" FOREIGN KEY ("department_id") REFERENCES "public"."programs_tb"("id") ON DELETE CASCADE;
 
 
 
@@ -775,9 +842,6 @@ GRANT USAGE ON SCHEMA "public" TO "postgres";
 GRANT USAGE ON SCHEMA "public" TO "anon";
 GRANT USAGE ON SCHEMA "public" TO "authenticated";
 GRANT USAGE ON SCHEMA "public" TO "service_role";
-
-
-
 
 
 

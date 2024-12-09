@@ -6,7 +6,8 @@ export const roomsSchema = z.object({
   type: z.string(),
   number: z.number(),
   code: z.string(),
-  department: z.string()
+  department: z.string(),
+  department_id: z.number()
 });
 
 export type RoomsPageTable = z.output<typeof roomsSchema>;

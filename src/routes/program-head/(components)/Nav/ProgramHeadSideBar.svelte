@@ -20,11 +20,6 @@
   import * as Collapsible from '$lib/components/ui/collapsible';
   const site_map = [
     {
-      title: 'Faculty Loading',
-      url: '/program-head',
-      icon: ListRestart
-    },
-    {
       title: 'Class Schedules',
       url: '/program-head/class-schedules',
       icon: CalendarCheck

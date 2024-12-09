@@ -13,6 +13,7 @@
   import type { Result } from '$lib/types';
   import { toast } from 'svelte-sonner';
   import { page } from '$app/stores';
+  import MultiSelect from '$lib/components/general/MultiSelect.svelte';
 
   interface Props {
     updateInformationForm: SuperValidated<Infer<UpdateInformationSchema>>;
@@ -55,7 +56,7 @@
     $formData.previousSchool = $page.data.user?.user_metadata.previousSchool;
     $formData.yearsOfTeaching = $page.data.user?.user_metadata.yearsOfTeaching;
     $formData.department = $page.data.user?.user_metadata.department;
-    $formData.day = $page.data.user?.user_metadata.schedule.day;
+    $formData.days = $page.data.user?.user_metadata.schedule.days[0].split(',') ?? [];
     $formData.startTime = $page.data.user?.user_metadata.schedule.startTime;
     $formData.endTime = $page.data.user?.user_metadata.schedule.endTime;
     $formData.availability = $page.data.user?.user_metadata.schedule.available;
@@ -69,7 +70,7 @@
       $formData.previousSchool = '';
       $formData.yearsOfTeaching = 0;
       $formData.department = '';
-      $formData.day = '';
+      $formData.days = [];
       $formData.startTime = '';
       $formData.endTime = '';
       $formData.availability = '';
@@ -91,8 +92,7 @@
           {#snippet children({ props })}
             <Form.Label>Title</Form.Label>
             <SelectPicker
-              name="Select title"
-              {props}
+              placeholder="Select title"
               class=""
               selections={titles}
               bind:selected={$formData.title}
@@ -177,8 +177,7 @@
           {#snippet children({ props })}
             <Form.Label>Department</Form.Label>
             <SelectPicker
-              name="Select department"
-              {props}
+              placeholder="Select department"
               class=""
               selections={auxiliaryState.formatDepartments()}
               bind:selected={$formData.department}
@@ -189,18 +188,16 @@
         <Form.FieldErrors />
       </Form.Field>
 
-      <Form.Field {form} name="day">
+      <Form.Field {form} name="days">
         <Form.Control>
           {#snippet children({ props })}
             <Form.Label>Day</Form.Label>
-            <SelectPicker
-              name="Select day"
-              {props}
-              class=""
-              selections={days}
-              bind:selected={$formData.day}
+            <MultiSelect
+              selections={days.map((day) => day.value)}
+              bind:selected={$formData.days}
+              placeholder="Select days"
             />
-            <input type="hidden" {...props} bind:value={$formData.day} />
+            <input type="hidden" {...props} bind:value={$formData.days} />
           {/snippet}
         </Form.Control>
         <Form.FieldErrors />
@@ -243,9 +240,8 @@
           {#snippet children({ props })}
             <Form.Label>Availability</Form.Label>
             <SelectPicker
-              name="Select availability"
-              {props}
-              class=""
+              placeholder="Select availability"
+              noDescription
               selections={[
                 { value: 'Part Time', label: 'Part Time' },
                 { value: 'Full Time', label: 'Full Time' }

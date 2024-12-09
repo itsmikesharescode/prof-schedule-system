@@ -81,7 +81,7 @@
     if (tableState.getShowUpdate()) {
       yearLevels = tableState.getActiveRow()?.levels as typeof yearLevels;
       $formData.id = tableState.getActiveRow()?.id;
-      $formData.department = tableState.getActiveRow()?.department;
+      $formData.department = `${tableState.getActiveRow()?.department},${tableState.getActiveRow()?.department_id}`;
     }
   });
 </script>
@@ -121,7 +121,7 @@
                       {...props}
                       bind:selected={$formData.department}
                       selections={auxiliaryState.formatDepartments()}
-                      name="Select department"
+                      placeholder="Select department"
                     />
                     <input type="hidden" name={props.name} bind:value={$formData.department} />
                   {/snippet}

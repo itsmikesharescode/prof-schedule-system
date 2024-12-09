@@ -9,7 +9,8 @@ export const yearLevelSchema = z.object({
       yearLevel: z.string()
     })
   ),
-  department: z.string()
+  department: z.string(),
+  department_id: z.number()
 });
 
 export type YearLevelPageTable = z.output<typeof yearLevelSchema>;

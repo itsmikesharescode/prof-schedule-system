@@ -1,3 +1,7 @@
+import { getLocalTimeZone, parseDate } from '@internationalized/date';
+
+import { DateFormatter } from '@internationalized/date';
+
 export const convertTo24Hour = (timeStr: string) => {
   const [time, period] = timeStr.split(' ');
   let [hours, minutes] = time.split(':');
@@ -9,7 +13,7 @@ export const convertTo24Hour = (timeStr: string) => {
     hour = 0;
   }
 
-  return `${hour.toString().padStart(2, '0')}:${minutes}`;
+  return `${hour.toString().padStart(2, '0')}:${minutes}:00`;
 };
 
 export const checkTimeOverlap = (
@@ -71,4 +75,25 @@ export const generateReferenceId = (length: number = 8): string => {
   }
 
   return result;
+};
+
+export function formatDate(
+  dateStr: string,
+  style: 'full' | 'long' | 'medium' | 'short' = 'long'
+): string {
+  try {
+    const df = new DateFormatter('en-US', { dateStyle: style });
+    const parsedDate = parseDate(dateStr);
+    return df.format(parsedDate.toDate(getLocalTimeZone()));
+  } catch (error) {
+    console.error('Error formatting date:', error);
+    return dateStr; // Return original string if parsing fails
+  }
+}
+
+export const convert24HourTo12Hour = (timeStr: string): string => {
+  const [hours, minutes] = timeStr.split(':').map(Number);
+  const period = hours >= 12 ? 'PM' : 'AM';
+  const hour12 = hours % 12 || 12;
+  return `${hour12}:${minutes.toString().padStart(2, '0')} ${period}`;
 };

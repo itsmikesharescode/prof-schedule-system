@@ -3,6 +3,10 @@ import { z } from 'zod';
 export const facultyLoadingSchema = z.object({
   id: z.number(),
   created_at: z.string(),
+  professor_id: z.string(),
+  schedule_id: z.number(),
+  start_time: z.string(),
+  end_time: z.string(),
   department: z.string(),
   semester: z.string(),
   section: z.string(),

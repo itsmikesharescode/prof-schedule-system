@@ -17,6 +17,8 @@
   import { toast } from 'svelte-sonner';
   import { PUBLIC_SUPABASE_STORAGE_URL } from '$env/static/public';
   import { useTableState } from '../Table/tableState.svelte';
+  import MultiSelect from '$lib/components/general/MultiSelect.svelte';
+  import { convertTo24Hour } from '$lib';
 
   interface Props {
     updateProfessorForm: SuperValidated<Infer<UpdateProfessorSchema>>;
@@ -68,9 +70,10 @@
       $formData.previousSchool = tableState.getActiveRow()?.previousSchool ?? '';
       $formData.yearsOfTeaching = tableState.getActiveRow()?.yearsOfTeaching ?? 0;
       $formData.department = tableState.getActiveRow()?.department ?? '';
-      $formData.day = tableState.getActiveRow()?.schedule.day ?? '';
-      $formData.startTime = tableState.getActiveRow()?.schedule.startTime ?? '';
-      $formData.endTime = tableState.getActiveRow()?.schedule.endTime ?? '';
+      $formData.days = tableState.getActiveRow()?.schedule.days[0].split(',') ?? [];
+      $formData.startTime =
+        convertTo24Hour(tableState.getActiveRow()?.schedule.startTime ?? '') ?? '';
+      $formData.endTime = convertTo24Hour(tableState.getActiveRow()?.schedule.endTime ?? '') ?? '';
       $formData.availability = tableState.getActiveRow()?.schedule.available ?? '';
       $formData.interests = tableState.getActiveRow()?.interests ?? [];
     }
@@ -90,21 +93,15 @@
       <X class="size-4" />
       <span class="sr-only">Close</span>
     </button>
-
+    {$formData.startTime}
     <AlertDialog.Header class="px-6 pt-6">
       <AlertDialog.Title>Update Professor</AlertDialog.Title>
       <AlertDialog.Description>
         Fill the fields below to update a professor.
       </AlertDialog.Description>
     </AlertDialog.Header>
-    <ScrollArea class="h-[80dvh]">
-      <form
-        method="POST"
-        action="?/updateProfessorEvent"
-        enctype="multipart/form-data"
-        use:enhance
-        class=" "
-      >
+    <ScrollArea class="max-h-[80dvh]">
+      <form method="POST" action="?/updateProfessorEvent" enctype="multipart/form-data" use:enhance>
         <input type="hidden" name="userId" bind:value={$formData.userId} />
         <input type="hidden" name="photoPath" bind:value={$formData.photoPath} />
         <div class="grid grid-cols-3 gap-6 px-6 pb-6">
@@ -133,10 +130,9 @@
                 {#snippet children({ props })}
                   <Form.Label>Title</Form.Label>
                   <SelectPicker
-                    name="Select title"
-                    {props}
-                    class=""
+                    placeholder="Select Title"
                     selections={titles}
+                    noDescription
                     bind:selected={$formData.title}
                   />
                   <input type="hidden" {...props} bind:value={$formData.title} />
@@ -275,9 +271,7 @@
                 {#snippet children({ props })}
                   <Form.Label>Department</Form.Label>
                   <SelectPicker
-                    name="Select department"
-                    {props}
-                    class=""
+                    placeholder="Select department"
                     selections={auxiliaryState.formatDepartments()}
                     bind:selected={$formData.department}
                   />
@@ -287,18 +281,16 @@
               <Form.FieldErrors />
             </Form.Field>
 
-            <Form.Field {form} name="day">
+            <Form.Field {form} name="days">
               <Form.Control>
                 {#snippet children({ props })}
-                  <Form.Label>Day</Form.Label>
-                  <SelectPicker
-                    name="Select day"
-                    {props}
-                    class=""
-                    selections={days}
-                    bind:selected={$formData.day}
+                  <Form.Label>Days</Form.Label>
+                  <MultiSelect
+                    selections={days.map((day) => day.value)}
+                    bind:selected={$formData.days}
+                    placeholder="Select days"
                   />
-                  <input type="hidden" {...props} bind:value={$formData.day} />
+                  <input type="hidden" {...props} bind:value={$formData.days} />
                 {/snippet}
               </Form.Control>
               <Form.FieldErrors />
@@ -341,9 +333,8 @@
                 {#snippet children({ props })}
                   <Form.Label>Availability</Form.Label>
                   <SelectPicker
-                    name="Select availability"
-                    {props}
-                    class=""
+                    placeholder="Select availability"
+                    noDescription
                     selections={[
                       { value: 'Part Time', label: 'Part Time' },
                       { value: 'Full Time', label: 'Full Time' }

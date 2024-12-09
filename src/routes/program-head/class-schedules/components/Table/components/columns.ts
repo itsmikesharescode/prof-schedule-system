@@ -1,15 +1,7 @@
 import type { ColumnDef } from '@tanstack/table-core';
 import { createRawSnippet } from 'svelte';
 import type { ClassSchedulesPageTable } from '../data/schemas.js';
-import {
-  TableCheckbox,
-  TableColumnHeader,
-  TablePriorityCell,
-  TableRowActions,
-  TableStatusCell,
-  TableTitleCell,
-  TableSubjectsCell
-} from './index.js';
+import { TableCheckbox, TableColumnHeader, TableRowActions } from './index.js';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/render-helpers.js';
 
 export const columns: ColumnDef<ClassSchedulesPageTable>[] = [
@@ -32,65 +24,149 @@ export const columns: ColumnDef<ClassSchedulesPageTable>[] = [
     enableSorting: false,
     enableHiding: false
   },
+
   {
-    accessorKey: 'id',
+    accessorKey: 'courseCode',
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<ClassSchedulesPageTable, unknown>, {
         column,
-        title: 'ID'
+        title: 'Course Code'
       });
     },
     cell: ({ row }) => {
-      const idSnippet = createRawSnippet<[string]>((getId) => {
-        const id = getId();
+      const courseCodeSnippet = createRawSnippet<[string]>((getCourseCode) => {
         return {
-          render: () => `<div class="w-[80px]">${id}</div>`
+          render: () => `<div class="w-full">${getCourseCode().split(',')[0]}</div>`
         };
       });
 
-      return renderSnippet(idSnippet, row.getValue('id'));
-    },
-    enableSorting: false,
-    enableHiding: false
-  },
-
-  {
-    accessorKey: 'school_year',
-    header: ({ column }) => {
-      return renderComponent(TableColumnHeader<ClassSchedulesPageTable, unknown>, {
-        column,
-        title: 'School Year'
-      });
-    },
-    cell: ({ row }) => {
-      const schoolYearSnippet = createRawSnippet<[string]>((getSchoolYear) => {
-        return {
-          render: () => `<div class="w-full">${getSchoolYear()}</div>`
-        };
-      });
-
-      return renderSnippet(schoolYearSnippet, row.getValue('school_year'));
+      return renderSnippet(courseCodeSnippet, row.getValue('courseCode'));
     },
     enableSorting: true,
     enableHiding: true
   },
 
   {
-    accessorKey: 'semester',
+    accessorKey: 'subject',
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<ClassSchedulesPageTable, unknown>, {
         column,
-        title: 'Semester'
+        title: 'Course Title'
       });
     },
     cell: ({ row }) => {
-      const semesterSnippet = createRawSnippet<[string]>((getSemester) => {
+      const subjectSnippet = createRawSnippet<[string]>((getSubject) => {
         return {
-          render: () => `<div class="w-full">${getSemester()}</div>`
+          render: () => `<div class="w-full line-clamp-2">${getSubject().split(',')[0]}</div>`
         };
       });
 
-      return renderSnippet(semesterSnippet, row.getValue('semester'));
+      return renderSnippet(subjectSnippet, row.getValue('subject'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
+    accessorKey: 'day',
+    header: ({ column }) => {
+      return renderComponent(TableColumnHeader<ClassSchedulesPageTable, unknown>, {
+        column,
+        title: 'Day'
+      });
+    },
+    cell: ({ row }) => {
+      const daySnippet = createRawSnippet<[string]>((getDay) => {
+        return {
+          render: () => `<div class="w-full truncate">${getDay()}</div>`
+        };
+      });
+
+      return renderSnippet(daySnippet, row.getValue('day'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
+    accessorKey: 'time',
+    header: ({ column }) => {
+      return renderComponent(TableColumnHeader<ClassSchedulesPageTable, unknown>, {
+        column,
+        title: 'Time'
+      });
+    },
+    cell: ({ row }) => {
+      const timeSnippet = createRawSnippet<[string]>((getTime) => {
+        return {
+          render: () => `<div class="w-full truncate">${getTime()}</div>`
+        };
+      });
+
+      return renderSnippet(timeSnippet, row.getValue('time'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
+    accessorKey: 'department',
+    header: ({ column }) => {
+      return renderComponent(TableColumnHeader<ClassSchedulesPageTable, unknown>, {
+        column,
+        title: 'Department'
+      });
+    },
+    cell: ({ row }) => {
+      const departmentSnippet = createRawSnippet<[string]>((getDepartment) => {
+        return {
+          render: () => `<div class="w-full">${getDepartment().split(',')[0]}</div>`
+        };
+      });
+
+      return renderSnippet(departmentSnippet, row.getValue('department'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
+    accessorKey: 'units',
+    header: ({ column }) => {
+      return renderComponent(TableColumnHeader<ClassSchedulesPageTable, unknown>, {
+        column,
+        title: 'Units'
+      });
+    },
+    cell: ({ row }) => {
+      const unitsSnippet = createRawSnippet<[number]>((getUnits) => {
+        return {
+          render: () => `<div class="w-full">${getUnits()}</div>`
+        };
+      });
+
+      return renderSnippet(unitsSnippet, row.getValue('units'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
+    accessorKey: 'professor',
+    header: ({ column }) => {
+      return renderComponent(TableColumnHeader<ClassSchedulesPageTable, unknown>, {
+        column,
+        title: 'Professor'
+      });
+    },
+    cell: ({ row }) => {
+      const professorSnippet = createRawSnippet<[string]>((getProfessor) => {
+        return {
+          render: () => `<div class="w-full">${getProfessor()}</div>`
+        };
+      });
+
+      return renderSnippet(professorSnippet, row.getValue('professor'));
     },
     enableSorting: true,
     enableHiding: true
@@ -107,7 +183,7 @@ export const columns: ColumnDef<ClassSchedulesPageTable>[] = [
     cell: ({ row }) => {
       const yearLevelSnippet = createRawSnippet<[string]>((getYearLevel) => {
         return {
-          render: () => `<div class="w-full">${getYearLevel()}</div>`
+          render: () => `<div class="w-full">${getYearLevel().split(',')[0]}</div>`
         };
       });
 
@@ -128,7 +204,7 @@ export const columns: ColumnDef<ClassSchedulesPageTable>[] = [
     cell: ({ row }) => {
       const sectionSnippet = createRawSnippet<[string]>((getSection) => {
         return {
-          render: () => `<div class="w-full">${getSection()}</div>`
+          render: () => `<div class="w-full">${getSection().split(',')[0]}</div>`
         };
       });
 
@@ -138,40 +214,6 @@ export const columns: ColumnDef<ClassSchedulesPageTable>[] = [
     enableHiding: true
   },
 
-  {
-    accessorKey: 'department',
-    header: ({ column }) => {
-      return renderComponent(TableColumnHeader<ClassSchedulesPageTable, unknown>, {
-        column,
-        title: 'Department'
-      });
-    },
-    cell: ({ row }) => {
-      const departmentSnippet = createRawSnippet<[string]>((getDepartment) => {
-        return {
-          render: () => `<div class="w-full">${getDepartment()}</div>`
-        };
-      });
-
-      return renderSnippet(departmentSnippet, row.getValue('department'));
-    },
-    enableSorting: true,
-    enableHiding: true
-  },
-
-  {
-    accessorKey: 'subjects',
-    id: 'subjects',
-    header: ({ column }) => {
-      return renderComponent(TableColumnHeader<ClassSchedulesPageTable, unknown>, {
-        column,
-        title: 'Subjects'
-      });
-    },
-    cell: ({ row }) => renderComponent(TableSubjectsCell, { row }),
-    enableSorting: false,
-    enableHiding: true
-  },
   {
     accessorKey: 'created_at',
     id: 'created_at',

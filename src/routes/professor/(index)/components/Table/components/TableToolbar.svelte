@@ -9,6 +9,7 @@
   import Button from '$lib/components/ui/button/button.svelte';
   import { Input } from '$lib/components/ui/input/index';
   import type { SchedulePageTable } from '../data/schemas';
+  import PrintFacultyLoad from './PrintFacultyLoad.svelte';
 
   let { table }: { table: Table<SchedulePageTable> } = $props();
 
@@ -18,13 +19,13 @@
 <div class="flex items-center justify-between">
   <div class="flex flex-1 items-center space-x-2">
     <Input
-      placeholder="Search section..."
-      value={(table.getColumn('section')?.getFilterValue() as string) ?? ''}
+      placeholder="Search subject..."
+      value={(table.getColumn('subject')?.getFilterValue() as string) ?? ''}
       oninput={(e) => {
-        table.getColumn('section')?.setFilterValue(e.currentTarget.value);
+        table.getColumn('subject')?.setFilterValue(e.currentTarget.value);
       }}
       onchange={(e) => {
-        table.getColumn('section')?.setFilterValue(e.currentTarget.value);
+        table.getColumn('subject')?.setFilterValue(e.currentTarget.value);
       }}
       class="h-8 w-[150px] lg:w-[250px]"
     />
@@ -36,5 +37,11 @@
       </Button>
     {/if}
   </div>
-  <TableViewOptions {table} />
+
+  <div class="flex items-center space-x-2">
+    {#if table.getRowCount() > 0}
+      <PrintFacultyLoad />
+    {/if}
+    <TableViewOptions {table} />
+  </div>
 </div>

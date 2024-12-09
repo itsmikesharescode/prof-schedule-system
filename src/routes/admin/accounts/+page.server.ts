@@ -52,7 +52,7 @@ export const actions: Actions = {
         previousSchool: form.data.previousSchool,
         yearsOfTeaching: form.data.yearsOfTeaching,
         schedule: {
-          day: form.data.day,
+          days: form.data.days[0].split(','),
           startTime: form.data.startTime,
           endTime: form.data.endTime,
           available: form.data.availability
@@ -100,7 +100,7 @@ export const actions: Actions = {
           previousSchool: form.data.previousSchool,
           yearsOfTeaching: form.data.yearsOfTeaching,
           schedule: {
-            day: form.data.day,
+            days: form.data.days,
             startTime: form.data.startTime,
             endTime: form.data.endTime,
             available: form.data.availability

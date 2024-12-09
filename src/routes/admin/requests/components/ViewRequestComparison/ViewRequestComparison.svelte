@@ -13,7 +13,7 @@
   let selectedSchedule = $state<PreferredSchedule | null | undefined>(null);
 </script>
 
-{#snippet content(title: string, description: string)}
+{#snippet content(title: string, description: string | string[])}
   <section class="flex flex-col">
     <span class="font-medium">{title}</span>
     <span class="text-sm text-muted-foreground">{description}</span>
@@ -53,8 +53,8 @@
         </Card.Header>
         <Card.Content class="relative flex flex-col gap-2">
           {@render content(
-            'Day:',
-            tableState.getActiveRow()?.professors_tb?.user_meta_data.schedule.day ?? ''
+            'Days:',
+            tableState.getActiveRow()?.professors_tb?.user_meta_data.schedule.days ?? []
           )}
           {@render content(
             'Start Time:',
@@ -96,7 +96,7 @@
           <Card.Title>Requested Schedule</Card.Title>
         </Card.Header>
         <Card.Content class="relative flex flex-col gap-2">
-          {@render content('Day:', tableState.getActiveRow()?.schedule.day ?? '')}
+          {@render content('Days:', tableState.getActiveRow()?.schedule.days ?? [])}
           {@render content('Start Time:', tableState.getActiveRow()?.schedule.startTime ?? '')}
 
           {@render content('End Time:', tableState.getActiveRow()?.schedule.endTime ?? '')}

@@ -1,4 +1,4 @@
-import type { UserMetaData, YearLevel, Subject, PreferredSchedule } from './types';
+import type { UserMetaData, YearLevel, PreferredSchedule } from './types';
 
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
@@ -33,54 +33,125 @@ export type Database = {
       class_schedules_tb: {
         Row: {
           created_at: string;
-          department: string;
+          day: string;
+          department_id: number;
+          final_time: string;
           id: number;
-          school_year: string;
-          section: string;
+          initial_time: string;
+          professor_id: string;
+          room_id: number;
+          school_year_id: number;
+          section_id: number;
           semester: string;
-          subjects: Subject[];
-          year_level: string;
+          subject_id: number;
+          year_level_id: number;
         };
         Insert: {
           created_at?: string;
-          department: string;
+          day: string;
+          department_id: number;
+          final_time: string;
           id?: number;
-          school_year: string;
-          section: string;
+          initial_time: string;
+          professor_id: string;
+          room_id: number;
+          school_year_id: number;
+          section_id: number;
           semester: string;
-          subjects: Subject[];
-          year_level: string;
+          subject_id: number;
+          year_level_id: number;
         };
         Update: {
           created_at?: string;
-          department?: string;
+          day?: string;
+          department_id?: number;
+          final_time?: string;
           id?: number;
-          school_year?: string;
-          section?: string;
+          initial_time?: string;
+          professor_id?: string;
+          room_id?: number;
+          school_year_id?: number;
+          section_id?: number;
           semester?: string;
-          subjects?: Subject[];
-          year_level?: string;
+          subject_id?: number;
+          year_level_id?: number;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'class_schedules_tb_department_id_fkey';
+            columns: ['department_id'];
+            isOneToOne: false;
+            referencedRelation: 'programs_tb';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'class_schedules_tb_professor_id_fkey';
+            columns: ['professor_id'];
+            isOneToOne: false;
+            referencedRelation: 'professors_tb';
+            referencedColumns: ['user_id'];
+          },
+          {
+            foreignKeyName: 'class_schedules_tb_room_id_fkey';
+            columns: ['room_id'];
+            isOneToOne: false;
+            referencedRelation: 'rooms_tb';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'class_schedules_tb_school_year_id_fkey';
+            columns: ['school_year_id'];
+            isOneToOne: false;
+            referencedRelation: 'school_years_tb';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'class_schedules_tb_section_id_fkey';
+            columns: ['section_id'];
+            isOneToOne: false;
+            referencedRelation: 'sections_tb';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'class_schedules_tb_subject_id_fkey';
+            columns: ['subject_id'];
+            isOneToOne: false;
+            referencedRelation: 'subjects_tb';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'class_schedules_tb_year_level_id_fkey';
+            columns: ['year_level_id'];
+            isOneToOne: false;
+            referencedRelation: 'year_levels_tb';
+            referencedColumns: ['id'];
+          }
+        ];
       };
       faculties_tb: {
         Row: {
           created_at: string;
+          end_time: string;
           id: number;
           professor_id: string;
           schedule_id: number;
+          start_time: string;
         };
         Insert: {
           created_at?: string;
+          end_time: string;
           id?: number;
           professor_id: string;
           schedule_id: number;
+          start_time: string;
         };
         Update: {
           created_at?: string;
+          end_time?: string;
           id?: number;
           professor_id?: string;
           schedule_id?: number;
+          start_time?: string;
         };
         Relationships: [
           {
@@ -225,7 +296,7 @@ export type Database = {
         Row: {
           code: string;
           created_at: string;
-          department: string;
+          department_id: number;
           id: number;
           number: number;
           type: string;
@@ -233,7 +304,7 @@ export type Database = {
         Insert: {
           code: string;
           created_at?: string;
-          department: string;
+          department_id: number;
           id?: number;
           number: number;
           type: string;
@@ -241,63 +312,87 @@ export type Database = {
         Update: {
           code?: string;
           created_at?: string;
-          department?: string;
+          department_id?: number;
           id?: number;
           number?: number;
           type?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'rooms_tb_department_id_fkey';
+            columns: ['department_id'];
+            isOneToOne: false;
+            referencedRelation: 'programs_tb';
+            referencedColumns: ['id'];
+          }
+        ];
       };
       school_years_tb: {
         Row: {
           created_at: string;
-          department: string;
+          department_id: number;
           id: number;
           year: string;
         };
         Insert: {
           created_at?: string;
-          department: string;
+          department_id: number;
           id?: number;
           year: string;
         };
         Update: {
           created_at?: string;
-          department?: string;
+          department_id?: number;
           id?: number;
           year?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'school_years_tb_department_id_fkey';
+            columns: ['department_id'];
+            isOneToOne: false;
+            referencedRelation: 'programs_tb';
+            referencedColumns: ['id'];
+          }
+        ];
       };
       sections_tb: {
         Row: {
           class: string;
           created_at: string;
-          department: string;
+          department_id: number;
           id: number;
           section_code: string;
         };
         Insert: {
           class: string;
           created_at?: string;
-          department: string;
+          department_id: number;
           id?: number;
           section_code: string;
         };
         Update: {
           class?: string;
           created_at?: string;
-          department?: string;
+          department_id?: number;
           id?: number;
           section_code?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'sections_tb_department_id_fkey';
+            columns: ['department_id'];
+            isOneToOne: false;
+            referencedRelation: 'programs_tb';
+            referencedColumns: ['id'];
+          }
+        ];
       };
       subjects_tb: {
         Row: {
           code: string;
           created_at: string;
-          department: string;
+          department_id: number;
           id: number;
           name: string;
           unit: number;
@@ -305,7 +400,7 @@ export type Database = {
         Insert: {
           code: string;
           created_at?: string;
-          department: string;
+          department_id: number;
           id?: number;
           name: string;
           unit: number;
@@ -313,33 +408,49 @@ export type Database = {
         Update: {
           code?: string;
           created_at?: string;
-          department?: string;
+          department_id?: number;
           id?: number;
           name?: string;
           unit?: number;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'subjects_tb_department_id_fkey';
+            columns: ['department_id'];
+            isOneToOne: false;
+            referencedRelation: 'programs_tb';
+            referencedColumns: ['id'];
+          }
+        ];
       };
       year_levels_tb: {
         Row: {
           created_at: string;
-          department: string;
+          department_id: number;
           id: number;
           levels: YearLevel[];
         };
         Insert: {
           created_at?: string;
-          department: string;
+          department_id: number;
           id?: number;
           levels: YearLevel[];
         };
         Update: {
           created_at?: string;
-          department?: string;
+          department_id?: number;
           id?: number;
           levels?: YearLevel[];
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'year_levels_tb_department_id_fkey';
+            columns: ['department_id'];
+            isOneToOne: true;
+            referencedRelation: 'programs_tb';
+            referencedColumns: ['id'];
+          }
+        ];
       };
     };
     Views: {

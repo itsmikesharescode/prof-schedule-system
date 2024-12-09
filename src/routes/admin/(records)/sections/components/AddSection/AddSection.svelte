@@ -74,7 +74,7 @@
             <Form.Label>Department</Form.Label>
             <SelectPicker
               {...props}
-              name="Select Department"
+              placeholder="Select department"
               selections={auxiliaryState.formatDepartments()}
               bind:selected={$formData.department}
             />
@@ -91,7 +91,7 @@
             <Form.Label>Class</Form.Label>
             <SelectPicker
               {...props}
-              name="Select Class"
+              placeholder="Select class"
               selections={classPeriods}
               bind:selected={$formData.class}
             />

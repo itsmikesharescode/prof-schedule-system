@@ -6,33 +6,15 @@
   import { initTableState } from './components/Table/tableState.svelte';
   import ViewCalendar from './components/ViewCalendar/ViewCalendar.svelte';
   import DeleteFaculty from './components/DeleteFaculty/DeleteFaculty.svelte';
+  import UpdateFaculty from './components/UpdateFaculty/UpdateFaculty.svelte';
 
   const { data } = $props();
 
   initTableState();
-
-  let professors = $state<Awaited<typeof data.getProfessors>>(null);
-  let schedules = $state<Awaited<typeof data.getClassSchedules>>(null);
-
-  const fetchData = async () => {
-    const [profs, scheds] = await Promise.all([data.getProfessors, data.getClassSchedules]);
-
-    professors = profs;
-    schedules = scheds;
-  };
-
-  $effect(() => {
-    fetchData();
-
-    return () => {
-      professors = null;
-      schedules = null;
-    };
-  });
 </script>
 
 <div class="sticky top-2 z-30 flex justify-end">
-  <AddFaculty addFacultyForm={data.addFacultyForm} {professors} {schedules} />
+  <AddFaculty addFacultyForm={data.addFacultyForm} />
 </div>
 
 <div class="mt-6">
@@ -46,8 +28,7 @@
   {:then faculties}
     <Table
       data={faculties?.map((faculty) => ({
-        id: faculty.id,
-        created_at: faculty.created_at,
+        ...faculty,
         department: faculty.professors_tb?.user_meta_data?.department ?? '',
         fullName: `${faculty.professors_tb?.user_meta_data?.lastName}, ${faculty.professors_tb?.user_meta_data?.firstName} ${faculty.professors_tb?.user_meta_data?.middleName}`,
         semester: faculty.class_schedules_tb?.semester ?? '',
@@ -62,5 +43,6 @@
   {/await}
 </div>
 
-<ViewCalendar />
+<!-- <ViewCalendar /> -->
+<UpdateFaculty updateFacultyForm={data.updateFacultyForm} />
 <DeleteFaculty />

@@ -5,6 +5,8 @@
 <script lang="ts" generics="TData">
   import Ellipsis from 'lucide-svelte/icons/ellipsis';
   import FileMinus from 'lucide-svelte/icons/file-minus';
+  import PrinterCheck from 'lucide-svelte/icons/printer-check';
+  import LoaderCircle from 'lucide-svelte/icons/loader-circle';
   import Pen from 'lucide-svelte/icons/pen';
   import Check from 'lucide-svelte/icons/check';
   import type { Row } from '@tanstack/table-core';
@@ -27,7 +29,25 @@
       </Button>
     {/snippet}
   </DropdownMenu.Trigger>
-  <DropdownMenu.Content class="w-[160px]" align="end">
+  <DropdownMenu.Content class="max-w-fit" align="end">
+    <DropdownMenu.Item
+      onclick={() => {
+        tableState.setActiveRow(row.original);
+        tableState.setShowPrintFacultyLoad(true);
+      }}
+      class="relative"
+    >
+      {#if tableState.getShowPrintFacultyLoad()}
+        <div
+          class="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center gap-2 rounded-lg bg-secondary"
+        >
+          <span>Pls wait...</span>
+          <LoaderCircle class="size-4 animate-spin" />
+        </div>
+      {/if}
+      <PrinterCheck />
+      Print Subject Load
+    </DropdownMenu.Item>
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);

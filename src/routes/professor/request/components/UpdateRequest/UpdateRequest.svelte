@@ -2,7 +2,7 @@
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
   import Button from '$lib/components/ui/button/button.svelte';
   import { X, LoaderCircle } from 'lucide-svelte';
-  import { fileProxy, type Infer, superForm, type SuperValidated } from 'sveltekit-superforms';
+  import { type Infer, superForm, type SuperValidated } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import * as Form from '$lib/components/ui/form/index.js';
   import { updateRequestSchema, type UpdateRequestSchema } from './schema';
@@ -10,9 +10,9 @@
   import Combobox from '$lib/components/general/Combobox.svelte';
   import { availableTimes, days } from '$lib/metadata';
   import SelectPicker from '$lib/components/general/SelectPicker.svelte';
-  ('$app/navigation');
   import { toast } from 'svelte-sonner';
   import Textarea from '$lib/components/ui/textarea/textarea.svelte';
+  import MultiSelect from '$lib/components/general/MultiSelect.svelte';
   import { useTableState } from '../Table/tableState.svelte';
 
   interface Props {
@@ -47,20 +47,11 @@
   $effect(() => {
     if (tableState.getShowUpdate()) {
       $formData.id = tableState.getActiveRow()?.id ?? 0;
-      $formData.day = tableState.getActiveRow()?.day ?? '';
       $formData.start_time = tableState.getActiveRow()?.start_time ?? '';
       $formData.end_time = tableState.getActiveRow()?.end_time ?? '';
+      $formData.days = tableState.getActiveRow()?.days ?? [];
       $formData.availability = tableState.getActiveRow()?.schedule.available ?? '';
       $formData.reason = tableState.getActiveRow()?.reason ?? '';
-
-      return () => {
-        $formData.id = 0;
-        $formData.day = '';
-        $formData.start_time = '';
-        $formData.end_time = '';
-        $formData.availability = '';
-        $formData.reason = '';
-      };
     }
   });
 </script>
@@ -93,18 +84,17 @@
         class="flex flex-col gap-2.5 px-6 pb-6"
       >
         <input name="id" type="hidden" bind:value={$formData.id} />
-        <Form.Field {form} name="day">
+
+        <Form.Field {form} name="days">
           <Form.Control>
             {#snippet children({ props })}
               <Form.Label>Day</Form.Label>
-              <SelectPicker
-                name="Select day"
-                {props}
-                class=""
-                selections={days}
-                bind:selected={$formData.day}
+              <MultiSelect
+                placeholder="Select days"
+                selections={days.map((day) => day.value)}
+                bind:selected={$formData.days}
               />
-              <input type="hidden" {...props} bind:value={$formData.day} />
+              <input type="hidden" {...props} bind:value={$formData.days} />
             {/snippet}
           </Form.Control>
           <Form.FieldErrors />
@@ -147,9 +137,8 @@
             {#snippet children({ props })}
               <Form.Label>Availability</Form.Label>
               <SelectPicker
-                name="Select availability"
-                {props}
-                class=""
+                placeholder="Select availability"
+                noDescription
                 selections={[
                   { value: 'Part Time', label: 'Part Time' },
                   { value: 'Full Time', label: 'Full Time' }

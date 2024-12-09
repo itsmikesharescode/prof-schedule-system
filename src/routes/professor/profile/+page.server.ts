@@ -15,7 +15,7 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions: Actions = {
-  updateProfileEvent: async ({ request, locals: { supabase, user, transformImage } }) => {
+  updateProfileEvent: async ({ request, locals: { supabase, transformImage } }) => {
     const form = await superValidate(request, zod(updateProfileSchema));
 
     const res = await transformImage(form.data.photo, {});
@@ -46,7 +46,7 @@ export const actions: Actions = {
     return withFiles({ form, msg: 'Profile updated successfully.' });
   },
 
-  updateInformationEvent: async ({ request, locals: { supabase, user } }) => {
+  updateInformationEvent: async ({ request, locals: { supabase } }) => {
     const form = await superValidate(request, zod(updateInformationSchema));
 
     if (!form.valid) {
@@ -63,7 +63,7 @@ export const actions: Actions = {
         previousSchool: form.data.previousSchool,
         yearsInService: form.data.yearsOfTeaching,
         schedule: {
-          day: form.data.day,
+          days: form.data.days[0].split(','),
           startTime: form.data.startTime,
           endTime: form.data.endTime,
           available: form.data.availability
@@ -77,7 +77,7 @@ export const actions: Actions = {
     return withFiles({ form, msg: 'Information updated successfully.' });
   },
 
-  updatePasswordEvent: async ({ request, locals: { supabase, user } }) => {
+  updatePasswordEvent: async ({ request, locals: { supabase } }) => {
     const form = await superValidate(request, zod(updatePasswordSchema));
 
     if (!form.valid) {

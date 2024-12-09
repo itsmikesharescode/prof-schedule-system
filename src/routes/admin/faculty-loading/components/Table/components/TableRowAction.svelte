@@ -28,7 +28,7 @@
     {/snippet}
   </DropdownMenu.Trigger>
   <DropdownMenu.Content class="w-[160px]" align="end">
-    <DropdownMenu.Item
+    <!-- <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
         tableState.setShowViewCalendar(true);
@@ -36,7 +36,7 @@
     >
       <Calendar />
       View Calendar
-    </DropdownMenu.Item>
+    </DropdownMenu.Item> -->
     <!-- <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
@@ -46,6 +46,17 @@
       <Pen />
       Update
     </DropdownMenu.Item> -->
+
+    <DropdownMenu.Item
+      onclick={() => {
+        tableState.setActiveRow(row.original);
+        tableState.setShowUpdate(true);
+      }}
+    >
+      <Pen />
+      Update
+    </DropdownMenu.Item>
+
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);

@@ -77,12 +77,13 @@
           {#snippet children({ props })}
             <Form.Label>Status</Form.Label>
             <SelectPicker
+              placeholder="Select Status"
+              noDescription
               selections={[
                 { label: 'Pending', value: 'Pending' },
                 { label: 'Approved', value: 'Approved' },
                 { label: 'Rejected', value: 'Rejected' }
               ]}
-              name="Select Status"
               bind:selected={$formData.status}
             />
             <input type="hidden" name={props.name} bind:value={$formData.status} />

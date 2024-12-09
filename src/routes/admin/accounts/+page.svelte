@@ -7,6 +7,7 @@
   import { initTableState } from './components/Table/tableState.svelte';
   import DeleteProfessor from './components/DeleteProfessor/DeleteProfessor.svelte';
   import UpdateStatus from './components/UpdateStatus/UpdateStatus.svelte';
+  import PrintFacultyLoad from './components/Table/components/PrintFacultyLoad.svelte';
   const { data } = $props();
 
   initTableState();
@@ -48,6 +49,7 @@
   {/await}
 </div>
 
+<PrintFacultyLoad />
 <UpdateStatus updateStatusForm={data.updateStatusForm} />
 <UpdateProfessor updateProfessorForm={data.updateProfessorForm} />
 <DeleteProfessor />

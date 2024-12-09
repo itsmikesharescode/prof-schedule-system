@@ -4,22 +4,26 @@ export const classScheduleSchema = z.object({
   id: z.number(),
   created_at: z.string(),
   department: z.string(),
+  department_id: z.number(),
   school_year: z.string(),
-  semester: z.string(),
+  school_year_id: z.number(),
   year_level: z.string(),
+  year_level_id: z.number(),
   section: z.string(),
-  subjects: z
-    .array(
-      z.object({
-        id: z.string(),
-        name: z.string().min(1, { message: 'Subject is required.' }),
-        startTime: z.string().min(1, { message: 'Start time is required.' }),
-        endTime: z.string().min(1, { message: 'End time is required.' }),
-        day: z.string().min(1, { message: 'Day is required.' }),
-        room: z.string().min(1, { message: 'Room is required.' })
-      })
-    )
-    .min(1, { message: 'At least one subject is required.' })
+  section_id: z.number(),
+  subject: z.string(),
+  subject_id: z.number(),
+  room: z.string(),
+  room_id: z.number(),
+  semester: z.string(),
+  day: z.string(),
+  courseCode: z.string(),
+  units: z.number(),
+  time: z.string(),
+  professor: z.string(),
+  professor_id: z.string(),
+  initial_time: z.string(),
+  final_time: z.string()
 });
 
 export type ClassSchedulesPageTable = z.output<typeof classScheduleSchema>;

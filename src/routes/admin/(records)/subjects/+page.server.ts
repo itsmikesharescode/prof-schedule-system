@@ -29,7 +29,7 @@ export const actions: Actions = {
         name: form.data.subjectName,
         code: form.data.subjectCode,
         unit: form.data.unit,
-        department: form.data.department
+        department_id: parseInt(form.data.department.split(',')[1]) // hacky way to get the department id
       }
     ]);
     if (error) return fail(401, { form, msg: error.message });
@@ -48,7 +48,7 @@ export const actions: Actions = {
         name: form.data.subjectName,
         code: form.data.subjectCode,
         unit: form.data.unit,
-        department: form.data.department
+        department_id: parseInt(form.data.department.split(',')[1]) // hacky way to get the department id
       })
       .eq('id', form.data.id);
     if (error) return fail(401, { form, msg: error.message });
@@ -56,9 +56,9 @@ export const actions: Actions = {
   },
   deleteSubjectEvent: async ({ request, locals: { supabase } }) => {
     const formData = await request.formData();
-    const id = formData.get('id');
+    const id = formData.get('id') as string;
 
-    const { error } = await supabase.from('subjects_tb').delete().eq('id', id);
+    const { error } = await supabase.from('subjects_tb').delete().eq('id', parseInt(id));
     if (error) return fail(401, { msg: error.message });
     return { msg: 'Deleted successfully' };
   }

@@ -24,7 +24,7 @@
     "@tailwindcss/typography": "^0.5.15",
     "@types/eslint": "^9.6.1",
     "autoprefixer": "^10.4.20",
-    "bits-ui": "^1.0.0-next.66",
+    "bits-ui": "^1.0.0-next.69",
     "clsx": "^2.1.1",
     "embla-carousel-svelte": "^8.5.1",
     "eslint": "^9.16.0",
@@ -38,7 +38,7 @@
     "prettier": "^3.4.2",
     "prettier-plugin-svelte": "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.6.9",
-    "svelte": "^5.6.2",
+    "svelte": "^5.9.0",
     "svelte-check": "^4.1.1",
     "svelte-sonner": "^0.3.28",
     "sveltekit-superforms": "^2.21.1",
@@ -58,10 +58,11 @@
     "@fullcalendar/list": "^6.1.15",
     "@fullcalendar/timegrid": "^6.1.15",
     "@supabase/ssr": "^0.5.2",
-    "@supabase/supabase-js": "^2.46.2",
+    "@supabase/supabase-js": "^2.47.2",
     "@tanstack/table-core": "^8.20.5",
     "embla-carousel-autoplay": "^8.5.1",
     "sharp": "^0.33.5",
-    "supabase": "^2.0.0"
+    "supabase": "^2.0.0",
+    "xlsx": "^0.18.5"
   }
 }

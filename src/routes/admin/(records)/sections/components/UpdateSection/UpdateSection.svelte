@@ -45,7 +45,7 @@
   $effect(() => {
     if (tableState.getShowUpdate()) {
       $formData.id = tableState.getActiveRow()?.id ?? 0;
-      $formData.department = tableState.getActiveRow()?.department ?? '';
+      $formData.department = `${tableState.getActiveRow()?.department},${tableState.getActiveRow()?.department_id}`;
       $formData.class = tableState.getActiveRow()?.class ?? '';
       $formData.sectionCode = tableState.getActiveRow()?.section_code ?? '';
     }
@@ -81,7 +81,7 @@
             <Form.Label>Department</Form.Label>
             <SelectPicker
               {...props}
-              name="Select Department"
+              placeholder="Select department"
               selections={auxiliaryState.formatDepartments()}
               bind:selected={$formData.department}
             />
@@ -98,7 +98,7 @@
             <Form.Label>Class</Form.Label>
             <SelectPicker
               {...props}
-              name="Select Class"
+              placeholder="Select class"
               selections={classPeriods}
               bind:selected={$formData.class}
             />

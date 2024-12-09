@@ -126,7 +126,7 @@ const auxilary: Handle = async ({ event, resolve }) => {
         return null;
       }
 
-      const { maxSizeInMB = 1, maxWidth = 1280, maxHeight = 720, quality = 80 } = options;
+      const { maxSizeInMB = 1, maxWidth = 400, maxHeight = 400, quality = 80 } = options;
 
       const buffer = Buffer.from(await file.arrayBuffer());
       let processedImage;

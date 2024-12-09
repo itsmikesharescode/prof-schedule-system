@@ -8,19 +8,19 @@
   import { addFacultySchema, type AddFacultySchema } from './schema';
   import { ScrollArea } from '$lib/components/ui/scroll-area/index';
   import CustomComboBox from '../CustomComboBox.svelte';
-  import type { streamProfessors } from '../../../(db_calls)/streamProfessors';
-  import type { streamClassSchedules } from '../../../(db_calls)/streamClassSchedules';
+  import { streamProfessors } from '../../../(db_calls)/streamProfessors';
+  import { streamClassSchedules } from '../../../(db_calls)/streamClassSchedules';
   import LoaderCircle from 'lucide-svelte/icons/loader-circle';
   import type { Result } from '$lib/types';
   import { toast } from 'svelte-sonner';
+  import { availableTimes } from '$lib/metadata';
+  import { page } from '$app/stores';
 
   interface Props {
     addFacultyForm: SuperValidated<Infer<AddFacultySchema>>;
-    professors: Awaited<ReturnType<typeof streamProfessors>>;
-    schedules: Awaited<ReturnType<typeof streamClassSchedules>>;
   }
 
-  let { addFacultyForm, professors, schedules }: Props = $props();
+  let { addFacultyForm }: Props = $props();
 
   let open = $state(false);
 
@@ -43,9 +43,24 @@
   });
 
   const { form: formData, enhance, submitting } = form;
+
+  let professors = $state<Awaited<ReturnType<typeof streamProfessors>>>(null);
+  let schedules = $state<Awaited<ReturnType<typeof streamClassSchedules>>>(null);
+
+  const showAddFaculty = async () => {
+    open = true;
+    if (!$page.data.supabase) return;
+    const [profs, scheds] = await Promise.all([
+      streamProfessors($page.data.supabase, null),
+      streamClassSchedules($page.data.supabase, null)
+    ]);
+
+    professors = profs;
+    schedules = scheds;
+  };
 </script>
 
-<Button size="sm" onclick={() => (open = true)}>
+<Button size="sm" onclick={showAddFaculty}>
   <Plus class="size-4" />
   Assign Faculty
 </Button>
@@ -90,18 +105,20 @@
                 <input type="hidden" name={props.name} bind:value={$formData.user_id} />
               {/snippet}
             </Form.Control>
+            <Form.Description />
+            <Form.FieldErrors />
           </Form.Field>
 
           <Form.Field {form} name="schedule_id">
             <Form.Control>
               {#snippet children({ props })}
-                <Form.Label>Schedule Section</Form.Label>
+                <Form.Label>Scheduled Class</Form.Label>
                 <CustomComboBox
                   {...props}
                   name="Select Schedule"
                   placeholder="Search for a schedule"
                   selections={schedules?.map((sched) => ({
-                    label: sched.section,
+                    label: `${sched.subject} - ${sched.section} - ${sched.day}`,
                     value: sched.id.toString()
                   })) ?? []}
                   bind:selected={$formData.schedule_id}
@@ -109,6 +126,42 @@
                 <input type="hidden" name={props.name} bind:value={$formData.schedule_id} />
               {/snippet}
             </Form.Control>
+          </Form.Field>
+
+          <Form.Field {form} name="start_time">
+            <Form.Control>
+              {#snippet children({ props })}
+                <Form.Label>Start Time</Form.Label>
+                <CustomComboBox
+                  {...props}
+                  name="Select Start Time"
+                  placeholder="Select start time"
+                  selections={availableTimes}
+                  bind:selected={$formData.start_time}
+                />
+                <input type="hidden" name={props.name} bind:value={$formData.start_time} />
+              {/snippet}
+            </Form.Control>
+            <Form.Description />
+            <Form.FieldErrors />
+          </Form.Field>
+
+          <Form.Field {form} name="end_time">
+            <Form.Control>
+              {#snippet children({ props })}
+                <Form.Label>End Time</Form.Label>
+                <CustomComboBox
+                  {...props}
+                  name="Select End Time"
+                  placeholder="Select end time"
+                  selections={availableTimes}
+                  bind:selected={$formData.end_time}
+                />
+                <input type="hidden" name={props.name} bind:value={$formData.end_time} />
+              {/snippet}
+            </Form.Control>
+            <Form.Description />
+            <Form.FieldErrors />
           </Form.Field>
         </div>
 
