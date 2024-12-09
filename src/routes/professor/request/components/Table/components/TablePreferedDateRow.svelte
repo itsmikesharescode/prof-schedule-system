@@ -8,6 +8,7 @@
   import * as Popover from '$lib/components/ui/popover/index.js';
   import { useTableState } from '../tableState.svelte';
   import Badge from '$lib/components/ui/badge/badge.svelte';
+  import { convert24HourTo12Hour } from '$lib';
 
   let { row }: { row: Row<RequestPageTable> } = $props();
 
@@ -25,7 +26,11 @@
           <Badge>{day}</Badge>
         {/each}
       </div>
-      <span>{row.original.start_time} - {row.original.end_time}</span>
+      <Badge class="max-w-fit">
+        {convert24HourTo12Hour(row.original.start_time)} - {convert24HourTo12Hour(
+          row.original.end_time
+        )}</Badge
+      >
     </section>
   </Popover.Content>
 </Popover.Root>

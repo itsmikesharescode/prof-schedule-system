@@ -56,7 +56,7 @@
     $formData.previousSchool = $page.data.user?.user_metadata.previousSchool;
     $formData.yearsOfTeaching = $page.data.user?.user_metadata.yearsOfTeaching;
     $formData.department = $page.data.user?.user_metadata.department;
-    $formData.days = $page.data.user?.user_metadata.schedule.days;
+    $formData.days = $page.data.user?.user_metadata.schedule.days[0].split(',') ?? [];
     $formData.startTime = $page.data.user?.user_metadata.schedule.startTime;
     $formData.endTime = $page.data.user?.user_metadata.schedule.endTime;
     $formData.availability = $page.data.user?.user_metadata.schedule.available;
