@@ -114,7 +114,6 @@
     <span class="text-sm text-muted-foreground">Please select a department first.</span>
   </div>
 {/snippet}
-{$formData.schoolYear}
 <AlertDialog.Root {open}>
   <AlertDialog.Content class="max-w-3xl p-0">
     <button

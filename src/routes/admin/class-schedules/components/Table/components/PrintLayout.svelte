@@ -11,7 +11,38 @@
 
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 
-  let { data }: Props = $props();
+  const { data }: Props = $props();
+
+  const handleMorningPrint = () => {
+    const morningClasses = data.filter((schedule) => {
+      const initialTime = new Date(`1970-01-01T${schedule.initial_time}`);
+      const noonTime = new Date(`1970-01-01T12:00:00`);
+      return initialTime < noonTime;
+    });
+
+    console.log('Morning Classes:', morningClasses);
+  };
+
+  const handleAfternoonPrint = () => {
+    const afternoonClasses = data.filter((schedule) => {
+      const initialTime = new Date(`1970-01-01T${schedule.initial_time}`);
+      const noonTime = new Date(`1970-01-01T12:00:00`);
+      const eveningTime = new Date(`1970-01-01T18:00:00`);
+      return initialTime >= noonTime && initialTime < eveningTime;
+    });
+
+    console.log('Afternoon Classes:', afternoonClasses);
+  };
+
+  const handleEveningPrint = () => {
+    const eveningClasses = data.filter((schedule) => {
+      const initialTime = new Date(`1970-01-01T${schedule.initial_time}`);
+      const eveningTime = new Date(`1970-01-01T18:00:00`);
+      return initialTime >= eveningTime;
+    });
+
+    console.log('Evening Classes:', eveningClasses);
+  };
 </script>
 
 <DropdownMenu.Root>
@@ -20,9 +51,18 @@
   </DropdownMenu.Trigger>
   <DropdownMenu.Content>
     <DropdownMenu.Group>
-      <DropdownMenu.Item><PrinterCheck /> Morning Classes</DropdownMenu.Item>
-      <DropdownMenu.Item><PrinterCheck /> Afternoon Classes</DropdownMenu.Item>
-      <DropdownMenu.Item><PrinterCheck /> Evening Classes</DropdownMenu.Item>
+      <DropdownMenu.Item onclick={handleMorningPrint}>
+        <PrinterCheck />
+        Morning Classes
+      </DropdownMenu.Item>
+      <DropdownMenu.Item onclick={handleAfternoonPrint}>
+        <PrinterCheck />
+        Afternoon Classes
+      </DropdownMenu.Item>
+      <DropdownMenu.Item onclick={handleEveningPrint}>
+        <PrinterCheck />
+        Evening Classes
+      </DropdownMenu.Item>
     </DropdownMenu.Group>
   </DropdownMenu.Content>
 </DropdownMenu.Root>
