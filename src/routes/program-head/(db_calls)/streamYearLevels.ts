@@ -9,7 +9,7 @@ export const streamYearLevels = async (
   if (params) {
     const { data, error } = await supabase
       .from('year_levels_tb')
-      .select('*')
+      .select('*, programs_tb(*)')
       .order('created_at', {
         ascending: true
       })
@@ -19,9 +19,12 @@ export const streamYearLevels = async (
     return data;
   }
 
-  const { data, error } = await supabase.from('year_levels_tb').select('*').order('created_at', {
-    ascending: true
-  });
+  const { data, error } = await supabase
+    .from('year_levels_tb')
+    .select('*, programs_tb(*)')
+    .order('created_at', {
+      ascending: true
+    });
 
   if (error) return null;
   return data;

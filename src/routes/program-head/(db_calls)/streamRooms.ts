@@ -10,7 +10,7 @@ export const streamRooms = async (
   if (params) {
     const { data, error } = await supabase
       .from('rooms_tb')
-      .select('*')
+      .select('*, programs_tb(*)')
       .order('created_at', {
         ascending: true
       })
@@ -20,9 +20,12 @@ export const streamRooms = async (
     return data;
   }
 
-  const { data, error } = await supabase.from('rooms_tb').select('*').order('created_at', {
-    ascending: true
-  });
+  const { data, error } = await supabase
+    .from('rooms_tb')
+    .select('*, programs_tb(*)')
+    .order('created_at', {
+      ascending: true
+    });
 
   if (error) return null;
   return data;
