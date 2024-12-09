@@ -12,6 +12,16 @@ class TableState {
     return this.#activeRow;
   }
 
+  #showPrintFacultyLoad = $state(false);
+
+  setShowPrintFacultyLoad(show: boolean) {
+    this.#showPrintFacultyLoad = show;
+  }
+
+  getShowPrintFacultyLoad() {
+    return this.#showPrintFacultyLoad;
+  }
+
   #showUpdateStatus = $state(false);
 
   setShowUpdateStatus(show: boolean) {

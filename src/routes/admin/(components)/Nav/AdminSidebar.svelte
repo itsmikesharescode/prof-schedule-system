@@ -34,11 +34,7 @@
       url: '/admin/logs',
       icon: Logs
     },
-    {
-      title: 'Faculty Loading',
-      url: '/admin/faculty-loading',
-      icon: ListRestart
-    },
+
     {
       title: 'Class Schedules',
       url: '/admin/class-schedules',
