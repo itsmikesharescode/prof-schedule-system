@@ -5,10 +5,23 @@
   import { useTableState } from '../tableState.svelte';
   import { tick } from 'svelte';
   import { toast } from 'svelte-sonner';
+  import { convert24HourTo12Hour } from '$lib';
+  import { onMount, onDestroy } from 'svelte';
 
   const tableState = useTableState();
 
   let toBePrinted = $state<Awaited<ReturnType<typeof streamFacultyLoad>>>(null);
+
+  const handleAfterPrint = () => {
+    tableState.setShowPrintFacultyLoad(false);
+  };
+
+  $effect(() => {
+    addEventListener('afterprint', handleAfterPrint);
+    return () => {
+      removeEventListener('afterprint', handleAfterPrint);
+    };
+  });
 
   const handlePrintFacultyLoad = async () => {
     if (!$page.data.supabase) return;
@@ -25,21 +38,26 @@
       return;
     }
 
-    console.log(toBePrinted);
+    setTimeout(() => {
+      print();
+    }, 500);
   };
 
-  $effect(() => {
+  const open = $derived.by(() => {
     if (tableState.getShowPrintFacultyLoad()) {
       tick().then(async () => {
         await handlePrintFacultyLoad();
       });
+      return true;
     }
+
+    return false;
   });
 </script>
 
-<AlertDialog.Root open={tableState.getShowPrintFacultyLoad()}>
-  <AlertDialog.Content class="flex h-full max-w-full flex-col overflow-auto">
-    <!--Professor Header-->
+<AlertDialog.Root {open}>
+  <AlertDialog.Content class="flex h-full max-w-full flex-col overflow-auto text-xs">
+    <!--Header-->
     <section class="grid grid-cols-[1fr,2fr,2fr] border-2">
       <div class="grid grid-cols-2 items-center gap-2.5 border-r-2 p-2">
         <img src="/favicon.png" class="w-full" alt="logo" />
@@ -53,18 +71,76 @@
       <div class="grid grid-cols-2">
         <div class="relative flex items-center justify-center border-r-2 p-2">
           <span class="absolute left-2 top-2">School Year</span>
-          <span class="">2020-2021</span>
+          <span class="">{toBePrinted?.[0]?.school_years_tb?.year}</span>
         </div>
         <div class="relative flex items-center justify-center p-2">
           <span class="absolute left-2 top-2">Semester</span>
-          <span class="">Second Semester</span>
+          <span class="">{toBePrinted?.[0]?.semester}</span>
         </div>
       </div>
     </section>
+
+    <!--Professor Header-->
+    <section>
+      <section class="grid grid-cols-[1fr,2fr,1fr,2fr] border-2">
+        <div class="flex border-r-2 p-2">
+          <span class="">EMP NO</span>
+        </div>
+        <div class="flex border-r-2 p-2">
+          <span class="text-center"></span>
+        </div>
+        <div class="flex border-r-2 p-2">
+          <span class="text-center">COLLEGE</span>
+        </div>
+        <div class="flex p-2">
+          <span class="text-center"></span>
+        </div>
+      </section>
+
+      <section class="grid grid-cols-[1fr,2fr,1fr,2fr] border-2 border-t-0">
+        <div class="flex border-r-2 p-2">
+          <span class="">EMP NAME</span>
+        </div>
+        <div class="flex border-r-2 p-2">
+          <span class="text-center"
+            >{tableState.getActiveRow()?.firstName.toUpperCase()}
+            {tableState.getActiveRow()?.middleName.toUpperCase()[0]}.
+            {tableState.getActiveRow()?.lastName.toUpperCase()}</span
+          >
+        </div>
+        <div class="flex border-r-2 p-2">
+          <span class="text-center">DEPARTMENT</span>
+        </div>
+        <div class="flex p-2">
+          <span class="text-center">{tableState.getActiveRow()?.department}</span>
+        </div>
+      </section>
+
+      <section class="grid grid-cols-[1fr,2fr,1fr,2fr] border-2 border-t-0">
+        <div class="flex border-r-2 p-2">
+          <span class="">EMP STATUS</span>
+        </div>
+        <div class="flex border-r-2 p-2">
+          <span class="text-center"
+            >{tableState.getActiveRow()?.schedule.available.toUpperCase()}</span
+          >
+        </div>
+        <div class="flex border-r-2 p-2">
+          <span class="text-center"></span>
+        </div>
+        <div class="flex p-2">
+          <span class="text-center"></span>
+        </div>
+      </section>
+    </section>
     <!--Regular Load-->
     <section>
-      <span class="font-semibold">REGULAR LOAD</span>
-      <section class="grid grid-cols-[1fr,2fr,1fr,2fr,1fr,1fr,1fr,1fr,1fr,1fr] border-2">
+      <span class="font-semibold">
+        {tableState.getActiveRow()?.schedule.available === 'Part Time'
+          ? 'PART-TIME LOAD'
+          : 'REGULAR LOAD'}
+      </span>
+      <section class="grid grid-cols-[1fr,2fr,1fr,2fr,1fr,1fr,1fr,1fr,1fr] border-2">
         <div class="flex items-center justify-center border-r-2 p-2">
           <span class="text-center">Subject Code</span>
         </div>
@@ -77,9 +153,7 @@
         <div class="flex items-center justify-center border-r-2 p-2">
           <span class="text-center">Year and Section</span>
         </div>
-        <div class="flex items-center justify-center border-r-2 p-2">
-          <span class="text-center">Subject Code</span>
-        </div>
+
         <div class="flex items-center justify-center border-r-2 p-2">
           <span class="text-center">Subject Ref</span>
         </div>
@@ -97,110 +171,53 @@
         </div>
       </section>
 
-      <section class="grid grid-cols-[1fr,2fr,1fr,2fr,1fr,1fr,1fr,1fr,1fr,1fr] border-2 border-t-0">
-        <div class="flex items-center justify-center border-r-2 p-2">
-          <span class="min-h-8 text-center"></span>
-        </div>
-        <div class="flex items-center justify-center border-r-2 p-2">
-          <span class="min-h-8 text-center"></span>
-        </div>
-        <div class="flex items-center justify-center border-r-2 p-2">
-          <span class="min-h-8 text-center"></span>
-        </div>
-        <div class="flex items-center justify-center border-r-2 p-2">
-          <span class="min-h-8 text-center"></span>
-        </div>
-        <div class="flex items-center justify-center border-r-2 p-2">
-          <span class="min-h-8 text-center"></span>
-        </div>
-        <div class="flex items-center justify-center border-r-2 p-2">
-          <span class="min-h-8 text-center"></span>
-        </div>
-        <div class="flex items-center justify-center border-r-2 p-2">
-          <span class="min-h-8 text-center"></span>
-        </div>
-        <div class="flex items-center justify-center border-r-2 p-2">
-          <span class="min-h-8 text-center"></span>
-        </div>
-        <div class="flex items-center justify-center border-r-2 p-2">
-          <span class="min-h-8 text-center"></span>
-        </div>
-        <div class="flex items-center justify-center p-2">
-          <span class="min-h-8 text-center"></span>
-        </div>
-      </section>
-      <span class="font-semibold">TOTAL REGULAR LOAD: <span class="underline">10</span></span>
-    </section>
+      {#each toBePrinted ?? [] as load}
+        <section class="grid grid-cols-[1fr,2fr,1fr,2fr,1fr,1fr,1fr,1fr,1fr] border-2 border-t-0">
+          <div class="flex items-center justify-center border-r-2 p-2">
+            <span class="min-h-8 text-center">{load.subjects_tb?.code}</span>
+          </div>
+          <div class="flex items-center justify-center border-r-2 p-2">
+            <span class="min-h-8">{load.subjects_tb?.name}</span>
+          </div>
+          <div class="flex items-center justify-center border-r-2 p-2">
+            <span class="min-h-8 text-center">{load.subjects_tb?.unit}</span>
+          </div>
+          <div class="flex items-center justify-center border-r-2 p-2">
+            <span class="min-h-8 text-center">{load.sections_tb?.section_code}</span>
+          </div>
 
-    <!--Part time Load-->
-    <section>
-      <span class="font-semibold">PART-TIME LOAD</span>
-      <section class="grid grid-cols-[1fr,2fr,1fr,2fr,1fr,1fr,1fr,1fr,1fr,1fr] border-2">
-        <div class="flex items-center justify-center border-r-2 p-2">
-          <span class="text-center">Subject Code</span>
-        </div>
-        <div class="flex items-center justify-center border-r-2 p-2">
-          <span class="text-center">Subject Description</span>
-        </div>
-        <div class="flex items-center justify-center border-r-2 p-2">
-          <span class="text-center">Units</span>
-        </div>
-        <div class="flex items-center justify-center border-r-2 p-2">
-          <span class="text-center">Year and Section</span>
-        </div>
-        <div class="flex items-center justify-center border-r-2 p-2">
-          <span class="text-center">Subject Code</span>
-        </div>
-        <div class="flex items-center justify-center border-r-2 p-2">
-          <span class="text-center">Subject Ref</span>
-        </div>
-        <div class="flex items-center justify-center border-r-2 p-2">
-          <span class="text-center">Time</span>
-        </div>
-        <div class="flex items-center justify-center border-r-2 p-2">
-          <span class="text-center">Days</span>
-        </div>
-        <div class="flex items-center justify-center border-r-2 p-2">
-          <span class="text-center">Room</span>
-        </div>
-        <div class="flex items-center justify-center p-2">
-          <span class="text-center">Effectivity</span>
-        </div>
-      </section>
+          <div class="flex items-center justify-center border-r-2 p-2">
+            <span class="min-h-8 text-center"></span>
+          </div>
+          <div class="flex items-center justify-center border-r-2 p-2">
+            <span class="min-h-8 text-center">
+              {convert24HourTo12Hour(load.initial_time)} -
+              {convert24HourTo12Hour(load.final_time)}
+            </span>
+          </div>
+          <div class="flex items-center justify-center border-r-2 p-2">
+            <span class="min-h-8 text-center">{load.day}</span>
+          </div>
+          <div class="flex items-center justify-center border-r-2 p-2">
+            <span class="min-h-8 text-center">{load.rooms_tb?.number}</span>
+          </div>
+          <div class="flex items-center justify-center p-2">
+            <span class="min-h-8 text-center">{new Date(load.created_at).toLocaleDateString()}</span
+            >
+          </div>
+        </section>
+      {/each}
 
-      <section class="grid grid-cols-[1fr,2fr,1fr,2fr,1fr,1fr,1fr,1fr,1fr,1fr] border-2 border-t-0">
-        <div class="flex items-center justify-center border-r-2 p-2">
-          <span class="min-h-8 text-center"></span>
-        </div>
-        <div class="flex items-center justify-center border-r-2 p-2">
-          <span class="min-h-8 text-center"></span>
-        </div>
-        <div class="flex items-center justify-center border-r-2 p-2">
-          <span class="min-h-8 text-center"></span>
-        </div>
-        <div class="flex items-center justify-center border-r-2 p-2">
-          <span class="min-h-8 text-center"></span>
-        </div>
-        <div class="flex items-center justify-center border-r-2 p-2">
-          <span class="min-h-8 text-center"></span>
-        </div>
-        <div class="flex items-center justify-center border-r-2 p-2">
-          <span class="min-h-8 text-center"></span>
-        </div>
-        <div class="flex items-center justify-center border-r-2 p-2">
-          <span class="min-h-8 text-center"></span>
-        </div>
-        <div class="flex items-center justify-center border-r-2 p-2">
-          <span class="min-h-8 text-center"></span>
-        </div>
-        <div class="flex items-center justify-center border-r-2 p-2">
-          <span class="min-h-8 text-center"></span>
-        </div>
-        <div class="flex items-center justify-center p-2">
-          <span class="min-h-8 text-center"></span>
-        </div>
-      </section>
-      <span class="font-semibold">TOTAL PART-TIME LOAD: <span class="underline">10</span></span>
+      <span class="font-semibold">
+        TOTAL {tableState.getActiveRow()?.schedule.available === 'Part Time'
+          ? 'PART-TIME LOAD'
+          : 'REGULAR LOAD'}:
+        <span class="underline"
+          >{toBePrinted
+            ?.map((item) => item.subjects_tb?.unit)
+            .reduce((a, b) => (a ?? 0) + (b ?? 0), 0)}</span
+        >
+      </span>
     </section>
 
     <!--Temporary Substitution Load-->
