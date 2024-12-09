@@ -17,6 +17,17 @@
   let toBePrinted = $state<ClassSchedulesPageTable[]>([]);
   let open = $state(false);
 
+  const handleAfterPrint = () => {
+    open = false;
+  };
+
+  $effect(() => {
+    addEventListener('afterprint', handleAfterPrint);
+    return () => {
+      removeEventListener('afterprint', handleAfterPrint);
+    };
+  });
+
   const handleMorningPrint = () => {
     toBePrinted = data.filter((schedule) => {
       const initialTime = new Date(`1970-01-01T${schedule.initial_time}`);
@@ -27,7 +38,6 @@
     tick().then(() => {
       setTimeout(() => {
         print();
-        open = false;
       }, 2000);
     });
   };
@@ -44,7 +54,6 @@
     tick().then(() => {
       setTimeout(() => {
         print();
-        open = false;
       }, 2000);
     });
   };
@@ -60,7 +69,6 @@
     tick().then(() => {
       setTimeout(() => {
         print();
-        open = false;
       }, 2000);
     });
   };
