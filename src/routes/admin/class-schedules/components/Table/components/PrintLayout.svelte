@@ -13,35 +13,32 @@
 
   const { data }: Props = $props();
 
+  let toBePrinted = $state<ClassSchedulesPageTable[]>([]);
+  let open = $state(true);
+
   const handleMorningPrint = () => {
-    const morningClasses = data.filter((schedule) => {
+    toBePrinted = data.filter((schedule) => {
       const initialTime = new Date(`1970-01-01T${schedule.initial_time}`);
       const noonTime = new Date(`1970-01-01T12:00:00`);
       return initialTime < noonTime;
     });
-
-    console.log('Morning Classes:', morningClasses);
   };
 
   const handleAfternoonPrint = () => {
-    const afternoonClasses = data.filter((schedule) => {
+    toBePrinted = data.filter((schedule) => {
       const initialTime = new Date(`1970-01-01T${schedule.initial_time}`);
       const noonTime = new Date(`1970-01-01T12:00:00`);
       const eveningTime = new Date(`1970-01-01T18:00:00`);
       return initialTime >= noonTime && initialTime < eveningTime;
     });
-
-    console.log('Afternoon Classes:', afternoonClasses);
   };
 
   const handleEveningPrint = () => {
-    const eveningClasses = data.filter((schedule) => {
+    toBePrinted = data.filter((schedule) => {
       const initialTime = new Date(`1970-01-01T${schedule.initial_time}`);
       const eveningTime = new Date(`1970-01-01T18:00:00`);
       return initialTime >= eveningTime;
     });
-
-    console.log('Evening Classes:', eveningClasses);
   };
 </script>
 
@@ -67,7 +64,7 @@
   </DropdownMenu.Content>
 </DropdownMenu.Root>
 
-<AlertDialog.Root open={false}>
+<AlertDialog.Root {open}>
   <AlertDialog.Content class="flex h-full max-w-full flex-col gap-5 overflow-auto">
     <section class="grid grid-cols-[1fr,2fr] border-2">
       <div class="grid min-h-20 grid-cols-2">
@@ -76,7 +73,7 @@
           <span class="text-xl font-bold">ONE Cainta College</span>
         </div>
         <div class="flex flex-col items-center justify-center">
-          <span class="text-xl font-bold">SUBJECT OFFERINGS</span>
+          <span class="text-center text-xl font-bold">SUBJECT OFFERINGS</span>
           <span class="font-semibold underline">Morning Session</span>
         </div>
       </div>
@@ -101,7 +98,7 @@
     </section>
 
     <section class="flex flex-col border-2">
-      <div class="grid grid-cols-[1fr,2fr,1fr,1fr,1fr] border-b-2">
+      <div class="grid grid-cols-[1fr,2fr,1fr,1fr,1fr,1fr] border-b-2">
         <div class="flex items-center justify-center border-r-2 p-2">
           <span class="">Course Code</span>
         </div>
@@ -119,12 +116,16 @@
         </div>
 
         <div class="flex items-center justify-center border-r-2 p-2">
+          <span class="">Instructor</span>
+        </div>
+
+        <div class="flex items-center justify-center border-r-2 p-2">
           <span class="">Room</span>
         </div>
       </div>
 
       {#each Array(10)}
-        <div class="grid grid-cols-[1fr,2fr,1fr,1fr,1fr] border-b-2">
+        <div class="grid grid-cols-[1fr,2fr,1fr,1fr,1fr,1fr] border-b-2">
           <div class="flex items-center justify-center border-r-2 p-2">
             <span class="">OCC103</span>
           </div>
@@ -139,6 +140,10 @@
 
           <div class="flex items-center justify-center border-r-2 p-2">
             <span class="">5</span>
+          </div>
+
+          <div class="flex items-center justify-center border-r-2 p-2">
+            <span class="">Doctor Husay</span>
           </div>
 
           <div class="flex items-center justify-center border-r-2 p-2">
