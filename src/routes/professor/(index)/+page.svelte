@@ -1,5 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
+  import { convert24HourTo12Hour } from '$lib';
   import { Skeleton } from '$lib/components/ui/skeleton/index';
   import Table from './components/Table/components/Table.svelte';
   import { columns } from './components/Table/components/columns';
@@ -21,13 +22,17 @@
         data={schedules?.map((item) => ({
           id: item.id,
           created_at: item.created_at,
-          professor_id: item.professor_id,
-          department: item.class_schedules_tb?.department ?? '',
-          semester: item.class_schedules_tb?.semester ?? '',
-          section: item.class_schedules_tb?.section ?? '',
-          school_year: item.class_schedules_tb?.school_year ?? '',
-          year_level: item.class_schedules_tb?.year_level ?? '',
-          class_schedules_tb: item.class_schedules_tb
+          department: item.programs_tb?.code ?? '',
+          school_year: item.school_years_tb?.year ?? '',
+          year_level: item.year_levels_tb?.levels?.[0]?.yearLevel ?? '',
+          section: item.sections_tb?.section_code ?? '',
+          subject: item.subjects_tb?.name ?? '',
+          courseCode: item.subjects_tb?.code ?? '',
+          room: item.rooms_tb?.number ?? 0,
+          semester: item.semester ?? '',
+          day: item.day ?? '',
+          units: item.subjects_tb?.unit ?? 0,
+          time: `${convert24HourTo12Hour(item.initial_time)} - ${convert24HourTo12Hour(item.final_time)}`
         })) ?? []}
         {columns}
       />

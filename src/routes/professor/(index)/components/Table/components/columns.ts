@@ -27,63 +27,126 @@ export const columns: ColumnDef<SchedulePageTable>[] = [
   },
 
   {
-    accessorKey: 'school_year',
+    accessorKey: 'subject',
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<SchedulePageTable, unknown>, {
         column,
-        title: 'School Year'
+        title: 'Subject'
       });
     },
     cell: ({ row }) => {
-      const schoolYearSnippet = createRawSnippet<[string]>((getSchoolYear) => {
+      const subjectSnippet = createRawSnippet<[string]>((getSubject) => {
         return {
-          render: () => `<div class="w-full">${getSchoolYear()}</div>`
+          render: () => `<div class="w-full">${getSubject()}</div>`
         };
       });
 
-      return renderSnippet(schoolYearSnippet, row.getValue('school_year'));
+      return renderSnippet(subjectSnippet, row.getValue('subject'));
     },
     enableSorting: true,
     enableHiding: true
   },
 
   {
-    accessorKey: 'year_level',
+    accessorKey: 'courseCode',
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<SchedulePageTable, unknown>, {
         column,
-        title: 'Year Level'
+        title: 'Subject Code'
       });
     },
     cell: ({ row }) => {
-      const yearLevelSnippet = createRawSnippet<[string]>((getYearLevel) => {
+      const courseCodeSnippet = createRawSnippet<[string]>((getCourseCode) => {
         return {
-          render: () => `<div class="w-full">${getYearLevel()}</div>`
+          render: () => `<div class="w-full">${getCourseCode()}</div>`
         };
       });
 
-      return renderSnippet(yearLevelSnippet, row.getValue('year_level'));
+      return renderSnippet(courseCodeSnippet, row.getValue('courseCode'));
     },
     enableSorting: true,
     enableHiding: true
   },
 
   {
-    accessorKey: 'semester',
+    accessorKey: 'room',
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<SchedulePageTable, unknown>, {
         column,
-        title: 'Semester'
+        title: 'Room'
       });
     },
     cell: ({ row }) => {
-      const semesterSnippet = createRawSnippet<[string]>((getSemester) => {
+      const roomSnippet = createRawSnippet<[number]>((getRoom) => {
         return {
-          render: () => `<div class="w-full">${getSemester()}</div>`
+          render: () => `<div class="w-full">${getRoom()}</div>`
         };
       });
 
-      return renderSnippet(semesterSnippet, row.getValue('semester'));
+      return renderSnippet(roomSnippet, row.getValue('room'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
+    accessorKey: 'time',
+    header: ({ column }) => {
+      return renderComponent(TableColumnHeader<SchedulePageTable, unknown>, {
+        column,
+        title: 'Time'
+      });
+    },
+    cell: ({ row }) => {
+      const timeSnippet = createRawSnippet<[string]>((getTime) => {
+        return {
+          render: () => `<div class="w-full">${getTime()}</div>`
+        };
+      });
+
+      return renderSnippet(timeSnippet, row.getValue('time'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
+    accessorKey: 'day',
+    header: ({ column }) => {
+      return renderComponent(TableColumnHeader<SchedulePageTable, unknown>, {
+        column,
+        title: 'Day'
+      });
+    },
+    cell: ({ row }) => {
+      const daySnippet = createRawSnippet<[string]>((getDay) => {
+        return {
+          render: () => `<div class="w-full">${getDay()}</div>`
+        };
+      });
+
+      return renderSnippet(daySnippet, row.getValue('day'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
+    accessorKey: 'units',
+    header: ({ column }) => {
+      return renderComponent(TableColumnHeader<SchedulePageTable, unknown>, {
+        column,
+        title: 'Units'
+      });
+    },
+    cell: ({ row }) => {
+      const unitsSnippet = createRawSnippet<[number]>((getUnits) => {
+        return {
+          render: () => `<div class="w-full">${getUnits()}</div>`
+        };
+      });
+
+      return renderSnippet(unitsSnippet, row.getValue('units'));
     },
     enableSorting: true,
     enableHiding: true
