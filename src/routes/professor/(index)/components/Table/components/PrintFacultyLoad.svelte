@@ -26,13 +26,6 @@
 
     toBePrinted = await streamFacultyLoad($page.data.supabase, $page.data.user?.id ?? '');
 
-    if (!toBePrinted?.length) {
-      toast.error('No faculty load found');
-      tableState.setActiveRow(null);
-      tableState.setShowPrintFacultyLoad(false);
-      return;
-    }
-
     setTimeout(() => {
       print();
     }, 500);

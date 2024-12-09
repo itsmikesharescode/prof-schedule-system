@@ -39,7 +39,9 @@
   </div>
 
   <div class="flex items-center space-x-2">
-    <PrintFacultyLoad />
+    {#if table.getRowCount() > 0}
+      <PrintFacultyLoad />
+    {/if}
     <TableViewOptions {table} />
   </div>
 </div>
