@@ -11,6 +11,7 @@
 
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
   import { tick } from 'svelte';
+  import { convert24HourTo12Hour } from '$lib';
 
   const { data }: Props = $props();
 
@@ -160,7 +161,7 @@
 
       <section class="flex flex-col border-2">
         <!--SubHeader (now shows once per section)-->
-        <div class="grid grid-cols-[1fr,2fr,1fr,1fr,1fr,1fr] border-b-2">
+        <div class="grid grid-cols-[1fr,2fr,1fr,1fr,1fr,1fr,1fr] border-b-2">
           <div class="flex items-center justify-center border-r-2 p-2">
             <span class="">Course Code</span>
           </div>
@@ -171,6 +172,10 @@
 
           <div class="flex items-center justify-center border-r-2 p-2">
             <span class="">Day</span>
+          </div>
+
+          <div class="flex items-center justify-center border-r-2 p-2">
+            <span class="">Time</span>
           </div>
 
           <div class="flex items-center justify-center border-r-2 p-2">
@@ -187,7 +192,7 @@
         </div>
 
         {#each schedules as schedule}
-          <div class="grid grid-cols-[1fr,2fr,1fr,1fr,1fr,1fr] border-b-2">
+          <div class="grid grid-cols-[1fr,2fr,1fr,1fr,1fr,1fr,1fr] border-b-2">
             <div class="flex items-center justify-center border-r-2 p-2">
               <span class="">{schedule.courseCode}</span>
             </div>
@@ -198,6 +203,14 @@
 
             <div class="flex items-center justify-center border-r-2 p-2">
               <span class="">{schedule.day}</span>
+            </div>
+
+            <div class="flex items-center justify-center border-r-2 p-2">
+              <span class=""
+                >{convert24HourTo12Hour(schedule.initial_time)} - {convert24HourTo12Hour(
+                  schedule.final_time
+                )}</span
+              >
             </div>
 
             <div class="flex items-center justify-center border-r-2 p-2">

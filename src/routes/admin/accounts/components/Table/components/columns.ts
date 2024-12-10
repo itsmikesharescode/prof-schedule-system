@@ -44,7 +44,7 @@ export const columns: ColumnDef<AccountPageTable, unknown>[] = [
     cell: ({ row }) => {
       const departmentSnippet = createRawSnippet<[string]>((getDepartment) => {
         return {
-          render: () => `<div class="w-full">${getDepartment()}</div>`
+          render: () => `<div class="w-full">${getDepartment().split(',')[0]}</div>`
         };
       });
 
