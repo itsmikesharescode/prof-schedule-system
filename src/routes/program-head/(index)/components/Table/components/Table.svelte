@@ -23,13 +23,22 @@
   import { createSvelteTable } from '$lib/components/ui/data-table/data-table.svelte';
   import FlexRender from '$lib/components/ui/data-table/flex-render.svelte';
   import * as Table from '$lib/components/ui/table/index';
-  import type { FacultyLoadingPageTable } from '../data/schemas';
+  import type { ClassSchedulesPageTable } from '../data/schemas';
+  import { type Infer, superForm, type SuperValidated } from 'sveltekit-superforms';
+  import type { AddScheduleSchema } from '../../AddSchedule/schema';
+  import AddSchedule from '../../AddSchedule/AddSchedule.svelte';
+  import Button from '$lib/components/ui/button/button.svelte';
+  import PrinterCheck from 'lucide-svelte/icons/printer-check';
+  import PrintLayout from './PrintLayout.svelte';
+  import { tick } from 'svelte';
 
-  let {
-    columns,
-    data
-  }: { columns: ColumnDef<FacultyLoadingPageTable, unknown>[]; data: FacultyLoadingPageTable[] } =
-    $props();
+  interface Props {
+    columns: ColumnDef<ClassSchedulesPageTable, unknown>[];
+    data: ClassSchedulesPageTable[];
+    addScheduleForm: SuperValidated<Infer<AddScheduleSchema>>;
+  }
+
+  let { addScheduleForm, columns, data }: Props = $props();
 
   let rowSelection = $state<RowSelectionState>({});
   let columnVisibility = $state<VisibilityState>({});
@@ -102,11 +111,27 @@
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues()
   });
+
+  let open = $state(false);
+  const handlePrint = async () => {
+    open = true;
+    setTimeout(() => {
+      open = false;
+    }, 2000);
+    await tick();
+    print();
+  };
 </script>
+
+<div class="sticky top-2 z-30 mb-4 flex items-center justify-end gap-2.5">
+  <PrintLayout {data} />
+  <AddSchedule {addScheduleForm} />
+</div>
 
 <div class="space-y-4">
   <DataTableToolbar {table} />
   <DataTablePagination {table} />
+
   <div class="">
     <Table.Root>
       <Table.Header>

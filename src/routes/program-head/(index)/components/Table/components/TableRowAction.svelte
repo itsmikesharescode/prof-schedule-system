@@ -8,12 +8,12 @@
   import Pen from 'lucide-svelte/icons/pen';
   import Calendar from 'lucide-svelte/icons/calendar';
   import type { Row } from '@tanstack/table-core';
-  import { type FacultyLoadingPageTable } from '../data/schemas';
+  import { type ClassSchedulesPageTable } from '../data/schemas';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index';
   import Button from '$lib/components/ui/button/button.svelte';
   import { useTableState } from '../tableState.svelte';
 
-  let { row }: { row: Row<FacultyLoadingPageTable> } = $props();
+  let { row }: { row: Row<ClassSchedulesPageTable> } = $props();
 
   const tableState = useTableState();
 </script>
@@ -31,21 +31,12 @@
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
-        tableState.setShowViewCalendar(true);
-      }}
-    >
-      <Calendar />
-      View Calendar
-    </DropdownMenu.Item>
-    <!-- <DropdownMenu.Item
-      onclick={() => {
-        tableState.setActiveRow(row.original);
         tableState.setShowUpdate(true);
       }}
     >
       <Pen />
       Update
-    </DropdownMenu.Item> -->
+    </DropdownMenu.Item>
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);

@@ -7,8 +7,8 @@
   import type { Table } from '@tanstack/table-core';
   import { buttonVariants } from '$lib/components/ui/button/index';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index';
-  import type { FacultyLoadingPageTable } from '../data/schemas';
-  let { table }: { table: Table<FacultyLoadingPageTable> } = $props();
+  import type { ClassSchedulesPageTable } from '../data/schemas';
+  let { table }: { table: Table<ClassSchedulesPageTable> } = $props();
 </script>
 
 <DropdownMenu.Root>

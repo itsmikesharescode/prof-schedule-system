@@ -1,60 +1,78 @@
+import { fail, type Actions } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types';
 import { superValidate } from 'sveltekit-superforms';
-import type { Actions, PageServerLoad } from './$types';
+import { addScheduleSchema } from './components/AddSchedule/schema';
 import { zod } from 'sveltekit-superforms/adapters';
-import { addFacultySchema } from './components/AddFaculty/schema';
-import { fail } from '@sveltejs/kit';
-import { updateFacultySchema } from './components/UpdateFaculty/schema';
+import { updateScheduleSchema } from './components/UpdateSchedule/schema';
 import { streamClassSchedules } from '../(db_calls)/streamClassSchedules';
-import { streamProfessors } from '../(db_calls)/streamProfessors';
-import { streamFaculties } from '../(db_calls)/streamFaculties';
 
-export const load: PageServerLoad = async ({ locals: { supabase } }) => {
+export const load: PageServerLoad = async ({ locals: { supabase }, url }) => {
   return {
-    addFacultyForm: await superValidate(zod(addFacultySchema)),
-    updateFacultyForm: await superValidate(zod(updateFacultySchema)),
-    getFaculties: await streamFaculties(supabase, null),
-    getClassSchedules: await streamClassSchedules(supabase, null),
-    getProfessors: await streamProfessors(supabase, null)
+    addScheduleForm: await superValidate(zod(addScheduleSchema)),
+    updateScheduleForm: await superValidate(zod(updateScheduleSchema)),
+    streamClassSchedules: streamClassSchedules(supabase, url.searchParams.get('filter'))
   };
 };
 
 export const actions: Actions = {
-  addFacultyEvent: async ({ request, locals: { supabase } }) => {
-    const form = await superValidate(request, zod(addFacultySchema));
+  addScheduleEvent: async ({ request, locals: { supabase } }) => {
+    const form = await superValidate(request, zod(addScheduleSchema));
+    if (!form.valid) return fail(400, { form });
 
-    if (!form.valid) {
-      return fail(400, { form });
-    }
+    const { error } = await supabase.rpc('add_class_schedules', {
+      professor_id: form.data.professor_id,
+      school_year_id: parseInt(form.data.schoolYear.split(',')[1]),
+      department_id: parseInt(form.data.department.split(',')[1]),
+      section_id: parseInt(form.data.section.split(',')[1]),
+      year_level_id: parseInt(form.data.yearLevel.split(',')[1]),
+      subject_id: parseInt(form.data.subject.split(',')[1]),
+      room_id: parseInt(form.data.room.split(',')[1]),
+      semester: form.data.semester,
+      day: form.data.day,
+      initial_time: form.data.initial_time,
+      final_time: form.data.final_time
+    });
 
-    const { error } = await supabase.from('faculties_tb').insert([
-      {
-        professor_id: form.data.user_id,
-        schedule_id: Number(form.data.schedule_id)
-      }
-    ]);
+    if (error) return fail(401, { form, msg: error.message });
 
-    if (error) {
-      return fail(401, { form, msg: error.message });
-    }
-
-    return { form, msg: 'Faculty added successfully' };
+    return { form, msg: 'Schedule added successfully' };
   },
-  /* updateFacultyEvent: async ({ request, locals: { supabase } }) => {
-    const form = await superValidate(request, zod(updateFacultySchema));
 
-    if (!form.valid) {
-      return fail(400, { form });
-    }
-  }, */
+  updateScheduleEvent: async ({ request, locals: { supabase } }) => {
+    const form = await superValidate(request, zod(updateScheduleSchema));
 
-  deleteFacultyEvent: async ({ request, locals: { supabase } }) => {
+    if (!form.valid) return fail(400, { form });
+
+    const { error } = await supabase
+      .from('class_schedules_tb')
+      .update({
+        professor_id: form.data.professor_id,
+        school_year_id: parseInt(form.data.schoolYear.split(',')[1]),
+        department_id: parseInt(form.data.department.split(',')[1]),
+        section_id: parseInt(form.data.section.split(',')[1]),
+        year_level_id: parseInt(form.data.yearLevel.split(',')[1]),
+        subject_id: parseInt(form.data.subject.split(',')[1]),
+        room_id: parseInt(form.data.room.split(',')[1]),
+        semester: form.data.semester,
+        day: form.data.day,
+        initial_time: form.data.initial_time,
+        final_time: form.data.final_time
+      })
+      .eq('id', form.data.id);
+
+    if (error) return fail(401, { form, msg: error.message });
+
+    return { form, msg: 'Schedule updated successfully' };
+  },
+
+  deleteScheduleEvent: async ({ request, locals: { supabase } }) => {
     const formData = await request.formData();
     const id = formData.get('id') as string;
 
-    const { error } = await supabase.from('faculties_tb').delete().eq('id', Number(id));
+    const { error } = await supabase.from('class_schedules_tb').delete().eq('id', Number(id));
 
     if (error) return fail(401, { msg: error.message });
 
-    return { msg: 'Faculty deleted successfully' };
+    return { msg: 'Schedule deleted successfully' };
   }
 };

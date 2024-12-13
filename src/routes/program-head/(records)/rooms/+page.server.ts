@@ -28,7 +28,7 @@ export const actions: Actions = {
       {
         code: form.data.roomCode,
         type: form.data.roomType,
-        department: form.data.department,
+        department_id: parseInt(form.data.department.split(',')[1]), // hacky way to get the department id
         number: form.data.roomNumber
       }
     ]);
@@ -45,7 +45,7 @@ export const actions: Actions = {
     const { error } = await supabase
       .from('rooms_tb')
       .update({
-        department: form.data.department,
+        department_id: parseInt(form.data.department.split(',')[1]), // hacky way to get the department id
         type: form.data.roomType,
         number: form.data.roomNumber,
         code: form.data.roomCode

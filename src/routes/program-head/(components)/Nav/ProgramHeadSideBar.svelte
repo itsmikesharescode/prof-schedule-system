@@ -21,7 +21,7 @@
   const site_map = [
     {
       title: 'Class Schedules',
-      url: '/program-head/class-schedules',
+      url: '/program-head',
       icon: CalendarCheck
     },
     {

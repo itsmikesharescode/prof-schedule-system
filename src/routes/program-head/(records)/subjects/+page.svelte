@@ -24,7 +24,10 @@
       <Skeleton class="h-[20px] w-[90%] rounded-full" />
     </section>
   {:then subjects}
-    <Table data={subjects ?? []} {columns} />
+    <Table
+      data={subjects?.map((v) => ({ ...v, department: v.programs_tb?.code ?? '' })) ?? []}
+      {columns}
+    />
   {/await}
 </div>
 

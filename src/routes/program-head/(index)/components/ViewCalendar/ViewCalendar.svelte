@@ -34,14 +34,12 @@
       <span class="sr-only">Close</span>
     </button>
     <AlertDialog.Header>
-      <AlertDialog.Title
-        >Viewing Calendar for {tableState.getActiveRow()?.fullName}</AlertDialog.Title
-      >
+      <AlertDialog.Title>Viewing Calendar</AlertDialog.Title>
     </AlertDialog.Header>
 
     <ScrollArea class="h-[80dvh]">
       {#if showSchedules}
-        <Schedules subjects={tableState.getActiveRow()?.class_schedules_tb?.subjects ?? []} />
+        <Schedules subjects={tableState.getActiveRow()?.subjects ?? []} />
       {/if}
     </ScrollArea>
   </AlertDialog.Content>

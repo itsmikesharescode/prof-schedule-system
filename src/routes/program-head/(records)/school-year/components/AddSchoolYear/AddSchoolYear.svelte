@@ -86,7 +86,7 @@
       <Form.Field {form} name="schoolYear">
         <Form.Control>
           {#snippet children({ props })}
-            <Form.Label>Title</Form.Label>
+            <Form.Label>School Year</Form.Label>
             <Input {...props} bind:value={$formData.schoolYear} placeholder="Enter school year" />
           {/snippet}
         </Form.Control>

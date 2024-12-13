@@ -45,7 +45,7 @@
   $effect(() => {
     if (tableState.getShowUpdate()) {
       $formData.id = tableState.getActiveRow()?.id ?? 0;
-      $formData.department = tableState.getActiveRow()?.department ?? '';
+      $formData.department = `${tableState.getActiveRow()?.department},${tableState.getActiveRow()?.department_id}`;
       $formData.roomType = tableState.getActiveRow()?.type ?? '';
       $formData.roomNumber = tableState.getActiveRow()?.number ?? 0;
       $formData.roomCode = tableState.getActiveRow()?.code ?? '';

@@ -11,14 +11,14 @@
   import type { Table } from '@tanstack/table-core';
   import * as Select from '$lib/components/ui/select/index';
   import { Button } from '$lib/components/ui/button/index';
-  import type { FacultyLoadingPageTable } from '../data/schemas';
+  import type { ClassSchedulesPageTable } from '../data/schemas';
   import { fly } from 'svelte/transition';
   import { cubicInOut } from 'svelte/easing';
   import { page } from '$app/stores';
   import { invalidateAll } from '$app/navigation';
   import { toast } from 'svelte-sonner';
 
-  let { table }: { table: Table<FacultyLoadingPageTable> } = $props();
+  let { table }: { table: Table<ClassSchedulesPageTable> } = $props();
 
   const sb = $page.data.supabase;
   let deleteLoader = $state(false);
@@ -28,7 +28,7 @@
     deleteLoader = true;
 
     const { error } = await sb
-      ?.from('faculties_tb')
+      ?.from('class_schedules_tb')
       .delete()
       .in(
         'id',
@@ -41,7 +41,7 @@
     }
 
     await invalidateAll();
-    toast.success('Faculties deleted successfully');
+    toast.success('Year levels deleted successfully');
     deleteLoader = false;
   };
 </script>
