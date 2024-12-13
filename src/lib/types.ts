@@ -12,7 +12,7 @@ export type PreferredSchedule = {
 };
 
 export type UserMetaData = {
-  role: 'Professor';
+  role: 'professor' | 'program head';
   email: string;
   avatar: string;
   approved: boolean;
