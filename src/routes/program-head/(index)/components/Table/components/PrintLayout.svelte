@@ -134,16 +134,16 @@
           </div>
           <div class="flex flex-col items-center justify-center">
             <span class="text-center text-xl font-bold">SUBJECT OFFERINGS</span>
-            <span class="font-semibold underline"
+            <!-- <span class="font-semibold underline"
               >{detectMorningAfternoonEvening(schedules[0].initial_time)}</span
-            >
+            > -->
           </div>
         </div>
 
         <div class="flex flex-col border-l-2">
           <div class="relative flex flex-col items-center justify-center border-b-2 p-2">
             <span class="absolute bottom-0 left-2 top-0 flex items-center font-light">Section</span>
-            <span class="text-sm">{schedules[0].subject.split(',')[0]}</span>
+            <!-- <span class="text-sm">{schedules[0].subject.split(',')[0]}</span> -->
             <span class="text-2xl font-semibold">{schedules[0].section.split(',')[0]}</span>
           </div>
           <div class="grid h-full grid-cols-2">
