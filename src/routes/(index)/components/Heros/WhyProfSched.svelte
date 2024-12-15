@@ -3,7 +3,7 @@
 
 <div class="flex flex-col gap-5">
 	<div
-		class="mx-auto flex max-w-3xl flex-col items-center justify-center gap-5 rounded-lg bg-secondary/50 p-10 shadow-lg"
+		class="mx-auto flex max-w-3xl flex-col items-center justify-center gap-5 rounded-lg bg-secondary/80 p-10 shadow-lg"
 	>
 		<span class="text-3xl font-semibold">WHY PROFSCHED?</span>
 		<p class="text-center text-muted-foreground">
