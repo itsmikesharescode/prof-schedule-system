@@ -95,6 +95,10 @@
       });
     }
   });
+
+  const filterProgramHead = () => {
+    return professors?.filter((prof) => prof.user_meta_data.role !== 'program head');
+  };
 </script>
 
 <Button
@@ -164,7 +168,7 @@
                       {...props}
                       name="Select Professor"
                       placeholder="Search for a professor"
-                      selections={professors?.map((prof) => ({
+                      selections={filterProgramHead()?.map((prof) => ({
                         label: `${prof.user_meta_data.firstName} ${prof.user_meta_data.middleName} ${prof.user_meta_data.lastName}`,
                         value: prof.user_id,
                         photoLink: prof.user_meta_data.avatar
