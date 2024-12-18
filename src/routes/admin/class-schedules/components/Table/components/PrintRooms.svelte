@@ -56,7 +56,6 @@
 		}
 	];
 
-	let value = $state('');
 	let triggerRef = $state<HTMLButtonElement>(null!);
 
 	class SelectedRoomState {
@@ -117,9 +116,7 @@
 									<Command.Item
 										value={room.label}
 										onSelect={() => {
-											value = room.value;
 											selectedRoomState.add(room);
-
 											closeAndFocusTrigger();
 										}}
 									>
