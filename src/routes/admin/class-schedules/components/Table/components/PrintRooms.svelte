@@ -13,58 +13,17 @@
 
 	const { data }: Props = $props();
 
-	const rooms = [
-		{
-			value: 'Room 101',
-			label: 'Room 101'
-		},
-		{
-			value: 'Room 102',
-			label: 'Room 102'
-		},
-		{
-			value: 'Room 103',
-			label: 'Room 103'
-		},
-		{
-			value: 'Room 104',
-			label: 'Room 104'
-		},
-		{
-			value: 'Room 105',
-			label: 'Room 105'
-		},
-		{
-			value: 'Room 106',
-			label: 'Room 106'
-		},
-		{
-			value: 'Room 107',
-			label: 'Room 107'
-		},
-		{
-			value: 'Room 108',
-			label: 'Room 108'
-		},
-		{
-			value: 'Room 109',
-			label: 'Room 109'
-		},
-		{
-			value: 'Room 110',
-			label: 'Room 110'
-		}
-	];
-
 	let triggerRef = $state<HTMLButtonElement>(null!);
 
 	class SelectedRoomState {
-		#selectedItems = $state<typeof rooms>([]);
+		#selectedItems = $state<typeof data>([]);
 
-		add(roomValue: (typeof rooms)[number]) {
-			const deepCopy = this.#selectedItems.map((item) => item.value);
-			if (deepCopy.includes(roomValue.value)) {
-				this.#selectedItems = this.#selectedItems.filter((item) => item.value !== roomValue.value);
+		add(roomValue: (typeof data)[number]) {
+			const deepCopy = this.#selectedItems.map((item) => item.rooms_tb.code);
+			if (deepCopy.includes(roomValue.rooms_tb.code)) {
+				this.#selectedItems = this.#selectedItems.filter(
+					(item) => item.rooms_tb.code !== roomValue.rooms_tb.code
+				);
 				return;
 			}
 
@@ -76,7 +35,7 @@
 		}
 
 		checkChecks(value: string) {
-			const deepCopy = this.#selectedItems.map((item) => item.value);
+			const deepCopy = this.#selectedItems.map((item) => item.rooms_tb.code);
 			if (deepCopy.includes(value)) {
 				return '';
 			}
@@ -87,15 +46,61 @@
 
 	const selectedRoomState = new SelectedRoomState();
 
-	function closeAndFocusTrigger() {
-		tick().then(() => {
-			triggerRef.focus();
-		});
-	}
+	const handleDownloadAll = () => {
+		// Group data by room code
+		const groupedData = data.reduce(
+			(acc, item) => {
+				const roomCode = item.rooms_tb.code;
 
-	$effect(() => {
-		console.log(data);
-	});
+				// Find existing group or create new one
+				const existingGroup = acc.find((group) => group.roomCode === roomCode);
+
+				if (existingGroup) {
+					existingGroup.datas.push(item);
+				} else {
+					acc.push({
+						roomCode,
+						datas: [item]
+					});
+				}
+
+				return acc;
+			},
+			[] as Array<{ roomCode: string; datas: typeof data }>
+		);
+
+		// Sort groups by room code
+		console.log($state.snapshot(groupedData.sort((a, b) => a.roomCode.localeCompare(b.roomCode))));
+	};
+
+	const handleDownloadSpecific = () => {
+		const selectedData = selectedRoomState.get();
+
+		// Group selected data by room code
+		const groupedData = selectedData.reduce(
+			(acc, item) => {
+				const roomCode = item.rooms_tb.code;
+
+				// Find existing group or create new one
+				const existingGroup = acc.find((group) => group.roomCode === roomCode);
+
+				if (existingGroup) {
+					existingGroup.datas.push(item);
+				} else {
+					acc.push({
+						roomCode,
+						datas: [item]
+					});
+				}
+
+				return acc;
+			},
+			[] as Array<{ roomCode: string; datas: typeof data }>
+		);
+
+		// Sort groups by room code
+		console.log($state.snapshot(groupedData.sort((a, b) => a.roomCode.localeCompare(b.roomCode))));
+	};
 </script>
 
 <DropdownMenu.Root>
@@ -112,27 +117,31 @@
 				</DropdownMenu.SubTrigger>
 				<DropdownMenu.SubContent sideOffset={10} class="mt-20">
 					<Command.Root>
-						<Command.Input placeholder="Search room..." />
+						<Command.Input placeholder="Search by room code" />
 						<Command.List>
 							<Command.Empty>No room found</Command.Empty>
 							<Command.Group>
-								{#each rooms as room}
+								{#each data as dataCopy}
 									<Command.Item
-										value={room.label}
+										value={dataCopy.rooms_tb.code}
 										onSelect={() => {
-											selectedRoomState.add(room);
-											closeAndFocusTrigger();
+											selectedRoomState.add(dataCopy);
 										}}
 									>
-										<Check class={selectedRoomState.checkChecks(room.value)} />
-										{room.label}
+										<Check class={selectedRoomState.checkChecks(dataCopy.rooms_tb.code)} />
+										<div class="flex flex-col">
+											<span>{dataCopy.rooms_tb.code}</span>
+											<span class="text-xs text-muted-foreground"
+												>{dataCopy.rooms_tb.type} / {dataCopy.rooms_tb.number}</span
+											>
+										</div>
 									</Command.Item>
 								{/each}
 							</Command.Group>
 						</Command.List>
 					</Command.Root>
 					{#if selectedRoomState.get().length}
-						<DropdownMenu.Item class="mt-5 ">
+						<DropdownMenu.Item class="mt-5 " onclick={handleDownloadSpecific}>
 							<Download />
 							<span>Download Selections</span>
 						</DropdownMenu.Item>
@@ -140,7 +149,7 @@
 				</DropdownMenu.SubContent>
 			</DropdownMenu.Sub>
 
-			<DropdownMenu.Item>
+			<DropdownMenu.Item onclick={handleDownloadAll}>
 				<Download />
 				Download All
 			</DropdownMenu.Item>
