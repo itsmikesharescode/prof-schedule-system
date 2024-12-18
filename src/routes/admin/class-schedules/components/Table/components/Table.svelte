@@ -112,7 +112,7 @@
 </script>
 
 <div class="sticky top-2 z-30 mb-4 flex items-center justify-end gap-2.5">
-	<PrintRooms />
+	<PrintRooms {data} />
 	<PrintLayout {data} />
 	<AddSchedule {addScheduleForm} />
 </div>

@@ -1,13 +1,17 @@
 <script lang="ts">
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
-	import PrinterCheck from 'lucide-svelte/icons/printer-check';
 	import { buttonVariants } from '$lib/components/ui/button';
-	import ChevronDown from 'lucide-svelte/icons/chevron-down';
 	import Check from 'lucide-svelte/icons/check';
-	import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
 	import Download from 'lucide-svelte/icons/download';
 	import { tick } from 'svelte';
 	import * as Command from '$lib/components/ui/command/index.js';
+	import type { ClassSchedulesPageTable } from '../data/schemas';
+
+	interface Props {
+		data: ClassSchedulesPageTable[];
+	}
+
+	const { data }: Props = $props();
 
 	const rooms = [
 		{
@@ -82,22 +86,9 @@
 		}
 	}
 
-	const selectedValue = $derived(rooms.find((f) => f.value === value)?.label);
-
 	const selectedRoomState = new SelectedRoomState();
 
-	const checkChecks = (room: string) => {
-		const deepCopy = selectedItems.map((item) => item.value);
-
-		if (deepCopy.includes(room)) {
-			return '';
-		}
-
-		return 'text-transparent';
-	};
-
 	function closeAndFocusTrigger() {
-		open = false;
 		tick().then(() => {
 			triggerRef.focus();
 		});
@@ -124,7 +115,7 @@
 							<Command.Group>
 								{#each rooms as room}
 									<Command.Item
-										value={room.value}
+										value={room.label}
 										onSelect={() => {
 											value = room.value;
 											selectedRoomState.add(room);
