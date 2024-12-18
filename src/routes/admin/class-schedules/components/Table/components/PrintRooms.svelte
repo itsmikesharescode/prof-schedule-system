@@ -92,6 +92,10 @@
 			triggerRef.focus();
 		});
 	}
+
+	$effect(() => {
+		console.log(data);
+	});
 </script>
 
 <DropdownMenu.Root>
